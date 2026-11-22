@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>CALI.LAAD</title>
 <meta name="description" content="CALI.LAAD: simulador, calculadora de carga, registro y evolución para calistenia de fuerza, con el método LAD.">
+<meta name="theme-color" content="#1A1F27">
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: una página con pestañas. Simulador (impulso a la izquierda, figura y curva a la derecha, medidas a todo el ancho), calculadora (perfil, INT2 modificado, series, pesas, total), tablas y explicación */
 :root{
@@ -199,20 +200,116 @@ td.acts{white-space:nowrap}td.acts button{margin-right:6px}
 .filebtn input{width:0;height:0;opacity:0;position:absolute}
 .filebtn:focus-within{outline:2px solid var(--accent)}
 
+/* ===== CALI.LAAD · gris acero, azul y neón ===== */
+:root{
+  --bg:#E6E9EE; --panel:#F5F7F9; --ink:#151A21; --muted:#566172; --line:#C7CED8;
+  --accent:#1C5BDB; --accent2:#0B87A8; --ok:#15803d; --warn:#b45309; --soft:#DCE2EA; --band:#5B4FD8; --accent-ink:#ffffff;
+  --display:"Saira",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
+  --plate:#1A1F27; --plate2:#232A34; --neon:#3DEBFF; --neonsoft:rgba(61,235,255,.55);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14171C; --panel:#1C2129; --ink:#E4E9F0; --muted:#8D97A6; --line:#2C343F;
+  --accent:#3D7BFF; --accent2:#3DEBFF; --ok:#4ade80; --warn:#fbbf24; --soft:#242B35; --band:#a78bfa; --accent-ink:#08101E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14171C; --panel:#1C2129; --ink:#E4E9F0; --muted:#8D97A6; --line:#2C343F;
+  --accent:#3D7BFF; --accent2:#3DEBFF; --ok:#4ade80; --warn:#fbbf24; --soft:#242B35; --band:#a78bfa; --accent-ink:#08101E; color-scheme:dark}
+body{background:var(--bg)}
+h1,h2,h3{font-family:var(--display);letter-spacing:.01em}
+h2{font-weight:700}
+.panel{border-radius:12px}
+button{border-radius:8px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+/* rótulo de neón */
+.hero{background:radial-gradient(120% 140% at 0% 0%,var(--plate2),var(--plate) 60%);border-radius:14px;padding:22px 22px 0;color:#C9D2DE;overflow:hidden;position:relative}
+.brand{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;margin:0;display:flex;align-items:center;gap:.12em;color:#EFFFFF;
+  text-shadow:0 0 2px #fff,0 0 8px var(--neon),0 0 18px var(--neon),0 0 36px var(--neonsoft)}
+.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#EFFFFF;box-shadow:0 0 6px var(--neon),0 0 16px var(--neon),0 0 30px var(--neonsoft);align-self:flex-end;margin-bottom:.12em}
+.hero .lead{color:#AEB8C6;margin:12px 0 18px;max-width:60ch}
+.tube{height:5px;margin:0 -22px;background:linear-gradient(90deg,transparent,var(--neon) 15%,#EFFFFF 50%,var(--neon) 85%,transparent);box-shadow:0 0 12px var(--neon),0 0 26px var(--neonsoft)}
+@media (prefers-reduced-motion:no-preference){.brand,.brand .dot,.tube{animation:flick 2.6s ease-out 1}}
+@keyframes flick{0%,6%,10%{opacity:.25}4%,8%,14%,100%{opacity:1}}
+/* pestañas con iconos */
+.tabbar{background:var(--bg)}
+.tabbar button{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:600;background:var(--panel)}
+.tabbar .ti{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tabbar button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media (max-width:720px){
+  .wrap{padding-bottom:96px}
+  .tabbar{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:20;margin:0;border:0;border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px));
+    flex-wrap:nowrap;overflow-x:auto;gap:2px;background:var(--panel);box-shadow:0 -6px 18px rgba(10,14,20,.18);scrollbar-width:none}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tabbar button{flex:1 0 50px;flex-direction:column;gap:2px;font-size:10px;padding:6px 2px;border:0;background:transparent;color:var(--muted);white-space:nowrap}
+  .tabbar button[aria-selected="true"]{background:transparent;color:var(--accent)}
+  .tabbar button[aria-selected="true"] .ti{filter:drop-shadow(0 0 4px var(--accent))}
+  .tabbar .ti{width:22px;height:22px}
+  .hero{padding:18px 16px 0}.tube{margin:0 -16px}
+}
+/* inicio */
+.week{background:linear-gradient(160deg,var(--panel),var(--soft))}
+.weekhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.weekhead h2{margin:0;font-size:20px}
+.weekmain{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:18px;align-items:end}
+@media (max-width:720px){.weekmain{grid-template-columns:minmax(0,1fr)}}
+.bignum b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(52px,11vw,84px);line-height:.95;color:var(--ink)}
+.bignum span{color:var(--muted);font-size:13px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bignum b{color:#EFFFFF;text-shadow:0 0 10px var(--neonsoft)}}
+:root[data-theme="dark"] .bignum b{color:#EFFFFF;text-shadow:0 0 10px var(--neonsoft)}
+.weekstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.weekstats div{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.weekstats b{display:block;font-family:var(--display);font-size:24px;font-weight:700;white-space:nowrap}
+@media (max-width:720px){.weekstats{grid-template-columns:repeat(2,minmax(0,1fr))}.weekstats b{font-size:21px}}
+.weekstats span{font-size:12px;color:var(--muted)}
+.weekbars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;margin:4px 0 6px}
+.weekbars small{font-size:10px;color:var(--muted)}
+.weekbars div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:112px;font-size:11px;color:var(--muted)}
+.weekbars i{display:block;width:100%;max-width:38px;border-radius:5px 5px 2px 2px;background:var(--accent);min-height:3px}
+.weekbars i.zero{background:var(--line)}
+.weekbars div.today span{color:var(--ink);font-weight:700}
+.besthold{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.besthold div{background:var(--soft);border-radius:10px;padding:10px 12px}
+.besthold b{display:block;font-family:var(--display);font-size:26px;font-weight:700}
+.besthold span{font-size:12px;color:var(--muted)}
+.lastbox{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline}
+.lastbox b{font-family:var(--display);font-size:22px}
+.tiles b,.rprev b{font-family:var(--display);font-weight:700}
 </style>
 
 <div class="wrap">
-  <header>
-    <h1>CALI.LAAD</h1>
-    <p class="lead">Calistenia de fuerza: simulador, calculadora de carga, registro y evolución de tus entrenamientos. Modelo LAD de cuantificación de la carga en calistenia de fuerza (autor: Juan Gil Saiz). Unidad: 1 LAD = 1 segundo al torque de la full de su skill (hombro + codo). Las pesas van aparte, en INOL. El simulador calcula el torque en el hombro y en el codo y el impulso angular de cada postura y powermove; la calculadora puntúa tu sesión; las tablas lo resumen y «Cómo funciona» lo explica a fondo, con los límites del modelo.</p>
+  <header class="hero">
+    <h1 class="brand" aria-label="CALI.LAAD"><span>CALI</span><i class="dot" aria-hidden="true"></i><span>LAAD</span></h1>
+    <p class="lead">Calistenia de fuerza, medida. Calcula la carga de cada sesión con el método LAD, guárdala y mira cómo progresas.</p>
+    <div class="tube" aria-hidden="true"></div>
   </header>
   <div class="tabbar" role="tablist" aria-label="Secciones">
-    <button type="button" role="tab" id="t-sim" aria-controls="tab-sim" aria-selected="true">Simulador</button>
-    <button type="button" role="tab" id="t-calc" aria-controls="tab-calc" aria-selected="false">Calculadora</button>
-    <button type="button" role="tab" id="t-reg" aria-controls="tab-reg" aria-selected="false">Registro</button>
-    <button type="button" role="tab" id="t-evo" aria-controls="tab-evo" aria-selected="false">Evolución</button>
-    <button type="button" role="tab" id="t-tab" aria-controls="tab-tab" aria-selected="false">Tablas</button>
-    <button type="button" role="tab" id="t-how" aria-controls="tab-how" aria-selected="false">Cómo funciona</button>
+    <button type="button" role="tab" id="t-home" aria-controls="tab-home" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg><span>Inicio</span></button>
+    <button type="button" role="tab" id="t-calc" aria-controls="tab-calc" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/></svg><span>Calculadora</span></button>
+    <button type="button" role="tab" id="t-reg" aria-controls="tab-reg" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span>Registro</span></button>
+    <button type="button" role="tab" id="t-evo" aria-controls="tab-evo" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path d="M5 15l4-5 4 3 6-7"/></svg><span>Evolución</span></button>
+    <button type="button" role="tab" id="t-sim" aria-controls="tab-sim" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><circle cx="12" cy="10" r="2"/><path d="M12 12v4l-3 4M12 16l3 4M8 13l4-1 4 1"/></svg><span>Simulador</span></button>
+    <button type="button" role="tab" id="t-tab" aria-controls="tab-tab" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg><span>Tablas</span></button>
+    <button type="button" role="tab" id="t-how" aria-controls="tab-how" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>Método</span></button>
+  </div>
+  <div class="tabpanel" id="tab-home" role="tabpanel" aria-labelledby="t-home" hidden>
+  <section class="panel week" aria-labelledby="h_week">
+    <div class="weekhead"><h2 id="h_week">Tu semana</h2><span id="h_range" class="tag"></span></div>
+    <div class="weekmain">
+      <div class="bignum"><b id="h_lad">0</b><span>LAD-Au esta semana</span></div>
+      <div class="weekstats" id="h_stats"></div>
+    </div>
+    <div class="weekbars" id="h_bars" aria-label="LAD-Au de cada día de esta semana"></div>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="primary" type="button" onclick="window.LADtab('calc')">Nueva sesión</button>
+      <button type="button" onclick="window.LADtab('evo')">Ver mi evolución</button>
+    </div>
+  </section>
+  <section class="panel" aria-labelledby="h_holds">
+    <h2 id="h_holds">Mejores holds de la semana</h2>
+    <div id="h_best" class="besthold"></div>
+  </section>
+  <section class="panel" aria-labelledby="h_last">
+    <h2 id="h_last">Última sesión</h2>
+    <div id="h_lastbox"></div>
+  </section>
   </div>
   <div class="tabpanel" id="tab-sim" role="tabpanel" aria-labelledby="t-sim">
   <div class="grid">
@@ -1761,8 +1858,29 @@ document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.addEventListen
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(!$('tab-evo').hidden)renderEvo();});
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(!$('tab-evo').hidden)renderEvo();},200);});
 
-function renderAll(){renderList();if(!$('tab-evo').hidden)renderEvo();}
-window.LADreg={show(t){if(t==='reg')preview();if(t==='evo')renderEvo();},refresh:renderAll};
+
+/* ---------- inicio: tu semana ---------- */
+function renderHome(){
+  const today=todayISO(), w0=monday(today), w1=addDays(w0,6), pw=addDays(w0,-7);
+  const inW=sessions.filter(s=>s.date>=w0&&s.date<=w1), prevW=sessions.filter(s=>s.date>=pw&&s.date<w0);
+  const lad=inW.reduce((a,s)=>a+(+s.ladau||0),0), plad=prevW.reduce((a,s)=>a+(+s.ladau||0),0), inol=inW.reduce((a,s)=>a+(+s.inol||0),0);
+  const m=dailyMap(), first=(sessions.map(s=>s.date).sort()[0])||today, ac=acwrAt(today,m,first);
+  $('h_range').textContent='Semana del '+shortDate(w0)+' al '+shortDate(w1);
+  $('h_lad').textContent=fmt(lad,1);
+  $('h_stats').innerHTML=[[plad>0?pct((lad/plad-1)*100):'—','frente a la semana pasada'],[ac==null?'—':fmt(ac,2),'ACWR de skills hoy'],[String(inW.length),inW.length===1?'sesión':'sesiones'],
+    [fmt(inol,2),'INOL de pesas'],[String(inW.reduce((a,s)=>a+(s.fallos||0),0)),'fallos anotados'],[String(inW.reduce((a,s)=>a+(s.cerca||0),0)),'series cerca del fallo']]
+    .map(([v,l])=>'<div><b>'+v+'</b><span>'+l+'</span></div>').join('');
+  const dn=['L','M','X','J','V','S','D'], vals=dn.map((_,i)=>m[addDays(w0,i)]||0), mx=Math.max(1,...vals);
+  $('h_bars').innerHTML=vals.map((v,i)=>'<div class="'+(addDays(w0,i)===today?'today':'')+'" title="'+esc(longDate(addDays(w0,i))+': '+fmt(v,1)+' LAD-Au')+'"><small>'+(v?fmt(v,0):'')+'</small><i class="'+(v?'':'zero')+'" style="height:'+(v?Math.max(6,v/mx*80):3)+'px"></i><span>'+dn[i]+'</span></div>').join('');
+  const best={};inW.forEach(s=>(s.prog||[]).forEach(p=>{if(!p.best)return;const k=(p.fam==='plancha'?'Plancha ':'Front ')+p.prog.charAt(0).toLowerCase()+p.prog.slice(1);if(!best[k]||p.best>best[k].v)best[k]={v:p.best,d:s.date};}));
+  const bk=Object.keys(best).sort((a,b)=>best[b].v-best[a].v).slice(0,6);
+  $('h_best').innerHTML=bk.length?bk.map(k=>'<div><b>'+fmt(best[k].v,2).replace(/,?0+$/,'')+'″</b><span>'+esc(k)+' · '+shortDate(best[k].d)+'</span></div>').join(''):'<p class="notes" style="margin:0">Esta semana aún no hay holds sueltos guardados.</p>';
+  const last=[...sessions].sort((a,b)=>b.date.localeCompare(a.date)||String(b.saved).localeCompare(String(a.saved)))[0];
+  $('h_lastbox').innerHTML=last?'<div class="lastbox"><b>'+fmt(last.ladau,1)+' LAD-Au</b><span>'+esc(longDate(last.date))+'</span><span>'+esc(last.note||'Sin nota')+'</span><span>INOL '+fmt(last.inol,2)+'</span><span>'+(last.nSeries||0)+' series</span></div>'
+    :'<p class="notes" style="margin:0">Todavía no has guardado ninguna sesión. Pulsa «Nueva sesión», monta tus series en la calculadora y guárdala en el registro.</p>';
+}
+function renderAll(){renderList();renderHome();if(!$('tab-evo').hidden)renderEvo();}
+window.LADreg={show(t){if(t==='reg')preview();if(t==='evo')renderEvo();if(t==='home')renderHome();},refresh:renderAll};
 $('r_date').value=todayISO();
 initStore();
 })();
@@ -1771,13 +1889,13 @@ initStore();
 <script>
 (function(){
   const $=id=>document.getElementById(id);
-  const tabs=['sim','calc','reg','evo','tab','how'];
+  const tabs=['home','sim','calc','reg','evo','tab','how'];
   function show(t){
     tabs.forEach(x=>{$('tab-'+x).hidden=x!==t;$('t-'+x).setAttribute('aria-selected',x===t?'true':'false');});
     try{localStorage.setItem('lad-tab',t)}catch(e){}
     if(t==='tab'&&window.LADsim) window.LADsim.refreshTables();
     if(t==='calc'&&window.LADcalc) window.LADcalc.refresh();
-    if((t==='reg'||t==='evo')&&window.LADreg) window.LADreg.show(t);
+    if((t==='reg'||t==='evo'||t==='home')&&window.LADreg) window.LADreg.show(t);
   }
   window.LADtab=t=>{show(t);window.scrollTo({top:0});};
   tabs.forEach(x=>$('t-'+x).addEventListener('click',()=>show(x)));
@@ -1791,8 +1909,8 @@ initStore();
   // si la calculadora usa tus medidas, se recalcula al cambiarlas en el simulador
   const med=document.querySelector('[aria-labelledby="h-medidas"]');
   if(med) med.addEventListener('input',()=>{if($('c_own').checked&&window.LADcalc)window.LADcalc.refresh();});
-  let t='sim';try{t=localStorage.getItem('lad-tab')||'sim'}catch(e){}
-  show(tabs.includes(t)?t:'sim');
+  let t='home';try{t=localStorage.getItem('lad-tab')||'home'}catch(e){}
+  show(tabs.includes(t)?t:'home');
 })();
 </script>
 
