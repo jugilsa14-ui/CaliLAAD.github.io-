@@ -202,17 +202,17 @@ td.acts{white-space:nowrap}td.acts button{margin-right:6px}
 
 /* ===== CALI.LAAD · gris oscuro y azul, siempre oscuro (el autor, 22 nov) ===== */
 :root{
-  --bg:#33363B; --panel:#3C4046; --ink:#F0F2F4; --muted:#B0B5BC; --line:#4C5158;
-  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#464A51; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark;
+  --bg:#E6E8EB; --panel:#F6F7F8; --ink:#1E2226; --muted:#5E656E; --line:#CDD2D8;
+  --accent:#1E8F50; --accent2:#3A9764; --ok:#8A9099; --warn:#B45309; --soft:#ECEEF1; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light;
   --display:"Saira",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
-  --plate:#2B2E32; --plate2:#383B40;
+  --plate:#F6F7F8; --plate2:#FFFFFF;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#33363B; --panel:#3C4046; --ink:#F0F2F4; --muted:#B0B5BC; --line:#4C5158;
-  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#464A51; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}}
+  --bg:#E6E8EB; --panel:#F6F7F8; --ink:#1E2226; --muted:#5E656E; --line:#CDD2D8;
+  --accent:#1E8F50; --accent2:#3A9764; --ok:#8A9099; --warn:#B45309; --soft:#ECEEF1; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light}}
 :root[data-theme="dark"]{
-  --bg:#33363B; --panel:#3C4046; --ink:#F0F2F4; --muted:#B0B5BC; --line:#4C5158;
-  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#464A51; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}
+  --bg:#E6E8EB; --panel:#F6F7F8; --ink:#1E2226; --muted:#5E656E; --line:#CDD2D8;
+  --accent:#1E8F50; --accent2:#3A9764; --ok:#8A9099; --warn:#B45309; --soft:#ECEEF1; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light}
 body{background:var(--bg)}
 h1,h2,h3{font-family:var(--display);letter-spacing:.01em}
 h2{font-weight:700}
@@ -220,11 +220,11 @@ h2{font-weight:700}
 button{border-radius:8px}
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 /* cabecera */
-.hero{background:radial-gradient(120% 140% at 0% 0%,var(--plate2),var(--plate) 60%);border-radius:14px;padding:22px 22px 0;color:#C9D2DE;overflow:hidden;position:relative}
-.brand{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;margin:0;display:flex;align-items:center;gap:.12em;color:#EEF2F7}
-.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#2FB36B;align-self:flex-end;margin-bottom:.12em}
-.hero .lead{color:#AEB8C6;margin:12px 0 18px;max-width:60ch}
-.tube{height:4px;margin:0 -22px;background:#2FB36B}
+.hero{background:radial-gradient(120% 140% at 0% 0%,var(--plate2),var(--plate) 60%);border-radius:14px;padding:22px 22px 0;color:#3A4048;border:1px solid var(--line);overflow:hidden;position:relative}
+.brand{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;margin:0;display:flex;align-items:center;gap:.12em;color:#1E2226}
+.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#1E8F50;align-self:flex-end;margin-bottom:.12em}
+.hero .lead{color:#5E656E;margin:12px 0 18px;max-width:60ch}
+.tube{height:4px;margin:0 -22px;background:#1E8F50}
 /* pestañas con iconos */
 .tabbar{background:var(--bg)}
 .tabbar button{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:600;background:var(--panel)}
@@ -267,12 +267,12 @@ button.primary{background:var(--accent);border-color:var(--accent);color:var(--a
 .lastbox b{font-family:var(--display);font-size:22px}
 .tiles b,.rprev b{font-family:var(--display);font-weight:700}
 /* cuenta */
-.acct{position:absolute;top:14px;right:16px;display:flex;gap:8px;align-items:center;font-size:12px;color:#AEB8C6;max-width:55%}
+.acct{position:absolute;top:14px;right:16px;display:flex;gap:8px;align-items:center;font-size:12px;color:#5E656E;max-width:55%}
 .acct span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.acct button{padding:4px 10px;font-size:12px;background:transparent;color:#DCE3EC;border-color:#3A4452}
+.acct button{padding:4px 10px;font-size:12px;background:transparent;color:#1E2226;border-color:var(--line)}
 /* acceso */
 body.gated{overflow:hidden}
-.gate{position:fixed;inset:0;z-index:50;background:rgba(10,12,16,.92);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px}
+.gate{position:fixed;inset:0;z-index:50;background:rgba(230,232,235,.94);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px}
 .gate[hidden]{display:none}
 .gbox{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;margin-top:6vh}
 .gbrand{font-size:34px;margin:0 0 4px}
@@ -428,7 +428,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <header class="hero">
     <div class="acct" id="acct"></div>
     <h1 class="brand" aria-label="CALI.LAAD"><span>CALI</span><i class="dot" aria-hidden="true"></i><span>LAAD</span></h1>
-    <p class="lead">Calistenia de fuerza, medida. Calcula la carga de cada sesión con el método LAD, guárdala y mira cómo progresas.</p>
+    <p class="lead">Calistenia de fuerza, medida. Calcula la carga de cada sesión con el método LAD, guárdala y observa cómo progresas.</p>
     <div class="tube" aria-hidden="true"></div>
   </header>
   <div class="tabbar" role="tablist" aria-label="Secciones">
@@ -776,7 +776,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="head"><h2 id="e_h-per">Evolución</h2><span id="e_range" class="tag"></span></div>
     <div class="seg" role="group" aria-label="Periodo">
       <button type="button" data-w="4">Último mes (4 semanas)</button>
-      <button type="button" data-w="7">7 semanas</button>
+      <button type="button" data-w="8">8 semanas</button>
       <button type="button" data-w="12">12 semanas</button>
       <button type="button" data-w="all">Todo</button>
       <button type="button" data-w="custom">Personalizado</button>
@@ -2044,7 +2044,7 @@ $('r_import').addEventListener('change',async e=>{
 
 /* ---------- evolución ---------- */
 let per='4', skill='plancha'; const charts={};
-try{per=localStorage.getItem('lad-evo-per')||'4'}catch(e){}
+try{per=localStorage.getItem('lad-evo-per')||'4';if(per==='7')per='8';}catch(e){}
 function range(){
   const dates=sessions.map(s=>s.date).sort(); const last=todayISO();
   if(per==='custom'){const f=$('e_from').value||dates[0]||last, t=$('e_to').value||last;return [monday(f),addDays(monday(t),6)];}
@@ -2086,7 +2086,7 @@ function svgChart(id,o){
     '<div class="legend">'+leg.map(([t,c,ln])=>'<span><i style="background:'+c+(ln?';height:3px':'')+'"></i>'+esc(t)+'</span>').join('')+'</div>';
 }
 
-const PAL=['#2FB36B','#E0A43A','#9BD8B4','#D0687F','#8C96A3','#5FB3A3','#C9B458','#7FA3C9'];
+const PAL=['#1E8F50','#C77D1A','#3A9764','#B3475F','#6B7480','#2E8C80','#9A8A2E','#4F77A8'];
 function renderEvo(){
   document.querySelectorAll('#tab-evo .seg [data-w]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.w===per?'true':'false'));
   document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sk===skill?'true':'false'));
@@ -2173,7 +2173,7 @@ const BAND=[[0,'RAW'],[5,'G5'],[10,'G10'],[15,'G15'],[20,'G20']];
 const EL={plancha:[['hold','Hold'],['dead','Deadstop'],['press','Press'],['neg','Negativa'],['flex','Flexión'],['low','Pino (descanso)']],
           front:[['hold','Hold'],['dead','Deadstop'],['press','Press'],['neg','Negativa'],['flex','Pull-up'],['low','Colgado (descanso)']]};
 const REST=[[0,'—'],[30,'30″'],[60,'1′'],[90,'1′30'],[120,'2′'],[150,'2′30'],[180,'3′'],[240,'4′'],[300,'5′'],[420,'7′'],[600,'10′']];
-const END=[['na','Sin anotar'],['paro','Paré yo'],['fallo','Caída (fallo)']];
+const END=[['na','Sin anotar'],['paro','He parado yo'],['fallo','Caída (fallo)']];
 const PM=['press','neg','flex'];
 /* filas <-> esfuerzos de la calculadora: los powermoves iguales seguidos se agrupan en una fila con reps */
 function toRows(efs){const rows=[];(efs||[]).forEach(e=>{
