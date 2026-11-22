@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>CALI.LAAD</title>
 <meta name="description" content="CALI.LAAD: simulador, calculadora de carga, registro y evolución para calistenia de fuerza, con el método LAD.">
-<meta name="theme-color" content="#1A1F27">
+<meta name="theme-color" content="#A9ADB2">
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,17 +202,17 @@ td.acts{white-space:nowrap}td.acts button{margin-right:6px}
 
 /* ===== CALI.LAAD · gris oscuro y azul, siempre oscuro (el autor, 22 nov) ===== */
 :root{
-  --bg:#E6E8EB; --panel:#F6F7F8; --ink:#1E2226; --muted:#5E656E; --line:#CDD2D8;
-  --accent:#1E8F50; --accent2:#3A9764; --ok:#8A9099; --warn:#B45309; --soft:#ECEEF1; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light;
+  --bg:#A9ADB2; --panel:#C5C8CC; --ink:#15181B; --muted:#3D434A; --line:#959AA1;
+  --accent:#17783F; --accent2:#1F6E45; --ok:#5E646C; --warn:#8A3A06; --soft:#B7BBC0; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light;
   --display:"Saira",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
-  --plate:#F6F7F8; --plate2:#FFFFFF;
+  --plate:#BBBFC3; --plate2:#CED1D4;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#E6E8EB; --panel:#F6F7F8; --ink:#1E2226; --muted:#5E656E; --line:#CDD2D8;
-  --accent:#1E8F50; --accent2:#3A9764; --ok:#8A9099; --warn:#B45309; --soft:#ECEEF1; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light}}
+  --bg:#A9ADB2; --panel:#C5C8CC; --ink:#15181B; --muted:#3D434A; --line:#959AA1;
+  --accent:#17783F; --accent2:#1F6E45; --ok:#5E646C; --warn:#8A3A06; --soft:#B7BBC0; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light}}
 :root[data-theme="dark"]{
-  --bg:#E6E8EB; --panel:#F6F7F8; --ink:#1E2226; --muted:#5E656E; --line:#CDD2D8;
-  --accent:#1E8F50; --accent2:#3A9764; --ok:#8A9099; --warn:#B45309; --soft:#ECEEF1; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light}
+  --bg:#A9ADB2; --panel:#C5C8CC; --ink:#15181B; --muted:#3D434A; --line:#959AA1;
+  --accent:#17783F; --accent2:#1F6E45; --ok:#5E646C; --warn:#8A3A06; --soft:#B7BBC0; --band:#6D5BD0; --accent-ink:#FFFFFF; color-scheme:light}
 body{background:var(--bg)}
 h1,h2,h3{font-family:var(--display);letter-spacing:.01em}
 h2{font-weight:700}
@@ -220,11 +220,11 @@ h2{font-weight:700}
 button{border-radius:8px}
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 /* cabecera */
-.hero{background:radial-gradient(120% 140% at 0% 0%,var(--plate2),var(--plate) 60%);border-radius:14px;padding:22px 22px 0;color:#3A4048;border:1px solid var(--line);overflow:hidden;position:relative}
+.hero{background:radial-gradient(120% 140% at 0% 0%,var(--plate2),var(--plate) 60%);border-radius:14px;padding:22px 22px 0;color:#2A2F35;border:1px solid var(--line);overflow:hidden;position:relative}
 .brand{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;margin:0;display:flex;align-items:center;gap:.12em;color:#1E2226}
-.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#1E8F50;align-self:flex-end;margin-bottom:.12em}
-.hero .lead{color:#5E656E;margin:12px 0 18px;max-width:60ch}
-.tube{height:4px;margin:0 -22px;background:#1E8F50}
+.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#17783F;align-self:flex-end;margin-bottom:.12em}
+.hero .lead{color:#30363C;margin:12px 0 18px;max-width:60ch}
+.tube{height:4px;margin:0 -22px;background:#17783F}
 /* pestañas con iconos */
 .tabbar{background:var(--bg)}
 .tabbar button{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:600;background:var(--panel)}
@@ -267,12 +267,12 @@ button.primary{background:var(--accent);border-color:var(--accent);color:var(--a
 .lastbox b{font-family:var(--display);font-size:22px}
 .tiles b,.rprev b{font-family:var(--display);font-weight:700}
 /* cuenta */
-.acct{position:absolute;top:14px;right:16px;display:flex;gap:8px;align-items:center;font-size:12px;color:#5E656E;max-width:55%}
+.acct{position:absolute;top:14px;right:16px;display:flex;gap:8px;align-items:center;font-size:12px;color:#30363C;max-width:55%}
 .acct span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .acct button{padding:4px 10px;font-size:12px;background:transparent;color:#1E2226;border-color:var(--line)}
 /* acceso */
 body.gated{overflow:hidden}
-.gate{position:fixed;inset:0;z-index:50;background:rgba(230,232,235,.94);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px}
+.gate{position:fixed;inset:0;z-index:50;background:rgba(169,173,178,.95);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px}
 .gate[hidden]{display:none}
 .gbox{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;margin-top:6vh}
 .gbrand{font-size:34px;margin:0 0 4px}
@@ -397,6 +397,13 @@ tr.detrow td{background:var(--soft);display:table-cell}
   .brow{grid-template-columns:repeat(2,minmax(0,1fr)) auto}.brow label:nth-of-type(1){grid-column:1}.brow button.x{grid-column:3;grid-row:1}
   .brow label.chk{grid-column:1/-1;padding:0}}
 input[type=checkbox],input[type=range]{accent-color:var(--accent)}
+
+/* Método: símbolos de cada apartado */
+dl.syms{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:12px 0 22px;padding:12px 14px;background:var(--soft);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;font-size:13px}
+dl.syms::before{content:"Símbolos de este apartado";grid-column:1/-1;font-weight:600;font-size:13px;margin-bottom:4px}
+dl.syms dt{font-weight:700;font-family:var(--display);white-space:nowrap}
+dl.syms dd{margin:0;color:var(--ink)}
+@media (max-width:640px){dl.syms{grid-template-columns:minmax(0,1fr)}dl.syms dt{white-space:normal;margin-top:6px}}
 </style>
 
 <div class="wrap">
@@ -428,7 +435,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <header class="hero">
     <div class="acct" id="acct"></div>
     <h1 class="brand" aria-label="CALI.LAAD"><span>CALI</span><i class="dot" aria-hidden="true"></i><span>LAAD</span></h1>
-    <p class="lead">Calistenia de fuerza, medida. Calcula la carga de cada sesión con el método LAD, guárdala y observa cómo progresas.</p>
+    <p class="lead">Calistenia de tensión. Calcula la carga de cada sesión con el método LAD, guárdala y observa cómo progresas.</p>
     <div class="tube" aria-hidden="true"></div>
   </header>
   <div class="tabbar" role="tablist" aria-label="Secciones">
@@ -587,15 +594,15 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="cols">
       <div class="col">
       <div class="fields">
-        <label for="H">Altura <small>cm</small></label><input id="H" type="number" step="0.5" value="168">
-        <label for="M">Peso <small>kg</small></label><input id="M" type="number" step="0.1" value="65">
-        <label for="shW">Anchura de hombros <small>cm, acromion → acromion (para la vista frontal). Por defecto ≈ 0,23 × altura, estimación por verificar</small></label><input id="shW" type="number" step="0.5" value="38.5">
+        <label for="H">Altura <small>cm</small></label><input id="H" type="number" step="0.5" placeholder="168" inputmode="decimal">
+        <label for="M">Peso <small>kg</small></label><input id="M" type="number" step="0.1" placeholder="65" inputmode="decimal">
+        <label for="shW">Anchura de hombros <small>cm, acromion → acromion (para la vista frontal). Por defecto ≈ 0,23 × altura, estimación por verificar</small></label><input id="shW" type="number" step="0.5" placeholder="38,5" inputmode="decimal">
       </div>
       <div class="fields" style="margin-top:6px">
         <label for="legfull">Pierna extendida <small>espina ilíaca anterosuperior → punta del dedo gordo, en punta. Solo con rodillas estiradas; vacío = segmentos</small></label><input id="legfull" type="number" step="0.5" placeholder="—">
       </div>
       <div class="row" style="margin-top:10px"><button id="reset" type="button">Proporciones medias para mi altura</button></div>
-      <p class="notes" style="margin-top:8px">Los valores iniciales son proporciones medias (de Leva, 1996) escaladas a tu altura. Sustitúyelos por los tuyos. Se guardan solo en tu navegador: cada persona que abra la página mete los suyos.</p>
+      <p class="notes" style="margin-top:8px">Pon tu altura y tu peso. Mientras estén vacíos, la web usa un cuerpo de ejemplo de 168 cm y 65 kg (en gris). Los segmentos vacíos usan proporciones medias (de Leva, 1996) para tu altura; sustitúyelos por tus medidas si las tienes. Se guardan solo en tu navegador: cada persona que abra la página mete los suyos.</p>
       <details style="margin-top:6px">
         <summary>Cómo tomar las medidas</summary>
         <ol class="notes" style="padding-left:18px;margin:8px 0 0">
@@ -656,17 +663,17 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <section class="panel" aria-labelledby="c_h-perfil">
     <h2 id="c_h-perfil">Tú</h2>
     <div class="prof">
-      <div class="f"><label for="c_H">Altura (cm)</label><input id="c_H" type="number" step="0.5" value="168"></div>
-      <div class="f"><label for="c_M">Peso (kg)</label><input id="c_M" type="number" step="0.1" value="65"></div>
+      <div class="f"><label for="c_H">Altura (cm)</label><input id="c_H" type="number" step="0.5" placeholder="168" inputmode="decimal"></div>
+      <div class="f"><label for="c_M">Peso (kg)</label><input id="c_M" type="number" step="0.1" placeholder="65" inputmode="decimal"></div>
       <div class="f"><label for="c_tP">Techo en plancha</label><select id="c_tP"></select></div>
       <div class="f"><label for="c_tF">Techo en front lever</label><select id="c_tF"></select></div>
-      <div class="f"><label for="c_sP">Tu máximo en el techo de plancha (s)</label><input id="c_sP" type="number" step="0.25" min="0" value="4"></div>
-      <div class="f"><label for="c_sF">Tu máximo en el techo de front (s)</label><input id="c_sF" type="number" step="0.25" min="0" value="6"></div>
+      <div class="f"><label for="c_sP">Tu máximo en el techo de plancha (s)</label><input id="c_sP" type="number" step="0.25" min="0" placeholder="tu récord"></div>
+      <div class="f"><label for="c_sF">Tu máximo en el techo de front (s)</label><input id="c_sF" type="number" step="0.25" min="0" placeholder="tu récord"></div>
       <div class="f"><label for="c_nP">n de la curva · plancha</label><input id="c_nP" type="number" step="0.1" min="0.5" value="7.8"></div>
       <div class="f"><label for="c_nF">n de la curva · front</label><input id="c_nF" type="number" step="0.1" min="0.5" value="7.8"></div>
     </div>
     <label class="chk" style="font-size:13px;color:var(--ink);white-space:normal;align-items:flex-start"><input id="c_own" type="checkbox"> Usar mis medidas del simulador para los torques (si no, proporciones medias para tu altura)</label>
-    <p class="notes"><b>1 LAD = 1 segundo al torque de la full de su skill.</b> INT1 = torque de hombro + codo de la postura ÷ el de la full. El techo y su máximo (récord del bloque, test 1) sirven para la fatiga y la RPE-T. Sin máximo medido en una postura, se estima con la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n); n = 7,8 es el valor estándar (half frente a full del autor, rigor F).</p>
+    <p class="notes"><b>1 LAD = 1 segundo al torque de la full de su skill.</b> INT1 = torque de hombro + codo de la postura ÷ el de la full. El techo y su máximo (récord del bloque, test 1) sirven para la fatiga y la RPE-P. Sin máximo medido en una postura, se estima con la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n); n = 7,8 es el valor estándar (half frente a full del autor, rigor F).</p>
     <details>
       <summary>Parámetros del modelo (valores estándar)</summary>
       <div class="prof" style="margin-top:10px">
@@ -706,7 +713,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   </section>
 
   <section class="panel" aria-labelledby="c_h-total">
-    <div class="head"><h2 id="c_h-total">Carga de la sesión</h2><span id="c_exTag" class="ex" hidden>Ejemplo: microdosis del martes 17 nov y pesas del miércoles 11 nov. Cambia o borra estas filas</span></div>
+    <div class="head"><h2 id="c_h-total">Carga de la sesión</h2><span id="c_exTag" class="ex" hidden>Ejemplo: una sesión de skills y pesas. Cambia o borra estas filas</span></div>
     <div class="total">
       <div><b id="c_tB">0,00</b><span>LAD-Au · carga base</span></div>
       <div><b id="c_tF2">0,00</b><span>Recargo por fatiga (LAD)</span></div>
@@ -832,12 +839,12 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 
   <section class="panel" aria-labelledby="h-int1">
     <div class="row" style="justify-content:space-between;align-items:flex-end">
-      <h2 id="h-int1" style="margin:0">INT1 y RPE-T</h2>
+      <h2 id="h-int1" style="margin:0">INT1 y RPE-P</h2>
       <span class="notes" id="techoNote"></span>
     </div>
-    <p class="notes">INT1 = torque de hombro + codo de la postura (con la goma que tengas puesta) ÷ el de la full sin goma: es la intensidad de la carga LAD. RPE-T = 10 × torque ÷ torque de tu techo (γ = 1): a qué parte de tu máximo entrenas; más de 10 = por encima de tu techo. Tu techo se elige en la banda izquierda. Pulsa una fila para verla en la figura del simulador.</p>
+    <p class="notes">INT1 = torque de hombro + codo de la postura (con la goma que tengas puesta) ÷ el de la full sin goma: es la intensidad de la carga LAD. RPE-P = 10 × torque ÷ torque de tu techo (γ = 1): a qué parte de tu progresión máxima entrenas (P de progresión); 10 = tu techo, más de 10 = por encima de tu techo. Es un cálculo, no una sensación: no entra en la carga y ajusta la fatiga (pestaña Método, apartado 9). Tu techo se elige en la banda izquierda. Pulsa una fila para verla en la figura del simulador.</p>
     <div class="tablewrap"><table>
-      <thead><tr><th>Postura</th><th>Hombro (N·m)</th><th>Codo (N·m)</th><th>INT1 (÷ full)</th><th>RPE-T (÷ techo × 10)</th></tr></thead>
+      <thead><tr><th>Postura</th><th>Hombro (N·m)</th><th>Codo (N·m)</th><th>INT1 (÷ full)</th><th>RPE-P (÷ techo × 10)</th></tr></thead>
       <tbody id="int1tbl"></tbody>
     </table></div>
     <p id="int1note" class="notes" style="margin-top:10px"></p>
@@ -851,21 +858,31 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   </div>
   <div class="tabpanel" id="tab-how" role="tabpanel" aria-labelledby="t-how" hidden>
   <section class="panel doc" aria-labelledby="h-how">
-    <h2 id="h-how">Cómo funciona</h2>
-    <p class="lede">Esta pestaña explica, paso a paso, qué calcula cada número de la página, con qué supuestos y de dónde salen los datos. Al final están los límites del modelo y el nivel de rigor de cada fuente. Los cálculos son nuestros (rigor F, ver <a href="#how-rigor">nivel de rigor</a>) salvo donde se cita otra cosa.</p>
+    <h2 id="h-how">Método</h2>
+    <p class="lede">Esta pestaña explica, paso a paso, qué calcula cada número de la web, con qué supuestos y de dónde salen los datos. Cada apartado termina con los símbolos que usa y lo que significa cada uno, aunque ya estén en la notación del apartado 2, para que puedas leer cualquier apartado suelto. Al final están los límites del modelo y el nivel de rigor de cada fuente. Los cálculos son del autor (rigor F, ver <a href="#how-rigor">nivel de rigor</a>) salvo donde se cita otra cosa.</p>
     <nav class="toc" aria-label="Índice">
-      <a href="#how-1">1. Qué es LAD</a><a href="#how-2">2. Notación</a><a href="#how-3">3. El cuerpo</a><a href="#how-4">4. Equilibrio</a><a href="#how-5">5. Torques</a><a href="#how-6">6. Gomas</a><a href="#how-7">7. Powermoves</a><a href="#how-8">8. Impulso angular e INT2</a><a href="#how-9">9. INT1</a><a href="#how-10">10. Skills</a><a href="#how-11">11. Carga de la sesión</a><a href="#how-12">12. Validación</a><a href="#how-13">13. Límites del modelo</a><a href="#how-rigor">14. Rigor y referencias</a>
+      <a href="#how-1">1. Qué es LAD</a><a href="#how-2">2. Notación</a><a href="#how-3">3. El cuerpo</a><a href="#how-4">4. Equilibrio</a><a href="#how-5">5. Torques</a><a href="#how-6">6. Gomas</a><a href="#how-7">7. Powermoves</a><a href="#how-8">8. Impulso angular e INT2</a><a href="#how-9">9. INT1 y RPE-P</a><a href="#how-10">10. Skills</a><a href="#how-11">11. Carga de la sesión</a><a href="#how-12">12. Validación</a><a href="#how-13">13. Límites del modelo</a><a href="#how-rigor">14. Rigor y referencias</a>
     </nav>
 
-    <h3 id="how-1">1. Qué es LAD y qué hace esta página</h3>
-    <p>LAD (<i>Load Definition</i>, creado por el autor) es un modelo para cuantificar la carga de un entrenamiento de calistenia de fuerza. <b>1 LAD = 1 segundo al torque de la full de su skill</b> (hombro + codo; plancha para el empuje, front para el tirón). Cada esfuerzo vale INT1 × INT2 × segundos, con dos coeficientes:</p>
+    <h3 id="how-1">1. Qué es LAD y qué hace esta web</h3>
+    <p>LAD (<i>Load Definition</i>, «definición de la carga») es un modelo, creado por el autor, para cuantificar la carga de un entrenamiento de calistenia de fuerza. Su unidad es el propio LAD: <b>1 LAD = 1 segundo manteniendo el torque de la full de su skill</b> (hombro + codo; plancha para el empuje, front lever para el tirón). Cada esfuerzo vale INT1 × INT2 × segundos, con dos coeficientes:</p>
     <ul>
       <li><b>INT1</b>: cuánto pesa la <b>postura</b> (la palanca): su torque de hombro + codo ÷ el de la full.</li>
       <li><b>INT2</b>: cuánto pesa el <b>powermove</b> (press, negativa, flexión, pull-up) respecto a mantener la postura quieta (hold).</li>
     </ul>
-    <p>La guía completa del método, con la fatiga, las pesas (INOL), la carga global y el registro de fallo, está en el documento «Método LAD · guía de cuantificación». Los dos coeficientes salen de un modelo biomecánico del cuerpo que calcula el <b>torque</b> (momento de fuerza) que tienen que hacer el hombro y el codo en cada instante. El simulador enseña ese modelo; la calculadora lo usa para puntuar la sesión; las tablas lo resumen.</p>
+    <p>Los dos coeficientes salen de un modelo biomecánico del cuerpo que calcula el <b>torque</b> (momento de fuerza) que tienen que hacer el hombro y el codo en cada instante. El simulador enseña ese modelo; la calculadora lo usa para puntuar la sesión; el registro guarda las sesiones; la evolución las compara en el tiempo; las tablas lo resumen.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 1">
+      <dt>LAD</dt><dd>Unidad de carga del método: 1 segundo al torque de la full de la skill.</dd>
+      <dt>Full</dt><dd>La versión completa de la skill: cuerpo recto y piernas juntas y estiradas.</dd>
+      <dt>Torque</dt><dd>Momento de fuerza: fuerza × distancia al eje de la articulación. Es lo que «cuesta» sostener una palanca. Se mide en N·m.</dd>
+      <dt>INT1</dt><dd>Intensidad de la postura: torque de hombro + codo de la postura ÷ el de la full. Full = 1.</dd>
+      <dt>INT2</dt><dd>Intensidad del powermove: su impulso angular ÷ el del hold de la misma duración. Hold = 1.</dd>
+      <dt>Hold</dt><dd>Mantener la postura quieta un tiempo (en segundos, ″).</dd>
+      <dt>Powermove</dt><dd>Movimiento dentro de la skill: press, negativa, flexión (plancha) o pull-up (front lever).</dd>
+    </dl>
 
     <h3 id="how-2">2. Notación y unidades</h3>
+    <p>Glosario general. Cada apartado repite al final los símbolos que usa.</p>
     <div class="tablewrap"><table class="def">
       <thead><tr><th>Símbolo</th><th>Significado</th><th>Unidad</th></tr></thead>
       <tbody>
@@ -874,18 +891,28 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
         <tr><td>mᵢ, Lᵢ</td><td>Masa y longitud del segmento i</td><td>kg, m</td></tr>
         <tr><td>xᵢ, yᵢ</td><td>Posición del centro de masas del segmento i (x horizontal, y vertical; las manos en el origen)</td><td>m</td></tr>
         <tr><td>CM</td><td>Centro de masas de todo el cuerpo</td><td>—</td></tr>
-        <tr><td>S, E, W</td><td>Hombro, codo y muñeca (agarre)</td><td>—</td></tr>
+        <tr><td>S, E, W</td><td>Hombro (<i>shoulder</i>), codo (<i>elbow</i>) y muñeca (<i>wrist</i>, el agarre)</td><td>—</td></tr>
         <tr><td>T_hombro, T_codo</td><td>Torque en el hombro y en el codo, sumando los dos brazos</td><td>N·m</td></tr>
         <tr><td>J</td><td>Impulso angular: torque acumulado en el tiempo, J = ∫ T dt</td><td>N·m·s</td></tr>
         <tr><td>F_goma</td><td>Fuerza de la goma = kg de asistencia × g</td><td>N</td></tr>
         <tr><td>φ, e, θ</td><td>Ángulo del antebrazo, flexión del codo e inclinación del tronco</td><td>°</td></tr>
         <tr><td>s, s_máx</td><td>Segundos de un hold y tu máximo en esa postura</td><td>s</td></tr>
+        <tr><td>INT1, INT2</td><td>Intensidad de la postura y del powermove</td><td>sin unidad</td></tr>
+        <tr><td>RPE-P</td><td>Esfuerzo relativo a tu progresión: 10 × torque de la postura ÷ torque de tu techo (apartado 9)</td><td>0–10 (puede pasar de 10)</td></tr>
+        <tr><td>Techo</td><td>La progresión más difícil que mantienes 2″ o más, sin goma</td><td>—</td></tr>
+        <tr><td>c</td><td>Carga base de un esfuerzo, sin fatiga</td><td>LAD</td></tr>
+        <tr><td>A, x, b, τ, w, n</td><td>Fatiga acumulada, fracción de máximo de un esfuerzo, peso de la fatiga, tiempo de recuperación, arrastre a la otra familia y exponente de la curva de s_máx (apartado 11)</td><td>—, —, —, s, —, —</td></tr>
+        <tr><td>LAD-Au</td><td>Carga LAD de la sesión: skills y ejercicios auxiliares, con la fatiga incluida</td><td>LAD</td></tr>
+        <tr><td>INOL</td><td>Índice de carga de las pesas (apartado 11)</td><td>sin unidad</td></tr>
+        <tr><td>ACWR</td><td>Carga aguda (7 días) ÷ carga crónica (28 días)</td><td>sin unidad</td></tr>
+        <tr><td>sRPE</td><td>Dureza de la sesión que anotas tú, de 0 a 5</td><td>0–5</td></tr>
       </tbody>
     </table></div>
+    <p class="small">Signos: × multiplicación · ÷ división · Σ suma de todos los términos · ∫ suma continua en el tiempo (integral) · |T| valor absoluto (sin signo) · T̄ valor medio · ≈ aproximadamente · ″ segundos de hold · ′ minutos de descanso.</p>
 
     <h3 id="how-3">3. El cuerpo: segmentos y proporciones</h3>
     <p>El cuerpo se representa en un plano (vista lateral) como una cadena de segmentos rígidos: mano, antebrazo, brazo, tronco, cabeza y cuello, muslo, pierna y pie. Brazos y piernas cuentan dos veces (izquierdo y derecho). Para cada segmento hacen falta tres datos: su longitud, su masa y dónde está su centro de masas.</p>
-    <p>Por defecto se usan las proporciones medias de <b>de Leva (1996)</b> para hombres, escaladas a tu altura y a tu peso. Los valores están citados de memoria y quedan <b>pendientes de verificar</b> contra el artículo. La longitud del tronco (hombro → cadera) se fija en 0,288 × H, porque la definición original del tronco sobrestimaba el torque frente a las referencias publicadas (ver <a href="#how-12">validación</a>).</p>
+    <p>Por defecto se usan las proporciones medias de <b>de Leva (1996)</b> para hombres, escaladas a tu altura y a tu peso. Los valores están citados de memoria y quedan <b>pendientes de verificar</b> contra el artículo. La longitud del tronco (hombro → cadera) se fija en 0,288 × H, porque la definición original del tronco sobrestimaba el torque frente a las referencias publicadas (ver <a href="#how-12">validación</a>). Mientras no pongas tu altura y tu peso, la web usa un cuerpo de ejemplo de 1,68 m y 65 kg, el mismo de los ejemplos de esta pestaña.</p>
     <div class="tablewrap"><table class="def">
       <thead><tr><th>Segmento</th><th>Longitud (× H)</th><th>CM desde el extremo proximal (× L)</th><th>Masa (% de M, cada uno)</th><th>Medida en el simulador</th></tr></thead>
       <tbody>
@@ -914,25 +941,61 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       </tbody>
     </table></div>
     <p class="small">Las piernas abiertas se proyectan sobre el plano lateral: su longitud efectiva se multiplica por cos(apertura). Es la forma de meter el straddle en un modelo plano.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 3">
+      <dt>H</dt><dd>Tu altura (m). Todas las longitudes por defecto son fracciones de H.</dd>
+      <dt>M</dt><dd>Tu peso (kg). Todas las masas son porcentajes de M.</dd>
+      <dt>L</dt><dd>Longitud de un segmento (m).</dd>
+      <dt>CM</dt><dd>Centro de masas: el punto donde se puede considerar concentrado el peso de un segmento o de todo el cuerpo.</dd>
+      <dt>Proximal</dt><dd>El extremo del segmento más cercano al tronco (en el brazo, el hombro).</dd>
+      <dt>×2</dt><dd>El segmento está a los dos lados del cuerpo y cuenta dos veces.</dd>
+      <dt>cos(apertura)</dt><dd>Coseno del ángulo de apertura de la pierna: 1 con las piernas juntas, 0,71 a 45°, 0,5 a 60°. Acorta la pierna vista de lado.</dd>
+      <dt>ADV90</dt><dd>Advanced tuck: cadera y rodillas a 90°.</dd>
+      <dt>Straddle</dt><dd>Piernas abiertas; el número es la apertura de cada pierna.</dd>
+    </dl>
 
     <h3 id="how-4">4. Equilibrio: el centro de masas sobre las manos</h3>
     <p>El modelo es <b>cuasiestático</b>: en cada instante el cuerpo está en equilibrio, como si el movimiento fuera muy lento. Para que no caiga hacia delante ni hacia atrás, el centro de masas tiene que estar en la vertical de las manos. Con una goma, la condición incluye su fuerza:</p>
     <div class="eq">Σ mᵢ · g · xᵢ − F_goma · x_goma = 0</div>
-    <p>Para una postura dada (inclinación del tronco, cadera, rodillas y codo), el único grado de libertad que queda es el ángulo del antebrazo φ. El programa recorre φ de 5° a 215° en pasos de 0,5°, localiza el cambio de signo de la ecuación y lo afina por bisección. Solo acepta soluciones con el hombro y el codo por encima de las manos (en el front lever, por debajo de la barra). Si no hay ninguna, la postura es <b>imposible</b> con esas medidas y la página lo avisa.</p>
+    <p>Para una postura dada (inclinación del tronco, cadera, rodillas y codo), el único grado de libertad que queda es el ángulo del antebrazo φ. El programa recorre φ de 5° a 215° en pasos de 0,5°, localiza el cambio de signo de la ecuación y lo afina por bisección (partir el intervalo por la mitad hasta dar con el cero). Solo acepta soluciones con el hombro y el codo por encima de las manos (en el front lever, por debajo de la barra). Si no hay ninguna, la postura es <b>imposible</b> con esas medidas y la web lo avisa.</p>
     <p class="small">El front lever es la misma física reflejada en vertical: colgado de la barra, el centro de masas tiene que estar en la vertical de las manos. Como solo importan las distancias horizontales, con el mismo cuerpo y la misma postura da el mismo torque que la plancha.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 4">
+      <dt>Σ</dt><dd>Suma de todos los segmentos del cuerpo.</dd>
+      <dt>mᵢ</dt><dd>Masa del segmento i (kg).</dd>
+      <dt>g</dt><dd>Gravedad, 9,81 m/s²: masa × g = peso en newtons.</dd>
+      <dt>xᵢ</dt><dd>Distancia horizontal del centro de masas del segmento i a las manos (m). Positiva hacia los pies.</dd>
+      <dt>F_goma</dt><dd>Fuerza hacia arriba de la goma (N) = kg de asistencia × g.</dd>
+      <dt>x_goma</dt><dd>Distancia horizontal del punto donde tira la goma a las manos (m).</dd>
+      <dt>φ</dt><dd>Ángulo del antebrazo con la vertical (°): lo que el programa ajusta hasta que el cuerpo queda en equilibrio.</dd>
+      <dt>Cuasiestático</dt><dd>Sin inercia: cada instante se calcula como si fuera un hold.</dd>
+    </dl>
 
     <h3 id="how-5">5. Torques en el hombro y en el codo</h3>
     <p>Una vez colocado el cuerpo, el torque en una articulación es el peso de todo lo que cuelga «más allá» de ella multiplicado por su distancia horizontal a la articulación (el brazo de momento):</p>
     <div class="eq">T_hombro = g · Σ (cuerpo) mᵢ · (xᵢ − x_S) − F_goma · (x_goma − x_S)<br>T_codo = g · [Σ (cuerpo) mᵢ · (xᵢ − x_E) + m_brazo · (x_brazo − x_E)] − F_goma · (x_goma − x_E)</div>
     <p>«Cuerpo» es tronco, cabeza, muslos, piernas y pies. Los valores son la suma de los dos lados (cada hombro hace la mitad). Como el centro de masas está sobre las manos, el torque del hombro es, en la práctica, el peso por la distancia horizontal entre el hombro y la vertical de las manos: por eso en la plancha full de 1,68 m y 65 kg salen 257 N·m con el hombro a unos 43 cm de esa vertical.</p>
     <p class="small">El signo del torque del codo dice si la carga tiende a extenderlo o a flexionarlo; el valor que se usa en el INT2 es el absoluto. Qué músculos lo frenan (bíceps, tríceps, coactivación) no lo decide el modelo: aparece como matiz al lado y lo valora el entrenador.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 5">
+      <dt>T_hombro</dt><dd>Torque en los hombros, sumando los dos (N·m).</dd>
+      <dt>T_codo</dt><dd>Torque en los codos, sumando los dos (N·m).</dd>
+      <dt>x_S, x_E</dt><dd>Posición horizontal del hombro (S) y del codo (E) (m).</dd>
+      <dt>xᵢ − x_S</dt><dd>Brazo de momento: distancia horizontal del segmento i al hombro.</dd>
+      <dt>m_brazo, x_brazo</dt><dd>Masa de los dos brazos y posición horizontal de su centro de masas: el brazo cuelga «más allá» del codo pero no del hombro.</dd>
+      <dt>N·m</dt><dd>Newton-metro: unidad de torque. 1 N·m = 1 newton a 1 metro del eje.</dd>
+      <dt>g, mᵢ, xᵢ, F_goma, x_goma</dt><dd>Como en el apartado 4.</dd>
+    </dl>
 
     <h3 id="how-6">6. Gomas</h3>
-    <p>Una goma se modela como una fuerza vertical constante igual a sus kilos × g (G5 = 5 kg, G10 = 10 kg, G15 = 15 kg, decisión del autor). Dónde se coloca cambia su efecto:</p>
+    <p>Una goma se modela como una fuerza vertical constante igual a sus kilos × g (G5 = 5 kg, G10 = 10 kg, G15 = 15 kg, criterio del autor). Dónde se coloca cambia su efecto:</p>
     <ul>
       <li><b>Bajo el centro de gravedad:</b> equivale a pesar esos kilos menos. Full de 1,68 m y 65 kg con G10: 215 N·m (sin goma, 257).</li>
       <li><b>En otro punto (cadera, rodillas, tobillos, pecho):</b> además de restar peso, cambia dónde cae el centro de masas y por tanto el brazo de momento. La misma G10 en los tobillos deja el hombro en 129 N·m, porque actúa con mucha más palanca.</li>
     </ul>
+    <dl class="syms" aria-label="Símbolos del apartado 6">
+      <dt>G5, G10, G15, G20</dt><dd>Goma que quita 5, 10, 15 o 20 kg. RAW = sin goma.</dd>
+      <dt>F_goma</dt><dd>Fuerza de la goma (N) = kg × g. G10 ≈ 98 N.</dd>
+      <dt>g</dt><dd>Gravedad, 9,81 m/s².</dd>
+      <dt>N·m</dt><dd>Unidad de torque.</dd>
+    </dl>
 
     <h3 id="how-7">7. Powermoves: cómo se modela cada recorrido</h3>
     <p>Cada powermove es una secuencia de 101 posturas de equilibrio (de 0 % a 100 % del recorrido).</p>
@@ -942,11 +1005,19 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <li><b>Flexión (plancha) y pull-up (front):</b> el recorrido se mide por la <b>bajada del centro de masas</b>. Al 100 % llega a la altura de las muñecas (plancha) o de la barra (front). En cada punto se busca la flexión de codo que deja el centro de masas a esa altura, con el centro de masas sobre las manos. Con 1,68 m y 65 kg en full, los brazos solo permiten llegar a un codo de 73°, con el centro de masas a 2 cm; con progresiones recogidas sí se llega hasta las muñecas (advanced tuck, codo ≈ 100°).</li>
     </ul>
     <p class="small">Para acelerar el cálculo, la relación codo → altura del centro de masas se calcula una vez por inclinación y se interpola, y cada postura del recorrido se busca a partir de la anterior. No cambia los resultados.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 7">
+      <dt>t</dt><dd>Avance del recorrido, de 0 (inicio) a 1 (final). 0,5 = mitad.</dd>
+      <dt>sen(π·t)</dt><dd>Seno de π·t: vale 0 al principio y al final y 1 a mitad de recorrido. Reparte la flexión o extensión de cadera a lo largo del press.</dd>
+      <dt>π</dt><dd>Número pi, ≈ 3,1416.</dd>
+      <dt>±90°</dt><dd>Giro del tronco hasta la vertical: +90° hacia el pino (plancha), −90° hacia el colgado invertido (front).</dd>
+      <dt>Codo 73°</dt><dd>Flexión del codo (0° = brazo recto).</dd>
+      <dt>CM</dt><dd>Centro de masas del cuerpo.</dd>
+    </dl>
 
     <h3 id="how-8">8. Impulso angular e INT2</h3>
     <p>El <b>impulso angular</b> es el torque acumulado a lo largo del tiempo:</p>
     <div class="eq">J = ∫ |T(t)| dt ≈ D · T̄  (con duración D y ritmo uniforme)</div>
-    <p>Se integra con 101 posiciones y la regla del trapecio. Decisiones del autor (14 nov): el INT2 es <b>el impulso angular resultante (hombro + codo) del powermove sobre el del hold</b>, con la <b>misma duración</b>, solo con torque absoluto, técnica perfecta (cadera recta) y sin sensaciones ni impacto:</p>
+    <p>Se integra con 101 posiciones y la regla del trapecio (sumar áreas de trapecios entre posiciones seguidas). Criterio del autor (14 nov 2026): el INT2 es <b>el impulso angular resultante (hombro + codo) del powermove sobre el del hold</b>, con la <b>misma duración</b>, solo con torque absoluto, técnica perfecta (cadera recta) y sin sensaciones ni impacto:</p>
     <div class="eq">INT2 = (J_hombro + J_codo)_powermove ÷ (J_hombro + J_codo)_hold = (T̄_hombro + T̄_codo)_powermove ÷ (T_hombro + T_codo)_hold</div>
     <div class="tablewrap"><table class="def">
       <thead><tr><th>Powermove</th><th>Hombro ÷ hold</th><th>Codo ÷ hold</th><th>INT2 estándar</th></tr></thead>
@@ -961,33 +1032,95 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <li><b>Por qué el press vale menos que el hold:</b> al girar hacia el pino (o hacia el colgado invertido) el centro de masas se acerca a la vertical del hombro y el brazo de momento se reduce; el máximo es la propia postura inicial.</li>
       <li><b>Por qué la flexión casi iguala al hold:</b> el cuerpo sigue horizontal, así que el torque del hombro no baja; solo cambia el del codo.</li>
       <li><b>Press = negativa</b> porque el recorrido es el mismo. Lo que los diferencia (la velocidad: frenar de golpe en la posición de máximo torque) no lo ve un modelo cuasiestático. Se registran por separado.</li>
-      <li><b>Por qué vale para cualquier altura y peso:</b> con proporciones medias todas las longitudes son proporcionales a H y todas las masas a M, así que todos los torques son proporcionales a M·H y el cociente no cambia. Comprobado de 150 cm y 50 kg a 200 cm y 100 kg. Solo cambia con medidas reales (por ejemplo, los brazos del autor dan un codo distinto en la flexión) o con otra técnica: para eso está el <b>INT2 modificado</b> de la calculadora.</li>
+      <li><b>Por qué vale para cualquier altura y peso:</b> con proporciones medias todas las longitudes son proporcionales a H y todas las masas a M, así que todos los torques son proporcionales a M·H y el cociente no cambia. Comprobado de 150 cm y 50 kg a 200 cm y 100 kg. Solo cambia con medidas reales (unos brazos largos dan otro codo en la flexión) o con otra técnica: para eso está el <b>INT2 modificado</b> de la calculadora.</li>
       <li>Las activaciones musculares influyen, pero las valora el entrenador fuera de la fórmula.</li>
     </ul>
+    <dl class="syms" aria-label="Símbolos del apartado 8">
+      <dt>J</dt><dd>Impulso angular (N·m·s): torque acumulado durante el movimiento. Un hold de 2″ a 257 N·m acumula 514 N·m·s.</dd>
+      <dt>∫ … dt</dt><dd>Integral en el tiempo: suma continua del torque instante a instante.</dd>
+      <dt>|T(t)|</dt><dd>Torque en cada instante t, sin signo (da igual que tienda a extender o a flexionar).</dd>
+      <dt>D</dt><dd>Duración del movimiento (s).</dd>
+      <dt>T̄</dt><dd>Torque medio a lo largo del recorrido (N·m).</dd>
+      <dt>J_hombro, J_codo</dt><dd>Impulso angular en el hombro y en el codo.</dd>
+      <dt>_powermove, _hold</dt><dd>El valor del movimiento y el de mantener la postura inicial quieta el mismo tiempo.</dd>
+      <dt>INT2</dt><dd>Cociente de los dos impulsos: cuánto «pesa» el powermove frente al hold. 0,64 = el press acumula el 64 % del torque del hold.</dd>
+      <dt>M·H</dt><dd>Peso × altura: todos los torques escalan con este producto.</dd>
+    </dl>
 
-    <h3 id="how-9">9. INT1 y RPE-T</h3>
-    <div class="eq">INT1 = (T_hombro + T_codo)(postura, con su goma) ÷ (T_hombro + T_codo)(full, sin goma)<br>RPE-T = 10 × (T_hombro + T_codo)(postura) ÷ (T_hombro + T_codo)(tu techo)</div>
-    <p>El INT1 se ancla a la full, fija para todos, y es lo que entra en la carga. La RPE-T se ancla a <b>tu techo</b> (la progresión que mantienes 2 segundos o más) y dice a qué parte de tu máximo entrenas; no entra en la carga. Con las medidas del autor (1,68 m, 65 kg): half y straddle 45° ≈ 0,91; straddle 60° y straddle half ≈ 0,84; ADV90 0,75; tuck 0,59; full G5 0,92 y G10 0,84; maltese 1,28.</p>
+    <h3 id="how-9">9. INT1 y RPE-P</h3>
+    <div class="eq">INT1 = (T_hombro + T_codo)(postura, con su goma) ÷ (T_hombro + T_codo)(full, sin goma)<br>RPE-P = 10 × [(T_hombro + T_codo)(postura) ÷ (T_hombro + T_codo)(tu techo)]^γ,  γ = 1</div>
+    <p>Los dos dividen el torque de la postura entre otro torque, pero cada uno tiene un ancla distinta y sirve para una cosa distinta.</p>
+    <p><b>INT1</b> se ancla a la <b>full</b>, que es la misma para todo el mundo. Es lo que entra en la carga LAD: un hold de half vale lo mismo para un principiante que para alguien que domina la full, porque la palanca es la misma.</p>
+    <p><b>RPE-P</b> (<i>RPE de progresión</i>; la P es de progresión) se ancla a <b>tu techo</b>: la progresión más difícil que mantienes 2″ o más, sin goma. Dice a qué parte de tu máximo de progresión estás entrenando, en una escala de 0 a 10 como la del esfuerzo percibido (RPE):</p>
+    <ul>
+      <li><b>10</b>: la postura pide el mismo torque que tu techo. Estás en tu progresión máxima.</li>
+      <li><b>8,6</b>: la postura pide el 86 % del torque de tu techo (por ejemplo, straddle half si tu techo es la full).</li>
+      <li><b>Más de 10</b>: la postura es más difícil que tu techo (una full con goma suave cuando tu techo es la half, o la maltese cuando tu techo es la full: 12,5).</li>
+    </ul>
+    <p>Qué no es la RPE-P: no es lo que sientes. No se pregunta, se calcula del torque, así que no cambia con el cansancio, el sueño o los segundos que aguantes. Tampoco mide la duración: un hold de 1″ y uno de 6″ en la misma postura tienen la misma RPE-P (los segundos los cuentan la carga y s_máx). La sRPE del registro sí es tu sensación de la sesión.</p>
+    <p>Para qué se usa: <b>no entra en la carga</b>, pero RPE-P ÷ 10 (la fracción del torque del techo) decide dos cosas de la fatiga (apartado 11): el peso de la fatiga b (0,25 hasta RPE-P 6 y 0,165 desde RPE-P 8) y el máximo estimado en cada postura con la curva de s_máx. Con γ = 1 la escala es lineal con el torque; γ queda como parámetro por si en el futuro se ajusta a datos.</p>
+    <p>Valores de INT1 (hombro + codo) con un cuerpo de 1,68 m y 65 kg: half ≈ 0,93; straddle 45° ≈ 0,91; straddle half ≈ 0,86; straddle 60° ≈ 0,85; ADV90 ≈ 0,77; tuck ≈ 0,60; full G5 ≈ 0,92 y G10 ≈ 0,84; maltese ≈ 1,25. Si tu techo es la full, la RPE-P es 10 × INT1 (half ≈ 9,3, tuck ≈ 6,0). Si tu techo es la half, cada RPE-P se divide entre 0,93 (la half pasa a 10 y la full a ≈ 10,8). La pestaña Tablas calcula los dos valores con tu cuerpo y tu techo.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 9">
+      <dt>INT1</dt><dd>Intensidad de la postura respecto a la full sin goma. Entra en la carga.</dd>
+      <dt>RPE-P</dt><dd>RPE de progresión: 10 × torque de la postura ÷ torque de tu techo. No entra en la carga; ajusta la fatiga.</dd>
+      <dt>RPE</dt><dd>Esfuerzo percibido (<i>rating of perceived exertion</i>), escala de 0 a 10. La RPE-P toma su escala, pero se calcula, no se percibe.</dd>
+      <dt>Techo</dt><dd>Tu progresión más difícil mantenida 2″ o más, sin goma. Se elige en la banda del simulador y en «Tú» de la calculadora.</dd>
+      <dt>γ (gamma)</dt><dd>Exponente de la escala de RPE-P. Vale 1: escala proporcional al torque.</dd>
+      <dt>T_hombro + T_codo</dt><dd>Torque de hombro más torque de codo de la postura (N·m).</dd>
+      <dt>sRPE</dt><dd>Dureza de la sesión que anotas en el registro (0–5): tu sensación.</dd>
+    </dl>
 
     <h3 id="how-10">10. Skills: maltese, front lever touch y SAT</h3>
     <p><b>Vista frontal.</b> Cada mano soporta la mitad del peso. El torque de cada hombro es esa fuerza por la distancia horizontal hombro–mano, que tiene dos partes: la <b>sagital</b> d (la de la vista lateral) y la <b>frontal</b> lat (cuánto queda la mano por fuera del hombro). El torque combinado es la suma vectorial:</p>
     <div class="eq">T_hombro = T_sagital · √(d² + lat²) ÷ d</div>
     <ul>
       <li><b>Maltese.</b> Con brazos rectos de longitud L (brazo + antebrazo): L² = d² + lat² + h², donde h es la altura del hombro sobre la muñeca. En la plancha normal (manos bajo los hombros, lat = 0) sale la plancha; al abrir las manos el hombro baja, y cuando h = 0 (hombros a la altura de las muñecas) es la maltese completa. Con 1,68 m y 65 kg: 257 N·m en plancha normal, 274 con las manos a 70 cm y 321 en la maltese completa (manos a ≈ 102 cm). <b>La progresión cuenta</b> a igual anchura de manos: con las manos a la anchura de la maltese full (≈ 102 cm), en straddle 45° salen 302 N·m, en advanced tuck 275 y en tuck 246, porque al acortar la palanca el centro de masas queda más cerca del hombro y el brazo baja de la horizontal. Si en cada progresión abres hasta que los brazos quedan horizontales («Maltese en esta progresión»), el torque vuelve a ≈ 320 N·m: con los brazos horizontales el brazo de momento es el brazo entero y la progresión solo cambia la anchura necesaria (en tuck, ≈ 131 cm).</li>
-      <li><b>SAT.</b> Brazos rectos; la apertura del agarre da la abducción, sen(abd) = lat ÷ L, y en la vista lateral el brazo se ve acortado por cos(abd). Con agarre de hombros sale como el front (257 N·m); con las manos a 100 cm, 317 N·m, porque la parte frontal ya cuenta. La progresión cambia el torque como en el front: con agarre de hombros, straddle 45° 234 N·m, advanced tuck 198, tuck 155.</li>
+      <li><b>SAT</b> (<i>straight arm touch</i>). Brazos rectos; la apertura del agarre da la abducción, sen(abd) = lat ÷ L, y en la vista lateral el brazo se ve acortado por cos(abd). Con agarre de hombros sale como el front (257 N·m); con las manos a 100 cm, 317 N·m, porque la parte frontal ya cuenta. La progresión cambia el torque como en el front: con agarre de hombros, straddle 45° 234 N·m, advanced tuck 198, tuck 155.</li>
       <li><b>Front lever touch.</b> Codo flexionado e inclinación del cuerpo; el simulador dice a qué distancia queda el cuerpo de la barra y avisa si la atravesaría. Con el cuerpo horizontal sale igual que el front (257 N·m), y con las piernas estiradas los brazos solo llegan hasta un codo de ≈ 70°. Con codo a 70°: straddle 45° 234 N·m, advanced tuck 198, tuck 155. La progresión se elige en la zona gráfica, junto a la apertura de las manos.</li>
     </ul>
-    <p class="small">La anchura de hombros por defecto (0,23 × H) es una estimación nuestra, pendiente de verificar; conviene medirla (acromion → acromion).</p>
+    <p class="small">La anchura de hombros por defecto (0,23 × H) es una estimación del autor, pendiente de verificar; conviene medirla (acromion → acromion).</p>
+    <dl class="syms" aria-label="Símbolos del apartado 10">
+      <dt>T_sagital</dt><dd>Torque del hombro visto de lado (el del modelo plano), N·m.</dd>
+      <dt>d</dt><dd>Distancia horizontal hombro–mano vista de lado (m).</dd>
+      <dt>lat</dt><dd>Distancia lateral: cuánto queda la mano por fuera del hombro, vista de frente (m).</dd>
+      <dt>√(d² + lat²)</dt><dd>Distancia horizontal real hombro–mano, combinando las dos vistas (teorema de Pitágoras).</dd>
+      <dt>L</dt><dd>Longitud del brazo recto: brazo + antebrazo (m).</dd>
+      <dt>h</dt><dd>Altura del hombro sobre la muñeca (m). h = 0: maltese completa.</dd>
+      <dt>abd</dt><dd>Abducción del brazo: cuánto se separa del cuerpo hacia el lado (°).</dd>
+      <dt>sen, cos</dt><dd>Seno y coseno del ángulo: reparten la longitud del brazo entre la vista lateral y la frontal.</dd>
+      <dt>SAT, FL touch</dt><dd>Straight arm touch (brazos rectos, cuerpo a la barra) y front lever touch (codos flexionados, cuerpo a la barra).</dd>
+    </dl>
 
     <h3 id="how-11">11. Carga LAD de la sesión (calculadora)</h3>
     <ul>
       <li><b>Esfuerzo de skill o auxiliar:</b> c = INT1 × INT2 × segundos (powermove sin vídeo: 1,5″; parcial: la mitad; anillas: × F_anillas, el RPE percibido en anillas ÷ en paralelas).</li>
-      <li><b>Fatiga:</b> carga = c × (1 + b × A). A suma la fracción de máximo de cada esfuerzo, x = INT2 × s ÷ s_máx, dentro de la serie (intraserie) y arrastra lo que queda de la serie anterior de su familia, × e^(−descanso ÷ τ) (interserie). b = 0,25 hasta el 60 % del torque de tu techo y 0,165 desde el 80 %, lineal entre medias; τ = 60 s; w = 0 entre empuje y tirón. En poco torque (pino, colgado invertido) no hay carga y A baja con e^(−t ÷ τ).</li>
-      <li><b>s_máx:</b> el récord del bloque en tu techo; en otras posturas, tu máximo si lo pones o la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n), con n = 7,8 estándar.</li>
+      <li><b>Fatiga:</b> carga = c × (1 + b × A). A suma la fracción de máximo de cada esfuerzo, x = INT2 × s ÷ s_máx, dentro de la serie (intraserie) y arrastra lo que queda de la serie anterior de su familia, × e^(−descanso ÷ τ) (interserie). b = 0,25 hasta el 60 % del torque de tu techo (RPE-P 6) y 0,165 desde el 80 % (RPE-P 8), lineal entre medias; τ = 60 s; w = 0 entre empuje y tirón. En poco torque (pino, colgado invertido) no hay carga y A baja con e^(−t ÷ τ).</li>
+      <li><b>s_máx:</b> el récord del bloque en tu techo; en otras posturas, tu máximo si lo pones o la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n), con n = 7,8 estándar. Sin tu máximo en el techo, la calculadora no puede estimar la fatiga ni la cercanía al fallo: pon tu récord en «Tú».</li>
       <li><b>Pesas:</b> INOL = series × reps × (1 + c_h × segundos de aguante) ÷ (100 − % 1RM), con masa total en lastrados y tope en el 99 %; c_h = 0,4 provisional. Sin fatiga acumulada.</li>
-      <li><b>Dos cifras, sin sumar</b> (decisión del autor, 19 nov): LAD-Au e INOL se siguen por separado, como tendencias conjuntas. El ACWR solo usa la LAD-Au, y con él se decide si programar más carga.</li>
+      <li><b>Dos cifras, sin sumar</b> (criterio del autor, 19 nov 2026): LAD-Au e INOL se siguen por separado, como tendencias conjuntas. El ACWR solo usa la LAD-Au, y con él se decide si programar más carga.</li>
       <li><b>Esfuerzo:</b> número de fallos anotados y de series cerca del fallo (reserva ≤ 1″ o ≤ 1 rep; estimada por el modelo si no se anota). En pesas, cercanía por RIR si estás entrenado en RIR; si no, por Epley.</li>
     </ul>
+    <dl class="syms" aria-label="Símbolos del apartado 11">
+      <dt>c</dt><dd>Carga base de un esfuerzo, sin fatiga (LAD).</dd>
+      <dt>INT1, INT2</dt><dd>Intensidad de la postura (apartado 9) y del powermove (apartado 8).</dd>
+      <dt>s</dt><dd>Segundos del hold o del powermove.</dd>
+      <dt>s_máx</dt><dd>Lo máximo que aguantarías en esa postura, fresco (s).</dd>
+      <dt>x</dt><dd>Fracción de tu máximo que gasta un esfuerzo: 2″ de un máximo de 4″ = 0,5.</dd>
+      <dt>A</dt><dd>Fatiga acumulada: suma de las x anteriores, rebajada por el descanso. A = 1 ≈ una serie al fallo.</dd>
+      <dt>b</dt><dd>Peso de la fatiga: cuánto encarece cada unidad de A el siguiente esfuerzo (0,25 = un 25 % más con A = 1).</dd>
+      <dt>e^(−t ÷ τ)</dt><dd>Recuperación exponencial: la parte de la fatiga que queda tras t segundos de descanso. e ≈ 2,718.</dd>
+      <dt>τ (tau)</dt><dd>Tiempo de recuperación: tras τ segundos queda ≈ 37 % de la fatiga. Estándar 60 s.</dd>
+      <dt>w</dt><dd>Arrastre de la fatiga entre familias (empuje ↔ tirón). 0 = no se arrastra.</dd>
+      <dt>n</dt><dd>Exponente de la curva de s_máx: cuánto crece el máximo al bajar el torque. Estándar 7,8.</dd>
+      <dt>F_anillas</dt><dd>Factor de anillas: RPE en anillas ÷ RPE en paralelas (≥ 1).</dd>
+      <dt>INOL</dt><dd>Índice de carga de pesas: repeticiones ÷ (100 − % 1RM). Más cerca del máximo, más vale cada repetición.</dd>
+      <dt>% 1RM</dt><dd>Porcentaje de tu repetición máxima (el máximo peso para 1 repetición), contando tu peso en lastrados.</dd>
+      <dt>c_h</dt><dd>Repeticiones equivalentes por segundo de aguante en una repetición (0,4).</dd>
+      <dt>LAD-Au</dt><dd>Carga LAD de la sesión: skills y auxiliares, con fatiga.</dd>
+      <dt>ACWR</dt><dd>Carga de los últimos 7 días ÷ media de los últimos 28. Franja de referencia 0,8–1,3.</dd>
+      <dt>RIR</dt><dd>Repeticiones en reserva: las que te quedaban al parar.</dd>
+      <dt>Epley</dt><dd>Fórmula de Epley: estima las repeticiones posibles a partir del % 1RM.</dd>
+    </dl>
 
     <h3 id="how-12">12. Validación</h3>
     <p>Comparación con los valores publicados por Brey Fitness (web, rigor E) para 70 kg y 1,75 m, con proporciones medias y sin goma (torque del hombro, N·m):</p>
@@ -1002,7 +1135,12 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
         <tr><td>Advanced tuck</td><td>221</td><td>201</td><td>+10 %</td></tr>
       </tbody>
     </table></div>
-    <p class="small">Las posturas extendidas coinciden dentro del 1–4 %. El advanced tuck se separa un 10 %, probablemente por cómo se define la posición de las rodillas (inferencia nuestra, sin comprobar). Coincidir con otra estimación no es una validación experimental: ninguno de los dos modelos se ha contrastado con medidas de fuerza reales.</p>
+    <p class="small">Las posturas extendidas coinciden dentro del 1–4 %. El advanced tuck se separa un 10 %, probablemente por cómo se define la posición de las rodillas (inferencia del autor, sin comprobar). Coincidir con otra estimación no es una validación experimental: ninguno de los dos modelos se ha contrastado con medidas de fuerza reales.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 12">
+      <dt>N·m</dt><dd>Torque del hombro, sumando los dos brazos.</dd>
+      <dt>Diferencia</dt><dd>(este modelo − Brey) ÷ Brey, en %.</dd>
+      <dt>Rigor E</dt><dd>Fuente web, sin revisión por pares (escala en el apartado 14).</dd>
+    </dl>
 
     <h3 id="how-13">13. Límites del modelo</h3>
     <ul>
@@ -1014,20 +1152,30 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <li><b>Gomas ideales.</b> Fuerza vertical y constante; una goma real cambia de fuerza al estirarse y no siempre tira en vertical.</li>
       <li><b>Straddle por proyección.</b> Las piernas abiertas se proyectan con cos(apertura); no se calcula el torque fuera del plano lateral, salvo en la vista frontal de la maltese y el SAT.</li>
       <li><b>Anchura de hombros estimada</b> (0,23 × H) si no la mides.</li>
-      <li><b>Dirección del torque del codo en la flexión.</b> El modelo da extensión en todo el recorrido; la experiencia del autor (tríceps al subir, bíceps y coactivación en el bloqueo) no se recoge. Falta un vídeo lateral para contrastarlo.</li>
-      <li><b>Sin percepción ni fatiga.</b> El esfuerzo percibido, la fatiga acumulada, la técnica y el coste metabólico no entran en el INT2 estándar (decisión del autor).</li>
+      <li><b>Dirección del torque del codo en la flexión.</b> El modelo da extensión en todo el recorrido; la experiencia práctica (tríceps al subir, bíceps y coactivación en el bloqueo) no se recoge. Falta un vídeo lateral para contrastarlo.</li>
+      <li><b>Sin percepción ni fatiga en el INT2.</b> El esfuerzo percibido, la fatiga acumulada, la técnica y el coste metabólico no entran en el INT2 estándar (criterio del autor).</li>
       <li><b>Población.</b> Pensado para adultos con proporciones típicas; con morfologías muy distintas, usar medidas propias.</li>
     </ul>
+    <dl class="syms" aria-label="Símbolos del apartado 13">
+      <dt>Concéntrico, excéntrico, isométrico</dt><dd>El músculo se acorta (subir), se alarga frenando (bajar) o no cambia de longitud (hold).</dd>
+      <dt>Protracción, retracción, depresión</dt><dd>Escápula hacia delante, hacia atrás y hacia abajo.</dd>
+      <dt>Coactivación</dt><dd>Músculos opuestos (bíceps y tríceps) contraídos a la vez.</dd>
+      <dt>cos(apertura)</dt><dd>Acortamiento de la pierna abierta vista de lado (apartado 3).</dd>
+      <dt>0,23 × H</dt><dd>Anchura de hombros estimada: 23 % de la altura.</dd>
+    </dl>
 
     <h3 id="how-rigor">14. Nivel de rigor y referencias</h3>
-    <p class="small">Escala de LAD: A revisión sistemática o metaanálisis · B estudio revisado por pares · C libro, manual o tesis · D actas o preprint · E web o foro · F criterio del autor o estimación nuestra.</p>
+    <p class="small">Escala de rigor: A revisión sistemática o metaanálisis · B estudio revisado por pares · C libro, manual o tesis · D actas o preprint · E web o foro · F criterio del autor o estimación propia.</p>
     <ul>
       <li><b>B</b> · de Leva, P. (1996). Adjustments to Zatsiorsky-Seluyanov's segment inertia parameters. <i>Journal of Biomechanics</i>, 29(9), 1223–1230. Parámetros de los segmentos (citados de memoria, por verificar).</li>
       <li><b>E</b> · Brey Fitness (web). Torques de la plancha por progresión para 70 kg y 1,75 m. Usado solo para comparar.</li>
-      <li><b>F</b> · Decisiones del autor (14 nov 2026): INT1 = % del techo; techo = progresión que mantienes 2″ o más; gomas en kg; INT2 = impulso angular resultante sobre el hold, con técnica perfecta y solo torque; anillas como factor aparte.</li>
-      <li><b>F</b> · Estimaciones nuestras: tronco 0,288 × H, anchura de hombros 0,23 × H, geometría de maltese, SAT y FL touch, flexión por bajada del centro de masas.</li>
+      <li><b>F</b> · Criterios del autor (14 nov 2026): INT1 respecto a la full; techo = progresión que mantienes 2″ o más; gomas en kg; INT2 = impulso angular resultante sobre el hold, con técnica perfecta y solo torque; anillas como factor aparte; RPE-P = 10 × torque ÷ torque del techo.</li>
+      <li><b>F</b> · Estimaciones propias: tronco 0,288 × H, anchura de hombros 0,23 × H, geometría de maltese, SAT y FL touch, flexión por bajada del centro de masas.</li>
     </ul>
-    <p class="small">El resto de fuentes del modelo LAD (y su nivel) están en el documento LAD.</p>
+    <dl class="syms" aria-label="Símbolos del apartado 14">
+      <dt>A–F</dt><dd>Nivel de rigor de cada fuente, de más sólido (A) a menos (F).</dd>
+      <dt>H</dt><dd>Altura.</dd>
+    </dl>
   </section>
   </div>
 </div>
@@ -1284,8 +1432,9 @@ $('base').value='full';
 LAD.PROG.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('skProg').append(o)});
 $('skProg').value='full';
 const ids=['H','M','legfull','bandKg','bandAt','base','tilt0','hipP','extP','hipN','extN','fdepth','tiltb','flE','shW','malGrip','satGrip','axEx','axGrip','axLean','axE','axT','techoP','techoF','dur','reps','skProg','flTilt','satTilt',...LAD.SEG.map(s=>'L_'+s.k)];
-function defaults(){const d=LAD.defaultSeg(+$('H').value||168);LAD.SEG.forEach(s=>$('L_'+s.k).value=d[s.k]);$('shW').value=Math.round(0.23*(+$('H').value||168)*2)/2;}
-let saved=null;try{saved=JSON.parse(localStorage.getItem('lad-sim')||'null')}catch(e){}
+function defaults(){const d=LAD.defaultSeg(+$('H').value||168);LAD.SEG.forEach(s=>{$('L_'+s.k).value='';$('L_'+s.k).placeholder=String(d[s.k]).replace('.',',');});$('shW').value='';$('shW').placeholder=String(Math.round(0.23*(+$('H').value||168)*2)/2).replace('.',',');}
+function phs(){const d=LAD.defaultSeg(+$('H').value||168);LAD.SEG.forEach(s=>$('L_'+s.k).placeholder=String(d[s.k]).replace('.',','));$('shW').placeholder=String(Math.round(0.23*(+$('H').value||168)*2)/2).replace('.',',');}
+let saved=null;try{saved=JSON.parse(localStorage.getItem('cali-sim')||'null')}catch(e){}
 let fam='plancha', mv='press', sCur=0, view=null, sk=null;
 function fillTecho(){
   [['techoP','plancha'],['techoF','front']].forEach(([id,f])=>{staticList(f).forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name;$(id).append(o)});$(id).value='full';});
@@ -1299,13 +1448,13 @@ function staticList(f){
 }
 fillTecho();
 if(saved){ids.forEach(id=>{if(saved[id]!=null&&saved[id]!==''&&$(id))$(id).value=saved[id]});if(saved.techo&&!saved.techoP)$('techoP').value=saved.techo;}
-if(!saved||saved['L_uarm']==null) defaults();
-function save(){try{const o={};ids.forEach(id=>o[id]=$(id).value);localStorage.setItem('lad-sim',JSON.stringify(o))}catch(e){}}
+if(!saved||saved['L_uarm']==null) defaults(); else phs();
+function save(){try{const o={};ids.forEach(id=>o[id]=$(id).value);localStorage.setItem('cali-sim',JSON.stringify(o))}catch(e){}}
 $('reset').addEventListener('click',()=>{defaults();update();});
 const fmt=(v,d=0)=>isFinite(v)?v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
 
 let P,opt,hold,curves={};
-function cfg(){const seg={};LAD.SEG.forEach(s=>seg[s.k]=+$('L_'+s.k).value);return {H:+$('H').value||168,M:+$('M').value||65,seg,legfull:+$('legfull').value||0,bandKg:+$('bandKg').value||0,bandAt:$('bandAt').value};}
+function cfg(){const seg={};const dS=LAD.defaultSeg(+$('H').value||168);phs();LAD.SEG.forEach(s=>seg[s.k]=+$('L_'+s.k).value||dS[s.k]);return {H:+$('H').value||168,M:+$('M').value||65,seg,legfull:+$('legfull').value||0,bandKg:+$('bandKg').value||0,bandAt:$('bandAt').value};}
 function getOpt(){return {front:fam==='front',base:$('base').value,tilt:+$('tilt0').value,hipP:Math.abs(+$('hipP').value)-Math.abs(+$('extP').value),hipN:Math.abs(+$('hipN').value)-Math.abs(+$('extN').value),fdepth:+$('fdepth').value,tiltb:+$('tiltb').value};}
 function shWV(){return +$('shW').value||Math.round(0.23*(+$('H').value||168)*2)/2;}
 function malMax(){const v=LAD.malteseMaxGrip(P0||LAD.params(cfg()),shWV(),'full');return v==null?shWV():Math.floor(v*2)/2;}
@@ -1480,7 +1629,7 @@ function renderChart(){
   $('chart').innerHTML=h+'</svg>';
 }
 function update(){save();compute();syncGrip();renderTable();renderHip();renderInt1();renderFigure();renderChart();renderImpulse();if(window.renderAuxReady)renderAux();}
-ids.forEach(id=>{const el=$(id);el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{if(id==='H'&&!$('H').value)return;update()})});
+ids.forEach(id=>{const el=$(id);el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{update()})});
 function setTabs(){document.querySelectorAll('[data-fam]').forEach(x=>x.setAttribute('aria-pressed',!sk&&x.dataset.fam===fam?'true':'false'));document.querySelectorAll('[data-sk]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.sk===sk?'true':'false'));document.querySelectorAll('[data-mv]').forEach(x=>{x.disabled=!!sk;x.setAttribute('aria-pressed',!sk&&!view&&x.dataset.mv===mv?'true':'false')});$('chartPanel').hidden=!!sk;$('playrow').hidden=!!sk;$('gripCtl').hidden=!sk;$('malCtl').hidden=sk!=='maltese';$('satCtl').hidden=sk!=='sat';}
 document.querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>{sk=b.dataset.sk;fam=sk==='maltese'?'plancha':'front';view=sk;setTabs();$('mvflex').textContent=fam==='plancha'?'Flexión':'Pull-up';update();}));
 document.querySelectorAll('[data-fam]').forEach(b=>b.addEventListener('click',()=>{fam=b.dataset.fam;view=null;sk=null;setTabs();$('mvflex').textContent=fam==='plancha'?'Flexión':'Pull-up';update();}));
@@ -1628,16 +1777,16 @@ function example(){
       {name:'Fondos lastrados',series:5,reps:3,kg:37.5,bw:true,rm:55,hold:0,rir:''},
       {name:'Inv cross (por brazo)',series:2,reps:3,kg:10,bw:false,rm:12,hold:2.67,rir:''}]};
 }
-let state=example();
-try{const s=JSON.parse(localStorage.getItem('lad-calc-v2')||'null');if(s&&s.series)state=Object.assign(example(),s);}catch(e){}
+let state=Object.assign(example(),{H:'',M:'',sP:'',sF:'',example:false,series:[],weights:[]});
+try{const s=JSON.parse(localStorage.getItem('cali-calc')||'null');if(s&&s.series)state=Object.assign({},state,s);}catch(e){}
 if(!state.i2mod)state.i2mod={on:false,plancha:{},front:{}};
-function save(){try{localStorage.setItem('lad-calc-v2',JSON.stringify(state))}catch(e){}}
+function save(){try{localStorage.setItem('cali-calc',JSON.stringify(state))}catch(e){}}
 const NUMS=['H','M','sP','sF','nP','nF','tau','w','ch'];
 function syncInputs(){NUMS.forEach(k=>$(k).value=state[k]);$('tP').value=state.tP;$('tF').value=state.tF;$('own').checked=!!state.own;$('rir').checked=!!state.rir;}
 syncInputs();
 
 let cache={};
-function P(bandKg){const H=+state.H||170,M=+state.M||70;const own=state.own&&window.LADsim;const base=own?window.LADsim.cfg():{H,M,seg:LAD.defaultSeg(H)};const k=JSON.stringify(base)+'|'+bandKg;if(!cache[k])cache[k]=LAD.params(Object.assign({},base,{bandKg,bandAt:'com'}));return cache[k];}
+function P(bandKg){const H=+state.H||168,M=+state.M||65;const own=state.own&&window.LADsim;const base=own?window.LADsim.cfg():{H,M,seg:LAD.defaultSeg(H)};const k=JSON.stringify(base)+'|'+bandKg;if(!cache[k])cache[k]=LAD.params(Object.assign({},base,{bandKg,bandAt:'com'}));return cache[k];}
 function torque(Pp,pos){const s=pos==='maltese'?LAD.maltese(Pp,0):pos==='fltouch'?LAD.flTouch(Pp,70):pos==='sat'?LAD.satGrip(Pp,Pp.H*23+2*(Pp.L.uarm+Pp.L.farm)*100*Math.sin(35*Math.PI/180),Pp.H*23,'full',0):LAD.hold(Pp,pos,0);return s?Math.abs(s.Tsh)+Math.abs(s.Tel):NaN;}
 let INT2={};
 function calcINT2(){
@@ -1741,7 +1890,7 @@ function compute(){
   let tI=0, wNear=0, wFail=0;
   state.weights.forEach((r,i)=>{
     const tr=$('wRows').querySelector('tr[data-i="'+i+'"]'); if(!tr) return;
-    const M=+state.M||0, num=(+r.kg||0)+(r.bw?M:0), den=(+r.rm||0)+(r.bw?M:0);
+    const M=+state.M||65, num=(+r.kg||0)+(r.bw?M:0), den=(+r.rm||0)+(r.bw?M:0);
     const pct=den>0?Math.min(99,num/den*100):NaN;
     const inol=(+r.series||0)*(+r.reps||0)*(1+(+state.ch||0)*(+r.hold||0))/(100-pct);
     let cerc, near, fail;
@@ -1781,12 +1930,12 @@ $('addS').addEventListener('click',()=>{const last=state.series[state.series.len
 $('wRows').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;const r=state.weights[+e.target.closest('tr').dataset.i];r[k]=k==='name'?e.target.value:k==='bw'?e.target.checked:e.target.value===''?'':+e.target.value;touched();compute();save();});
 $('wRows').addEventListener('click',e=>{const d=e.target.dataset.wdel;if(d==null)return;state.weights.splice(+d,1);touched();all();});
 $('addW').addEventListener('click',()=>{state.weights.push({name:'Ejercicio',series:3,reps:3,kg:20,bw:true,rm:40,hold:0,rir:''});touched();all();});
-NUMS.forEach(id=>$(id).addEventListener('input',()=>{state[id]=+$(id).value;touched();if(id==='H'||id==='M')cache={};compute();save();}));
+NUMS.forEach(id=>$(id).addEventListener('input',()=>{state[id]=$(id).value===''?'':+$(id).value;touched();if(id==='H'||id==='M')cache={};compute();save();}));
 ['tP','tF'].forEach(id=>$(id).addEventListener('change',()=>{state[id]=$(id).value;touched();compute();save();}));
 $('own').addEventListener('change',()=>{state.own=$('own').checked;cache={};compute();save();});
 $('rir').addEventListener('change',()=>{state.rir=$('rir').checked;compute();save();});
 $('clear').addEventListener('click',()=>{state.series=[];state.weights=[];touched();all();$('msg').textContent='Sesión vaciada.';});
-$('ex').addEventListener('click',()=>{state=example();cache={};syncInputs();renderI2();all();$('msg').textContent='Ejemplo cargado.';});
+$('ex').addEventListener('click',()=>{state=Object.assign(example(),{H:state.H,M:state.M,sP:state.sP,sF:state.sF,tP:state.tP,tF:state.tF,own:state.own});cache={};syncInputs();renderI2();all();$('msg').textContent='Ejemplo cargado.';});
 $('copy').addEventListener('click',()=>{
   const t=compute(); const lines=['Sesión LAD · '+new Date().toLocaleDateString('es-ES')];
   state.series.forEach((s,i)=>lines.push('Serie '+(i+1)+' ('+(s.fam==='plancha'?'plancha':'front')+(s.ring?', anillas':'')+', descanso '+s.rest+' s): '+s.efs.map(e=>MVN[s.fam][e.mv]+(e.mv==='aux'?' INT1 '+e.i1:e.mv==='low'?'':' '+((POS[s.fam].find(p=>p.id===e.pos)||{}).name||e.pos)+(+e.band?' G'+e.band:''))+' '+(e.secs||1.5)+'″'+(e.part?' parcial':'')).join(' → ')+(s.end==='fallo'?' · caída':s.end==='paro'?' · paré':'')));
@@ -2086,7 +2235,7 @@ function svgChart(id,o){
     '<div class="legend">'+leg.map(([t,c,ln])=>'<span><i style="background:'+c+(ln?';height:3px':'')+'"></i>'+esc(t)+'</span>').join('')+'</div>';
 }
 
-const PAL=['#1E8F50','#C77D1A','#3A9764','#B3475F','#6B7480','#2E8C80','#9A8A2E','#4F77A8'];
+const PAL=['#17783F','#8F5A0E','#1F6E45','#8E2F45','#3F4650','#1F6B62','#6B5F12','#2F5A8C'];
 function renderEvo(){
   document.querySelectorAll('#tab-evo .seg [data-w]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.w===per?'true':'false'));
   document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sk===skill?'true':'false'));
