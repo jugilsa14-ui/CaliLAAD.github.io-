@@ -333,6 +333,30 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
 .wform label.chk{flex-direction:row;align-items:center;gap:6px}
 #r_save{min-width:180px}
 @media (max-width:720px){.acct{position:static;justify-content:flex-end;max-width:none;margin:-6px 0 6px}}
+
+/* descripción de la sesión */
+details.desc summary{cursor:pointer;font-weight:600;font-size:14px}
+details.desc .opt{font-weight:400;color:var(--muted);font-size:12px;margin-left:6px}
+.descf{display:grid;gap:10px;margin-top:10px}
+.descf label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.descf textarea,.descf input[type=text]{font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+.dtag{display:inline-block;font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:999px;padding:0 7px;margin-left:4px}
+tr.detrow td{background:var(--soft);display:table-cell}
+@media (max-width:640px){tr.detrow td{display:block}}
+/* lista de sesiones en el móvil: tarjetas */
+@media (max-width:640px){
+  .rtable thead{display:none}
+  .rtable,.rtable tbody{display:block}
+  .rtable tr:not(.detrow){display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;background:var(--soft);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+  .rtable td{display:flex;flex-direction:column;border:0;padding:0;font-size:13px}
+  .rtable td::before{content:attr(data-l);font-size:11px;color:var(--muted)}
+  .rtable td:nth-child(2){grid-column:1/-1;font-weight:600;font-size:15px}
+  .rtable td:nth-child(2)::before,.rtable td.acts::before{content:none}
+  .rtable td.acts{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .rtable tr.detrow{display:block;margin:-4px 0 10px}
+  .rtable tr.detrow td{display:block;border-radius:0 0 10px 10px;padding:10px 12px}
+  .rtable tr.detrow td::before{content:none}
+}
 </style>
 
 <div class="wrap">
@@ -349,6 +373,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
       <label>Correo electrónico <input id="g_email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
       <label id="g_pwl">Contraseña <input id="g_pw" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres"></label>
       <label class="chk gcons" id="g_consl"><input id="g_cons" type="checkbox"> Acepto que CALI.LAAD guarde mi correo y mis sesiones para darme el servicio. Puedo borrarlos cuando quiera.</label>
+      <label class="chk gcons" id="g_statl"><input id="g_stat" type="checkbox"> Opcional: dejo que mis sesiones se usen, sin mi correo ni mi nombre, para estadísticas de la comunidad e investigación sobre la carga en calistenia.</label>
       <button class="primary btnbig" id="g_go" type="submit">Crear cuenta</button>
       <button type="button" class="linkb" id="g_forgot">He olvidado mi contraseña</button>
       <p class="gmsg" id="g_msg" role="status"></p>
@@ -664,9 +689,16 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
     <div class="head"><h2 id="r_h-save">Nueva sesión</h2><span id="r_store" class="tag"></span></div>
     <div class="rform">
       <label>Fecha <input id="r_date" type="date"></label>
-      <label class="grow">Nota <input id="r_note" type="text" maxlength="200" placeholder="p. ej. holds RAW y combos en half"></label>
+      <label class="grow">Título <input id="r_note" type="text" maxlength="120" placeholder="p. ej. Lunes · holds RAW y combos en half"></label>
       <label>Dureza de la sesión (0–5) <input id="r_srpe" type="number" min="0" max="5" step="1" placeholder="—"></label>
     </div>
+    <details class="desc" id="r_descbox"><summary>Descripción de la sesión <span class="opt">objetivos, metodología, notas</span></summary>
+      <div class="descf">
+        <label>Objetivos <textarea id="r_goals" rows="2" maxlength="1000" placeholder="p. ej. acumular segundos de half en buena forma; probar el combo 111"></textarea></label>
+        <label>Metodología <textarea id="r_method" rows="2" maxlength="1000" placeholder="p. ej. series cortas al 50 % del techo, descansos de 2′, RPE 6–7"></textarea></label>
+        <label>Descripción y notas <textarea id="r_desc" rows="3" maxlength="3000" placeholder="Cómo te sentiste, qué salió bien, qué cambiarías…"></textarea></label>
+      </div>
+    </details>
 
     <div class="nbgrid">
       <div class="nbcol">
@@ -716,7 +748,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
   <section class="panel" aria-labelledby="r_h-list">
     <div class="head"><h2 id="r_h-list">Mis sesiones</h2><span id="r_count" class="tag"></span></div>
     <div class="tablewrap"><table class="rtable">
-      <thead><tr><th>Fecha</th><th>Sesión</th><th>LAD-Au</th><th>Base</th><th>INOL</th><th>Series</th><th>Fallos</th><th>Cerca del fallo</th><th>sRPE</th><th></th></tr></thead>
+      <thead><tr><th>Fecha</th><th>Título</th><th>LAD-Au</th><th>Base</th><th>INOL</th><th>Series</th><th>Fallos</th><th>Cerca del fallo</th><th>sRPE</th><th></th></tr></thead>
       <tbody id="r_rows"></tbody>
     </table></div>
     <p class="notes" id="r_empty">Todavía no hay sesiones. Añade tus series arriba y pulsa «Guardar sesión».</p>
@@ -1774,7 +1806,7 @@ function setMode(m){mode=m;
   $('g_tup').setAttribute('aria-selected',m==='up');$('g_tin').setAttribute('aria-selected',m==='in');
   $('g_title').textContent=recovery?'Nueva contraseña':m==='up'?'Crea tu cuenta':'Entra en tu cuenta';
   $('g_go').textContent=recovery?'Guardar contraseña':m==='up'?'Crear cuenta':'Entrar';
-  $('g_consl').hidden=m!=='up'||recovery; $('g_forgot').hidden=m!=='in'||recovery;
+  $('g_consl').hidden=m!=='up'||recovery; $('g_statl').hidden=m!=='up'||recovery; $('g_forgot').hidden=m!=='in'||recovery;
   $('g_email').closest('label').hidden=recovery;
   $('g_pw').autocomplete=m==='up'||recovery?'new-password':'current-password';
   document.querySelector('.gtabs').hidden=recovery; $('g_msg').textContent='';}
@@ -1801,7 +1833,7 @@ $('g_form').addEventListener('submit',async e=>{
   if(pw.length<8){$('g_msg').textContent='La contraseña necesita 8 caracteres o más.';return;}
   if(mode==='up'&&!$('g_cons').checked){$('g_msg').textContent='Marca la casilla para poder crear la cuenta.';return;}
   $('g_go').disabled=true; $('g_msg').textContent=mode==='up'?'Creando tu cuenta…':'Entrando…';
-  const err=mode==='up'?await window.CALIauth.signUp(em,pw):await window.CALIauth.signIn(em,pw);
+  const err=mode==='up'?await window.CALIauth.signUp(em,pw,$('g_stat').checked):await window.CALIauth.signIn(em,pw);
   $('g_go').disabled=false;
   if(err){$('g_msg').textContent=/Invalid login/i.test(err)?'Correo o contraseña incorrectos.':/not confirmed/i.test(err)?'Confirma tu correo: abre el enlace que te enviamos.':/registered/i.test(err)?'Ese correo ya tiene cuenta: pulsa «Entrar».':'No se pudo: '+err;return;}
   if(mode==='up')$('g_msg').textContent='Cuenta creada. Revisa tu correo y abre el enlace para confirmarla; después, entra.';
@@ -1832,7 +1864,7 @@ const LKEY='lad-registro-v1';
 // Cuentas de CALI.LAAD (Supabase). Rellenar con la Project URL y la clave pública (anon / publishable). Nunca la secreta.
 const SB_CONF={url:'',key:''};
 const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
-let sessions=[], mode='none', col=null, sb=null, sbUser=null;
+let sessions=[], mode='none', col=null, sb=null, sbUser=null, openDet=null;
 const inClaude=!!(window.claude&&window.claude.use);
 function setStore(t){$('r_store').textContent=t;}
 function localLoad(){try{return JSON.parse(localStorage.getItem(LKEY)||'[]')||[]}catch(e){return []}}
@@ -1886,7 +1918,7 @@ async function useAccount(user){
 }
 function signedOut(){sbUser=null;mode='local';sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
 window.CALIauth={
-  async signUp(email,pw){const {error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+location.pathname}});return error?error.message:null;},
+  async signUp(email,pw,stat){const {error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+location.pathname,data:{estadistica:!!stat,consentimiento:new Date().toISOString(),version_condiciones:'2026-11-22'}}});return error?error.message:null;},
   async signIn(email,pw){const {error}=await sb.auth.signInWithPassword({email,password:pw});return error?error.message:null;},
   async reset(email){const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});return error?error.message:null;},
   async newPassword(pw){const {error}=await sb.auth.updateUser({password:pw});return error?error.message:null;},
@@ -1934,7 +1966,7 @@ function progOf(series){
 function fromCalc(){
   if(!window.LADcalc||!window.LADcalc.snapshot) return null;
   const snap=window.LADcalc.snapshot(); const st=snap.state;
-  return {v:1,date:$('r_date').value||todayISO(),note:$('r_note').value.trim(),srpe:$('r_srpe').value===''?null:+$('r_srpe').value,
+  return {v:1,date:$('r_date').value||todayISO(),note:$('r_note').value.trim(),title:$('r_note').value.trim(),goals:$('r_goals').value.trim(),method:$('r_method').value.trim(),desc:$('r_desc').value.trim(),srpe:$('r_srpe').value===''?null:+$('r_srpe').value,
     ladau:snap.tL,base:snap.tB,inol:snap.tI,fallos:snap.fallos,cerca:snap.cerca,wNear:snap.wNear,nSeries:st.series.length,
     profile:{H:st.H,M:st.M,tP:st.tP,tF:st.tF,sP:st.sP,sF:st.sF},
     series:st.series,weights:st.weights,prog:progOf(st.series),saved:new Date().toISOString()};
@@ -1949,7 +1981,7 @@ $('r_save').addEventListener('click',async()=>{
   s.id='s_'+s.date.replace(/-/g,'')+'_'+Date.now().toString(36);
   $('r_save').disabled=true; const ok=await putSession(s); $('r_save').disabled=false;
   $('r_msg').textContent=ok?'Guardada: '+longDate(s.date)+' · '+fmt(s.ladau,1)+' LAD-Au.':'No se pudo guardar.';
-  $('r_note').value='';$('r_srpe').value='';
+  if(ok){['r_note','r_srpe','r_goals','r_method','r_desc'].forEach(id=>$(id).value='');$('r_descbox').open=false;}
   if(ok&&window.CALIbuilder)window.CALIbuilder.saved();
 });
 
@@ -1958,14 +1990,24 @@ function renderList(){
   const rows=[...sessions].sort((a,b)=>b.date.localeCompare(a.date)||String(b.saved).localeCompare(String(a.saved)));
   $('r_count').textContent=rows.length+' sesi'+(rows.length===1?'ón':'ones');
   $('r_empty').hidden=rows.length>0;
-  $('r_rows').innerHTML=rows.map(s=>'<tr><td>'+esc(longDate(s.date))+'</td><td>'+esc(s.note||'—')+'</td><td class="n"><b>'+fmt(s.ladau,1)+'</b></td><td class="n">'+fmt(s.base,1)+'</td><td class="n">'+fmt(s.inol,2)+'</td><td class="n">'+(s.nSeries||0)+'</td><td class="n">'+(s.fallos||0)+'</td><td class="n">'+(s.cerca||0)+'</td><td class="n">'+(s.srpe==null?'—':s.srpe)+'</td>'+
-    '<td class="acts"><button type="button" data-load="'+esc(s.id)+'">A la calculadora</button><button type="button" class="x" data-del="'+esc(s.id)+'" aria-label="Borrar sesión">✕</button></td></tr>').join('');
+  $('r_rows').innerHTML=rows.map(s=>{const has=s.goals||s.method||s.desc;return '<tr><td>'+esc(longDate(s.date))+'</td><td>'+esc(s.title||s.note||'—')+(has?' <span class="dtag">con descripción</span>':'')+'</td><td class="n"><b>'+fmt(s.ladau,1)+'</b></td><td class="n">'+fmt(s.base,1)+'</td><td class="n">'+fmt(s.inol,2)+'</td><td class="n">'+(s.nSeries||0)+'</td><td class="n">'+(s.fallos||0)+'</td><td class="n">'+(s.cerca||0)+'</td><td class="n">'+(s.srpe==null?'—':s.srpe)+'</td>'+
+    '<td class="acts"><button type="button" data-det="'+esc(s.id)+'" aria-expanded="'+(openDet===s.id)+'">Descripción</button><button type="button" data-load="'+esc(s.id)+'">A la calculadora</button><button type="button" class="x" data-del="'+esc(s.id)+'" aria-label="Borrar sesión">✕</button></td></tr>'+
+    (openDet===s.id?'<tr class="detrow"><td colspan="10"><div class="descf">'+
+      '<label>Título <input type="text" data-f="title" maxlength="120" value="'+esc(s.title||s.note||'')+'"></label>'+
+      '<label>Objetivos <textarea data-f="goals" rows="2" maxlength="1000">'+esc(s.goals||'')+'</textarea></label>'+
+      '<label>Metodología <textarea data-f="method" rows="2" maxlength="1000">'+esc(s.method||'')+'</textarea></label>'+
+      '<label>Descripción y notas <textarea data-f="desc" rows="3" maxlength="3000">'+esc(s.desc||'')+'</textarea></label>'+
+      '<div class="row" style="display:flex;gap:10px;align-items:center"><button class="primary" type="button" data-dsave="'+esc(s.id)+'">Guardar descripción</button><span class="tag" data-dmsg></span></div></div></td></tr>':'');}).join('');
   const th=[...document.querySelectorAll('.rtable th')].map(t=>t.textContent);
-  $('r_rows').querySelectorAll('tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.l=th[i]||''));
+  $('r_rows').querySelectorAll('tr:not(.detrow)').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.l=th[i]||''));
 }
 $('r_rows').addEventListener('click',e=>{
   const d=e.target.dataset;
   if(d.del){const s=sessions.find(x=>x.id===d.del); if(s&&confirmDel(e.target)) delSession(d.del);}
+  if(d.det){openDet=openDet===d.det?null:d.det;renderList();return;}
+  if(d.dsave){const s=sessions.find(x=>x.id===d.dsave);if(!s)return;const row=e.target.closest('.detrow');const n=Object.assign({},s);
+    row.querySelectorAll('[data-f]').forEach(f=>{n[f.dataset.f]=f.value.trim();});n.note=n.title;
+    putSession(n).then(ok=>{openDet=null;renderList();$('r_msg').textContent=ok?'Descripción guardada.':'No se pudo guardar la descripción.';});return;}
   if(d.load){const s=sessions.find(x=>x.id===d.load); if(s&&window.LADcalc&&window.LADcalc.load){window.LADcalc.load(s);window.LADtab('calc');}}
 });
 // borrado en dos pulsaciones (sin ventanas del navegador)
@@ -2096,7 +2138,7 @@ function renderHome(){
   const bk=Object.keys(best).sort((a,b)=>best[b].v-best[a].v).slice(0,6);
   $('h_best').innerHTML=bk.length?bk.map(k=>'<div><b>'+fmt(best[k].v,2).replace(/,?0+$/,'')+'″</b><span>'+esc(k)+' · '+shortDate(best[k].d)+'</span></div>').join(''):'<p class="notes" style="margin:0">Esta semana aún no hay holds sueltos guardados.</p>';
   const last=[...sessions].sort((a,b)=>b.date.localeCompare(a.date)||String(b.saved).localeCompare(String(a.saved)))[0];
-  $('h_lastbox').innerHTML=last?'<div class="lastbox"><b>'+fmt(last.ladau,1)+' LAD-Au</b><span>'+esc(longDate(last.date))+'</span><span>'+esc(last.note||'Sin nota')+'</span><span>INOL '+fmt(last.inol,2)+'</span><span>'+(last.nSeries||0)+' series</span></div>'
+  $('h_lastbox').innerHTML=last?'<div class="lastbox"><b>'+fmt(last.ladau,1)+' LAD-Au</b><span>'+esc(longDate(last.date))+'</span><span>'+esc(last.title||last.note||'Sin título')+'</span><span>INOL '+fmt(last.inol,2)+'</span><span>'+(last.nSeries||0)+' series</span></div>'
     :'<p class="notes" style="margin:0">Todavía no has guardado ninguna sesión. Pulsa «Nueva sesión», monta tus series en la calculadora y guárdala en el registro.</p>';
 }
 function renderAll(){renderList();renderHome();if(!$('tab-evo').hidden)renderEvo();}
