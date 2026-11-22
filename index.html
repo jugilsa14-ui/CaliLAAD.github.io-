@@ -202,34 +202,34 @@ td.acts{white-space:nowrap}td.acts button{margin-right:6px}
 
 /* ===== CALI.LAAD · gris oscuro y azul, siempre oscuro (el autor, 22 nov) ===== */
 :root{
-  --bg:#14171C; --panel:#1C2129; --ink:#E4E9F0; --muted:#8D97A6; --line:#2C343F;
-  --accent:#3D7BFF; --accent2:#7FB2FF; --ok:#4ade80; --warn:#fbbf24; --soft:#242B35; --band:#a78bfa; --accent-ink:#08101E; color-scheme:dark;
+  --bg:#232527; --panel:#2C2F33; --ink:#ECEEF0; --muted:#A0A5AC; --line:#3C4046;
+  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#35393E; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark;
   --display:"Saira",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
-  --plate:#1A1F27; --plate2:#232A34;
+  --plate:#1E2022; --plate2:#2A2D31;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#14171C; --panel:#1C2129; --ink:#E4E9F0; --muted:#8D97A6; --line:#2C343F;
-  --accent:#3D7BFF; --accent2:#7FB2FF; --ok:#4ade80; --warn:#fbbf24; --soft:#242B35; --band:#a78bfa; --accent-ink:#08101E; color-scheme:dark}}
+  --bg:#232527; --panel:#2C2F33; --ink:#ECEEF0; --muted:#A0A5AC; --line:#3C4046;
+  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#35393E; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#14171C; --panel:#1C2129; --ink:#E4E9F0; --muted:#8D97A6; --line:#2C343F;
-  --accent:#3D7BFF; --accent2:#7FB2FF; --ok:#4ade80; --warn:#fbbf24; --soft:#242B35; --band:#a78bfa; --accent-ink:#08101E; color-scheme:dark}
+  --bg:#232527; --panel:#2C2F33; --ink:#ECEEF0; --muted:#A0A5AC; --line:#3C4046;
+  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#35393E; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}
 body{background:var(--bg)}
 h1,h2,h3{font-family:var(--display);letter-spacing:.01em}
 h2{font-weight:700}
 .panel{border-radius:12px}
 button{border-radius:8px}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 /* cabecera */
 .hero{background:radial-gradient(120% 140% at 0% 0%,var(--plate2),var(--plate) 60%);border-radius:14px;padding:22px 22px 0;color:#C9D2DE;overflow:hidden;position:relative}
 .brand{font-family:var(--display);font-weight:800;font-size:clamp(34px,7vw,56px);line-height:1;margin:0;display:flex;align-items:center;gap:.12em;color:#EEF2F7}
-.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#4C8BFF;align-self:flex-end;margin-bottom:.12em}
+.brand .dot{width:.2em;height:.2em;border-radius:50%;background:#2FB36B;align-self:flex-end;margin-bottom:.12em}
 .hero .lead{color:#AEB8C6;margin:12px 0 18px;max-width:60ch}
-.tube{height:4px;margin:0 -22px;background:#3D7BFF}
+.tube{height:4px;margin:0 -22px;background:#2FB36B}
 /* pestañas con iconos */
 .tabbar{background:var(--bg)}
 .tabbar button{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:600;background:var(--panel)}
 .tabbar .ti{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.tabbar button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tabbar button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 @media (max-width:720px){
   .wrap{padding-bottom:96px}
   .tabbar{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:20;margin:0;border:0;border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px));
@@ -284,14 +284,14 @@ body.gated{overflow:hidden}
 .gbox input[type=email],.gbox input[type=password]{font:inherit;font-size:15px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .gbox .gcons{flex-direction:row;align-items:flex-start;gap:8px;line-height:1.4}
 .gbox .gcons input{margin-top:3px}
-.gtabs button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.gtabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .linkb{background:none;border:0;color:var(--accent2);padding:0;font-weight:500;text-decoration:underline;align-self:flex-start}
 .linkb[hidden]{display:none}
 .gmsg{min-height:1.2em;margin:0;font-size:13px;color:var(--warn)}
 .gtry{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:13px}
 .gtry[hidden]{display:none}
 .gtry p{margin:0}
-button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:11px 18px;color:#fff}
+button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:11px 18px;color:var(--accent-ink)}
 /* nueva sesión */
 .nb .nbgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px}
 @media (max-width:880px){.nb .nbgrid{grid-template-columns:minmax(0,1fr)}}
@@ -302,7 +302,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
 .flab{font-size:12px;color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chips button{padding:8px 12px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font-weight:500}
-.chips button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.chips button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 #b_steps button{border-style:dashed;background:transparent}
 .stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;align-self:flex-start;background:var(--soft)}
 .stepper button{border:0;border-radius:0;width:52px;height:48px;font-size:22px;background:transparent}
@@ -357,6 +357,45 @@ tr.detrow td{background:var(--soft);display:table-cell}
   .rtable tr.detrow td{display:block;border-radius:0 0 10px 10px;padding:10px 12px}
   .rtable tr.detrow td::before{content:none}
 }
+/* nueva sesión por filas */
+.sticky-head{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.sticky-head h3{font-family:var(--display);font-size:16px;margin:0}
+.bseries{display:flex;flex-direction:column;gap:10px}
+.bcard{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.bhead,.brow,.bfoot{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end}
+.bhead{border-bottom:1px solid var(--line);padding-bottom:8px}
+.bhead b{font-family:var(--display);font-size:16px;align-self:center}
+.bhead label,.brow label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted)}
+.brow label.chk{flex-direction:row;align-items:center;gap:5px;font-size:12px;padding-bottom:8px}
+.bhead select,.brow select{min-width:118px;width:auto}
+.brow input[type=number]{width:82px}
+.brow .sp{flex:0 0 0}
+.bload{margin-left:auto;align-self:center;color:var(--muted);font-size:12px}
+.bload b{font-family:var(--display);font-size:20px;color:var(--ink)}
+.brow button.x{margin-left:auto}
+.bfoot button{padding:5px 10px;font-size:13px}
+.bfoot .tag{align-self:center}
+.addbtns{display:flex;gap:10px;flex-wrap:wrap}
+.savebar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:12px}
+.wtable input[type=text]{min-width:140px}
+.wtable input[type=number]{width:76px}
+@media (max-width:640px){
+  .brow{display:grid;grid-template-columns:1fr 1fr;align-items:end}
+  .brow select,.bhead select{min-width:0;width:100%}
+  .brow input[type=number]{width:100%}
+  .brow button.x{grid-column:2;justify-self:end}
+  .bhead{display:grid;grid-template-columns:1fr 1fr}
+  .bhead b{grid-column:1}.bload{grid-column:2;grid-row:1;justify-self:end}
+  .wtable thead{display:none}.wtable,.wtable tbody{display:block}
+  .wtable tr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 10px;background:var(--soft);border-radius:10px;padding:10px;margin-bottom:8px}
+  .wtable td{display:flex;flex-direction:column;font-size:12px;border:0;padding:0}
+  .wtable td::before{content:attr(data-l);font-size:11px;color:var(--muted)}
+  .wtable td:first-child{grid-column:1/-1}
+  .wtable input{width:100%}
+}
+@media (max-width:640px){.rprev{grid-template-columns:repeat(2,minmax(0,1fr))}.rprev b{font-size:20px}
+  .brow{grid-template-columns:repeat(2,minmax(0,1fr)) auto}.brow label:nth-of-type(1){grid-column:1}.brow button.x{grid-column:3;grid-row:1}
+  .brow label.chk{grid-column:1/-1;padding:0}}
 </style>
 
 <div class="wrap">
@@ -700,49 +739,21 @@ tr.detrow td{background:var(--soft);display:table-cell}
       </div>
     </details>
 
-    <div class="nbgrid">
-      <div class="nbcol">
-        <h3>Añadir series de skills</h3>
-        <div class="field"><span class="flab">Skill</span><div class="chips" id="b_fam" role="radiogroup" aria-label="Skill"></div></div>
-        <div class="field"><span class="flab">Progresión</span><div class="chips" id="b_prog" role="radiogroup" aria-label="Progresión"></div></div>
-        <div class="field"><span class="flab">Goma</span><div class="chips" id="b_band" role="radiogroup" aria-label="Goma"></div></div>
-        <div class="field"><span class="flab">Tipo de serie</span><div class="chips" id="b_kind" role="radiogroup" aria-label="Tipo de serie"></div></div>
-        <div id="b_holdbox" class="field"><span class="flab">Segundos de hold</span>
-          <div class="stepper"><button type="button" data-st="-0.5" aria-label="Medio segundo menos">−</button><output id="b_secs">3</output><button type="button" data-st="0.5" aria-label="Medio segundo más">+</button></div></div>
-        <div id="b_combobox" class="field" hidden><span class="flab">Combo, paso a paso</span>
-          <div class="chips" id="b_steps"></div>
-          <div class="seq" id="b_seq" aria-live="polite"></div></div>
-        <div class="field"><span class="flab">Cómo acabó</span><div class="chips" id="b_end" role="radiogroup" aria-label="Cómo acabó"></div></div>
-        <div class="field"><span class="flab">Descanso antes</span><div class="chips" id="b_rest" role="radiogroup" aria-label="Descanso antes"></div></div>
-        <div class="addrow">
-          <div class="stepper small"><button type="button" data-n="-1" aria-label="Una serie menos">−</button><output id="b_n">1</output><button type="button" data-n="1" aria-label="Una serie más">+</button></div>
-          <button class="primary btnbig" id="b_add" type="button">Añadir 1 serie</button>
-        </div>
-        <details class="wdet"><summary>Añadir pesas</summary>
-          <div class="wform">
-            <label class="grow">Ejercicio <input id="w_name" type="text" placeholder="Fondos lastrados"></label>
-            <label>Series <input id="w_s" type="number" min="1" step="1" value="3"></label>
-            <label>Reps <input id="w_r" type="number" min="1" step="1" value="3"></label>
-            <label>Kg <input id="w_kg" type="number" min="0" step="0.5" value="20"></label>
-            <label>1RM (kg) <input id="w_rm" type="number" min="0" step="0.5" value="40"></label>
-            <label>Aguante por rep (s) <input id="w_h" type="number" min="0" step="0.25" value="0"></label>
-            <label class="chk"><input id="w_bw" type="checkbox" checked> Con mi peso (fondos, dominadas)</label>
-            <button id="w_add" type="button">Añadir pesas</button>
-          </div>
-        </details>
-      </div>
-      <div class="nbcol">
-        <h3>Tu sesión</h3>
-        <div id="r_preview" class="rprev"></div>
-        <ol class="slist" id="b_list"></ol>
-        <p class="notes" id="b_empty">Elige skill, progresión y segundos, y pulsa «Añadir». Cada serie aparece aquí con su carga.</p>
-        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-          <button class="primary btnbig" id="r_save" type="button">Guardar sesión</button>
-          <button id="b_clear" type="button">Empezar de cero</button>
-          <span id="r_msg" class="tag" role="status"></span>
-        </div>
-        <p class="notes">Para combos poco habituales, anillas o tus propios máximos, ajusta la sesión en la <a href="#tab-calc" onclick="window.LADtab('calc');return false;">calculadora</a>: es la misma sesión.</p>
-      </div>
+    <div id="r_preview" class="rprev"></div>
+    <div class="sticky-head"><h3>Series de skills</h3><span class="notes">Una serie es una fila o varias: para un combo, añade más filas a la misma serie.</span></div>
+    <div id="b_series" class="bseries"></div>
+    <p class="notes" id="b_empty">Todavía no hay series. Añade la primera.</p>
+    <div class="row addbtns">
+      <button class="primary" type="button" data-addser="plancha">+ Serie de plancha</button>
+      <button class="primary" type="button" data-addser="front">+ Serie de front lever</button>
+    </div>
+    <h3 style="margin-top:6px">Pesas</h3>
+    <div class="tablewrap"><table class="wtable"><thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg</th><th>Con mi peso</th><th>1RM (kg)</th><th>Aguante por rep (s)</th><th>INOL</th><th></th></tr></thead><tbody id="b_wrows"></tbody></table></div>
+    <div class="row addbtns"><button type="button" id="w_add">+ Ejercicio de pesas</button></div>
+    <div class="row savebar">
+      <button class="primary btnbig" id="r_save" type="button">Guardar sesión</button>
+      <button id="b_clear" type="button">Empezar de cero</button>
+      <span id="r_msg" class="tag" role="status"></span>
     </div>
   </section>
   <section class="panel" aria-labelledby="r_h-list">
@@ -2074,7 +2085,7 @@ function svgChart(id,o){
     '<div class="legend">'+leg.map(([t,c,ln])=>'<span><i style="background:'+c+(ln?';height:3px':'')+'"></i>'+esc(t)+'</span>').join('')+'</div>';
 }
 
-const PAL=['#1f5fd6','#c2410c','#15803d','#7c3aed','#b45309','#0e7490','#be123c','#4d7c0f'];
+const PAL=['#2FB36B','#E0A43A','#9BD8B4','#D0687F','#8C96A3','#5FB3A3','#C9B458','#7FA3C9'];
 function renderEvo(){
   document.querySelectorAll('#tab-evo .seg [data-w]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.w===per?'true':'false'));
   document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sk===skill?'true':'false'));
@@ -2149,90 +2160,98 @@ initStore();
 </script>
 
 <script>
-/* Nueva sesión: constructor rápido de series. Escribe en la misma sesión que la calculadora. */
+/* Nueva sesión: series por filas con desplegables. Escribe en la misma sesión que la calculadora. */
 (function(){
 const $=id=>document.getElementById(id);
 const fmt=(v,d=1)=>isFinite(v)?v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
-const nz=v=>fmt(v,v%1?(v*10%1?2:1):0);
 const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-const B={fam:'plancha',prog:'full',band:0,kind:'hold',secs:3,end:'paro',rest:180,n:1,seq:[]};
-try{Object.assign(B,JSON.parse(localStorage.getItem('cali-builder')||'{}'),{seq:[],n:1});}catch(e){}
-function keep(){try{const o=Object.assign({},B);delete o.seq;localStorage.setItem('cali-builder',JSON.stringify(o));}catch(e){}}
-const PROGS=[['full','Full'],['half','Half'],['sthalf','Straddle half'],['st45','Straddle 45°'],['st60','Straddle 60°'],['adv90','ADV90'],['tuck','Tuck']];
-const BANDS=[[0,'RAW'],[5,'G5'],[10,'G10']];
-const PMV=()=>B.fam==='plancha'?[['flex','Flexión'],['press','Press'],['neg','Negativa']]:[['flex','Pull-up'],['press','Press'],['neg','Negativa']];
-const MVN={hold:'hold',press:'press',neg:'negativa',flex:null};
-function chips(id,list,val,key){
-  $(id).innerHTML=list.map(([v,t])=>'<button type="button" role="radio" aria-checked="'+(String(v)===String(val))+'" data-'+key+'="'+v+'">'+t+'</button>').join('');
-}
-function stepName(e){return e.mv==='hold'?(e.secs===1?'deadstop 1″':'hold '+nz(e.secs)+'″'):e.mv==='flex'?(B.fam==='plancha'?'flexión':'pull-up'):MVN[e.mv];}
-function renderForm(){
-  chips('b_fam',[['plancha','Plancha'],['front','Front lever']],B.fam,'fam');
-  chips('b_prog',PROGS,B.prog,'prog');
-  chips('b_band',BANDS,B.band,'band');
-  chips('b_kind',[['hold','Hold'],['combo','Combo']],B.kind,'kind');
-  chips('b_end',[['paro','Paré yo'],['fallo','Caída (fallo)']],B.end,'end');
-  chips('b_rest',[[60,'1′'],[120,'2′'],[180,'3′'],[240,'4′'],[300,'5′']],B.rest,'rest');
-  $('b_secs').textContent=nz(B.secs); $('b_n').textContent=B.n;
-  $('b_holdbox').hidden=B.kind!=='hold'; $('b_combobox').hidden=B.kind!=='combo';
-  $('b_steps').innerHTML=[['d','+ Deadstop 1″'],['h2','+ Hold 2″'],['h3','+ Hold 3″']].concat(PMV().map(([v,t])=>[v,'+ '+t])).map(([v,t])=>'<button type="button" data-step="'+v+'">'+t+'</button>').join('');
-  $('b_seq').innerHTML=B.seq.length?B.seq.map((e,i)=>'<span class="pill">'+esc(stepName(e))+'</span>'+(i<B.seq.length-1?'<i class="arr">→</i>':'')).join('')+' <button type="button" class="x" id="b_undo" aria-label="Quitar el último paso">Quitar último</button>':'<span class="notes">Pulsa los pasos en el orden en que los hiciste.</span>';
-  $('b_add').textContent='Añadir '+B.n+' serie'+(B.n>1?'s':'');
-}
-function effortList(){
-  const base={pos:B.prog,band:+B.band,part:false,smax:'',i1:0.5};
-  if(B.kind==='hold') return [Object.assign({mv:'hold',secs:B.secs},base)];
-  return B.seq.map(e=>Object.assign({},base,{mv:e.mv,secs:e.mv==='hold'?e.secs:''}));
-}
-function serieName(s){
-  const e0=s.efs[0]||{}, prog=(PROGS.find(p=>p[0]===e0.pos)||[0,e0.pos])[1], band=+e0.band?' G'+e0.band:' RAW';
-  const fam=s.fam==='plancha'?'Plancha':'Front';
-  if(s.efs.length===1&&e0.mv==='hold') return fam+' '+prog.toLowerCase()+band+' · hold '+nz(+e0.secs||0)+'″';
-  return fam+' '+prog.toLowerCase()+band+' · '+s.efs.map(e=>e.mv==='hold'?(+e.secs===1?'deadstop':'hold '+nz(+e.secs)+'″'):e.mv==='flex'?(s.fam==='plancha'?'flexión':'pull-up'):e.mv==='press'?'press':e.mv==='neg'?'negativa':e.mv).join(' → ');
+const opts=(list,val)=>list.map(([v,t])=>'<option value="'+v+'"'+(String(v)===String(val)?' selected':'')+'>'+t+'</option>').join('');
+const PROG=[['full','Full'],['half','Half'],['sthalf','Straddle half'],['st45','Straddle 45°'],['st60','Straddle 60°'],['adv90','ADV90'],['tuck','Tuck']];
+const PROGX={plancha:PROG.concat([['maltese','Maltese']]),front:PROG.concat([['fltouch','FL touch'],['sat','SAT']])};
+const BAND=[[0,'RAW'],[5,'G5'],[10,'G10'],[15,'G15'],[20,'G20']];
+const EL={plancha:[['hold','Hold'],['dead','Deadstop'],['press','Press'],['neg','Negativa'],['flex','Flexión'],['low','Pino (descanso)']],
+          front:[['hold','Hold'],['dead','Deadstop'],['press','Press'],['neg','Negativa'],['flex','Pull-up'],['low','Colgado (descanso)']]};
+const REST=[[0,'—'],[30,'30″'],[60,'1′'],[90,'1′30'],[120,'2′'],[150,'2′30'],[180,'3′'],[240,'4′'],[300,'5′'],[420,'7′'],[600,'10′']];
+const END=[['na','Sin anotar'],['paro','Paré yo'],['fallo','Caída (fallo)']];
+const PM=['press','neg','flex'];
+/* filas <-> esfuerzos de la calculadora: los powermoves iguales seguidos se agrupan en una fila con reps */
+function toRows(efs){const rows=[];(efs||[]).forEach(e=>{
+  const last=rows[rows.length-1], kind=e.mv==='hold'&&+e.secs===1?'dead':e.mv;
+  if(PM.includes(e.mv)&&last&&last.el===e.mv&&last.pos===e.pos&&+last.band===+e.band&&!!last.part===!!e.part){last.reps++;return;}
+  rows.push({el:kind,pos:e.pos||'full',band:+e.band||0,secs:e.mv==='hold'||e.mv==='low'?(+e.secs||0):'',reps:PM.includes(e.mv)?1:'',part:!!e.part});});return rows;}
+function toEfs(rows){const out=[];rows.forEach(r=>{const base={pos:r.pos,band:+r.band||0,part:!!r.part,smax:'',i1:0.5};
+  if(r.el==='hold')out.push(Object.assign({mv:'hold',secs:+r.secs||0},base));
+  else if(r.el==='dead')out.push(Object.assign({mv:'hold',secs:+r.secs||1},base));
+  else if(r.el==='low')out.push(Object.assign({mv:'low',secs:+r.secs||1},base));
+  else for(let i=0;i<Math.max(1,Math.round(+r.reps||1));i++)out.push(Object.assign({mv:r.el,secs:''},base));});return out;}
+let st=null;
+function load(){st=window.LADcalc.getState();}
+function commit(){window.LADcalc.setState(st.series,st.weights);render();}
+function rowHtml(s,i,r,j){
+  const pm=PM.includes(r.el);
+  return '<div class="brow" data-i="'+i+'" data-j="'+j+'">'+
+    '<label><span>Elemento</span><select data-k="el">'+opts(EL[s.fam],r.el)+'</select></label>'+
+    '<label><span>Progresión</span><select data-k="pos"'+(r.el==='low'?' disabled':'')+'>'+opts(PROGX[s.fam],r.pos)+'</select></label>'+
+    '<label><span>Goma</span><select data-k="band"'+(r.el==='low'?' disabled':'')+'>'+opts(BAND,r.band)+'</select></label>'+
+    (pm?'<label><span>Reps</span><input data-k="reps" type="number" min="1" step="1" inputmode="numeric" value="'+r.reps+'"></label>'+
+        '<label class="chk"><input data-k="part" type="checkbox"'+(r.part?' checked':'')+'><span>Parcial</span></label>'
+       :'<label><span>Segundos</span><input data-k="secs" type="number" min="0" step="0.25" inputmode="decimal" value="'+r.secs+'"></label><span class="sp"></span>')+
+    '<button type="button" class="x" data-rdel aria-label="Quitar esta fila">✕</button></div>';
 }
 function render(){
-  renderForm();
   if(!window.LADcalc||!window.LADcalc.snapshot) return;
-  const snap=window.LADcalc.snapshot(), st=snap.state;
-  const items=st.series.map((s,i)=>{const r=snap.perS[i]||{};return '<li><div class="sname">'+esc(serieName(s))+'</div><div class="smeta"><span>'+(s.end==='fallo'?'caída':s.end==='paro'?'paré':'')+(s.rest?' · descanso '+Math.round(s.rest/60*10)/10+'′':'')+'</span><b>'+fmt(r.load,1)+' LAD</b></div>'+
-    '<div class="sacts"><button type="button" data-dup="'+i+'">Repetir</button><button type="button" class="x" data-del="'+i+'" aria-label="Quitar serie">Quitar</button></div></li>';});
-  const witems=st.weights.map((w,i)=>{const r=snap.perW[i]||{};return '<li class="w"><div class="sname">'+esc(w.name||'Pesas')+' · '+w.series+'×'+w.reps+' @'+nz(+w.kg||0)+' kg'+(+w.hold?' · aguante '+nz(+w.hold)+'″':'')+'</div><div class="smeta"><span>'+(isFinite(r.pct)?fmt(r.pct,0)+' % del 1RM':'')+'</span><b>INOL '+fmt(r.inol,2)+'</b></div>'+
-    '<div class="sacts"><button type="button" class="x" data-wdel="'+i+'" aria-label="Quitar pesas">Quitar</button></div></li>'});
-  $('b_list').innerHTML=items.join('')+witems.join('');
-  $('b_empty').hidden=!!(items.length||witems.length);
+  const snap=window.LADcalc.snapshot(); st=snap.state;
+  $('b_series').innerHTML=st.series.map((s,i)=>{const rows=toRows(s.efs),r=snap.perS[i]||{};
+    return '<div class="bcard" data-i="'+i+'"><div class="bhead"><b>Serie '+(i+1)+'</b>'+
+      '<label><span>Skill</span><select data-s="fam">'+opts([['plancha','Plancha'],['front','Front lever']],s.fam)+'</select></label>'+
+      '<label><span>Descanso antes</span><select data-s="rest">'+opts(REST,REST.some(x=>x[0]===+s.rest)?+s.rest:s.rest)+(REST.some(x=>x[0]===+s.rest)?'':'<option selected value="'+s.rest+'">'+s.rest+' s</option>')+'</select></label>'+
+      '<label><span>Cómo acabó</span><select data-s="end">'+opts(END,s.end||'na')+'</select></label>'+
+      '<span class="bload"><b>'+fmt(r.load,1)+'</b> LAD</span></div>'+
+      rows.map((rw,j)=>rowHtml(s,i,rw,j)).join('')+
+      '<div class="bfoot"><button type="button" data-radd>+ Añadir al combo</button><button type="button" data-sdup>Repetir serie</button><button type="button" class="x" data-sdel>Quitar serie</button>'+(rows.length>1?'<span class="tag">Combo de '+rows.length+' elementos</span>':'')+'</div></div>';}).join('');
+  $('b_empty').hidden=st.series.length>0;
+  $('b_wrows').innerHTML=st.weights.map((w,i)=>{const r=snap.perW[i]||{};return '<tr data-w="'+i+'">'+
+    '<td><input data-wk="name" type="text" value="'+esc(w.name)+'" aria-label="Ejercicio"></td>'+
+    ['series','reps','kg'].map(k=>'<td><input data-wk="'+k+'" type="number" min="0" step="'+(k==='kg'?0.5:1)+'" value="'+w[k]+'"></td>').join('')+
+    '<td><label class="chk"><input data-wk="bw" type="checkbox"'+(w.bw?' checked':'')+' aria-label="Con mi peso"></label></td>'+
+    '<td><input data-wk="rm" type="number" min="0" step="0.5" value="'+w.rm+'"></td>'+
+    '<td><input data-wk="hold" type="number" min="0" step="0.25" value="'+w.hold+'"></td>'+
+    '<td class="n"><b>'+fmt(r.inol,2)+'</b></td><td><button type="button" class="x" data-wdel aria-label="Quitar ejercicio">✕</button></td></tr>';}).join('');
+  const th=[...document.querySelectorAll('.wtable th')].map(t=>t.textContent);
+  $('b_wrows').querySelectorAll('tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.l=th[i]||''));
   window.LADreg&&window.LADreg.preview&&window.LADreg.preview();
 }
-function mutate(fn){const st=window.LADcalc.getState();fn(st);window.LADcalc.setState(st.series,st.weights);render();}
-document.querySelector('.nb').addEventListener('click',e=>{
-  const d=e.target.dataset;
-  if(d.fam){B.fam=d.fam;B.seq=[];}
-  else if(d.prog)B.prog=d.prog; else if(d.band!=null)B.band=+d.band; else if(d.kind)B.kind=d.kind;
-  else if(d.end)B.end=d.end; else if(d.rest)B.rest=+d.rest;
-  else if(d.st){B.secs=Math.max(0.5,Math.round((B.secs+(+d.st))*2)/2);}
-  else if(d.n){B.n=Math.max(1,Math.min(10,B.n+(+d.n)));}
-  else if(d.step){const s=d.step;B.seq.push(s==='d'?{mv:'hold',secs:1}:s==='h2'?{mv:'hold',secs:2}:s==='h3'?{mv:'hold',secs:3}:{mv:s});}
-  else if(e.target.id==='b_undo')B.seq.pop();
-  else if(d.dup!=null){mutate(st=>{st.series.splice(+d.dup+1,0,JSON.parse(JSON.stringify(st.series[+d.dup])));});return;}
-  else if(d.del!=null){mutate(st=>st.series.splice(+d.del,1));return;}
-  else if(d.wdel!=null){mutate(st=>st.weights.splice(+d.wdel,1));return;}
-  else return;
-  keep(); renderForm();
+const box=document.querySelector('.nb');
+box.addEventListener('change',e=>{
+  const t=e.target, card=t.closest('.bcard'), wr=t.closest('tr[data-w]');
+  if(card){load();const s=st.series[+card.dataset.i];
+    if(t.dataset.s){const k=t.dataset.s;s[k]=k==='rest'?+t.value:t.value;
+      if(k==='fam'){s.efs.forEach(x=>{if(!PROGX[s.fam].some(p=>p[0]===x.pos))x.pos='full';});}}
+    else{const row=t.closest('.brow'); if(!row)return; const rows=toRows(s.efs), r=rows[+row.dataset.j], k=t.dataset.k;
+      if(k==='part')r.part=t.checked; else if(k==='el'){r.el=t.value;if(PM.includes(r.el)){r.reps=r.reps||1;r.secs='';}else{r.secs=r.el==='dead'?1:(+r.secs||3);r.reps='';}}
+      else if(k==='band')r.band=+t.value; else r[k]=t.value;
+      s.efs=toEfs(rows);}
+    commit();return;}
+  if(wr){load();const w=st.weights[+wr.dataset.w],k=t.dataset.wk;if(!k)return;w[k]=k==='name'?t.value:k==='bw'?t.checked:t.value===''?'':+t.value;commit();}
 });
-$('b_add').addEventListener('click',()=>{
-  const efs=effortList(); if(!efs.length){$('r_msg').textContent='Añade al menos un paso al combo.';return;}
-  mutate(st=>{for(let i=0;i<B.n;i++)st.series.push({fam:B.fam,rest:st.series.length||i?B.rest:0,ring:false,fan:1,end:B.end,res:'',efs:JSON.parse(JSON.stringify(efs))});});
-  $('r_msg').textContent=B.n+' serie'+(B.n>1?'s añadidas':' añadida')+'.'; B.seq=[];B.n=1;renderForm();
+box.addEventListener('click',e=>{
+  const t=e.target,d=t.dataset,card=t.closest('.bcard');
+  if(d.addser){load();const last=[...st.series].reverse().find(s=>s.fam===d.addser);
+    st.series.push(last?Object.assign(JSON.parse(JSON.stringify(last)),{end:'na',res:''}):{fam:d.addser,rest:st.series.length?180:0,ring:false,fan:1,end:'na',res:'',efs:[{mv:'hold',pos:'full',band:0,secs:3,part:false,smax:'',i1:0.5}]});
+    commit();const cards=document.querySelectorAll('.bcard');cards[cards.length-1]&&cards[cards.length-1].scrollIntoView({block:'nearest'});return;}
+  if(card&&d.radd!=null){load();const s=st.series[+card.dataset.i];const rows=toRows(s.efs);const last=rows[rows.length-1]||{pos:'full',band:0};
+    rows.push({el:'dead',pos:last.pos,band:last.band,secs:1,reps:'',part:false});s.efs=toEfs(rows);commit();return;}
+  if(card&&d.sdup!=null){load();const i=+card.dataset.i;st.series.splice(i+1,0,JSON.parse(JSON.stringify(st.series[i])));commit();return;}
+  if(card&&d.sdel!=null){load();st.series.splice(+card.dataset.i,1);commit();return;}
+  if(card&&d.rdel!=null){load();const s=st.series[+card.dataset.i];const rows=toRows(s.efs);rows.splice(+t.closest('.brow').dataset.j,1);
+    if(rows.length)s.efs=toEfs(rows);else st.series.splice(+card.dataset.i,1);commit();return;}
+  if(d.wdel!=null){load();st.weights.splice(+t.closest('tr').dataset.w,1);commit();return;}
+  if(t.id==='w_add'){load();st.weights.push({name:'Ejercicio',series:3,reps:3,kg:20,bw:true,rm:40,hold:0,rir:''});commit();return;}
+  if(t.id==='b_clear'){load();st.series=[];st.weights=[];commit();$('r_msg').textContent='Sesión vacía.';}
 });
-$('w_add').addEventListener('click',()=>{
-  const w={name:$('w_name').value.trim()||'Pesas',series:+$('w_s').value||1,reps:+$('w_r').value||1,kg:+$('w_kg').value||0,bw:$('w_bw').checked,rm:+$('w_rm').value||0,hold:+$('w_h').value||0,rir:''};
-  if(!(w.rm>0)){$('r_msg').textContent='Pon tu 1RM del ejercicio para calcular el INOL.';return;}
-  mutate(st=>st.weights.push(w)); $('r_msg').textContent='Pesas añadidas.';
-});
-$('b_clear').addEventListener('click',()=>{mutate(st=>{st.series=[];st.weights=[];});$('r_msg').textContent='Sesión vacía.';});
-window.CALIbuilder={render,saved(){mutate(st=>{st.series=[];st.weights=[];});}};
-// la primera vez, el registro empieza vacío (la calculadora trae un ejemplo)
-try{const st=window.LADcalc&&window.LADcalc.getState();if(st&&st.example)window.LADcalc.setState([],[]);}catch(e){}
-renderForm();
+window.CALIbuilder={render,saved(){load();st.series=[];st.weights=[];commit();}};
+try{const s0=window.LADcalc&&window.LADcalc.getState();if(s0&&s0.example)window.LADcalc.setState([],[]);}catch(e){}
+render();
 })();
 </script>
 
