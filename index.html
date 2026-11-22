@@ -200,7 +200,7 @@ td.acts{white-space:nowrap}td.acts button{margin-right:6px}
 .filebtn input{width:0;height:0;opacity:0;position:absolute}
 .filebtn:focus-within{outline:2px solid var(--accent)}
 
-/* ===== CALI.LAAD · gris oscuro y azul, siempre oscuro (Juan, 22 nov) ===== */
+/* ===== CALI.LAAD · gris oscuro y azul, siempre oscuro (el autor, 22 nov) ===== */
 :root{
   --bg:#14171C; --panel:#1C2129; --ink:#E4E9F0; --muted:#8D97A6; --line:#2C343F;
   --accent:#3D7BFF; --accent2:#7FB2FF; --ok:#4ade80; --warn:#fbbf24; --soft:#242B35; --band:#a78bfa; --accent-ink:#08101E; color-scheme:dark;
@@ -601,7 +601,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
       <div class="f"><label for="c_nF">n de la curva · front</label><input id="c_nF" type="number" step="0.1" min="0.5" value="7.8"></div>
     </div>
     <label class="chk" style="font-size:13px;color:var(--ink);white-space:normal;align-items:flex-start"><input id="c_own" type="checkbox"> Usar mis medidas del simulador para los torques (si no, proporciones medias para tu altura)</label>
-    <p class="notes"><b>1 LAD = 1 segundo al torque de la full de su skill.</b> INT1 = torque de hombro + codo de la postura ÷ el de la full. El techo y su máximo (récord del bloque, test 1) sirven para la fatiga y la RPE-T. Sin máximo medido en una postura, se estima con la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n); n = 7,8 es el valor estándar (half frente a full de Juan, rigor F).</p>
+    <p class="notes"><b>1 LAD = 1 segundo al torque de la full de su skill.</b> INT1 = torque de hombro + codo de la postura ÷ el de la full. El techo y su máximo (récord del bloque, test 1) sirven para la fatiga y la RPE-T. Sin máximo medido en una postura, se estima con la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n); n = 7,8 es el valor estándar (half frente a full del autor, rigor F).</p>
     <details>
       <summary>Parámetros del modelo (valores estándar)</summary>
       <div class="prof" style="margin-top:10px">
@@ -814,7 +814,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
     </nav>
 
     <h3 id="how-1">1. Qué es LAD y qué hace esta página</h3>
-    <p>LAD (<i>Load Definition</i>, autor Juan Gil Saiz) es un modelo para cuantificar la carga de un entrenamiento de calistenia de fuerza. <b>1 LAD = 1 segundo al torque de la full de su skill</b> (hombro + codo; plancha para el empuje, front para el tirón). Cada esfuerzo vale INT1 × INT2 × segundos, con dos coeficientes:</p>
+    <p>LAD (<i>Load Definition</i>, creado por el autor) es un modelo para cuantificar la carga de un entrenamiento de calistenia de fuerza. <b>1 LAD = 1 segundo al torque de la full de su skill</b> (hombro + codo; plancha para el empuje, front para el tirón). Cada esfuerzo vale INT1 × INT2 × segundos, con dos coeficientes:</p>
     <ul>
       <li><b>INT1</b>: cuánto pesa la <b>postura</b> (la palanca): su torque de hombro + codo ÷ el de la full.</li>
       <li><b>INT2</b>: cuánto pesa el <b>powermove</b> (press, negativa, flexión, pull-up) respecto a mantener la postura quieta (hold).</li>
@@ -884,7 +884,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
     <p class="small">El signo del torque del codo dice si la carga tiende a extenderlo o a flexionarlo; el valor que se usa en el INT2 es el absoluto. Qué músculos lo frenan (bíceps, tríceps, coactivación) no lo decide el modelo: aparece como matiz al lado y lo valora el entrenador.</p>
 
     <h3 id="how-6">6. Gomas</h3>
-    <p>Una goma se modela como una fuerza vertical constante igual a sus kilos × g (G5 = 5 kg, G10 = 10 kg, G15 = 15 kg, decisión de Juan). Dónde se coloca cambia su efecto:</p>
+    <p>Una goma se modela como una fuerza vertical constante igual a sus kilos × g (G5 = 5 kg, G10 = 10 kg, G15 = 15 kg, decisión del autor). Dónde se coloca cambia su efecto:</p>
     <ul>
       <li><b>Bajo el centro de gravedad:</b> equivale a pesar esos kilos menos. Full de 1,68 m y 65 kg con G10: 215 N·m (sin goma, 257).</li>
       <li><b>En otro punto (cadera, rodillas, tobillos, pecho):</b> además de restar peso, cambia dónde cae el centro de masas y por tanto el brazo de momento. La misma G10 en los tobillos deja el hombro en 129 N·m, porque actúa con mucha más palanca.</li>
@@ -902,7 +902,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
     <h3 id="how-8">8. Impulso angular e INT2</h3>
     <p>El <b>impulso angular</b> es el torque acumulado a lo largo del tiempo:</p>
     <div class="eq">J = ∫ |T(t)| dt ≈ D · T̄  (con duración D y ritmo uniforme)</div>
-    <p>Se integra con 101 posiciones y la regla del trapecio. Decisiones de Juan (14 nov): el INT2 es <b>el impulso angular resultante (hombro + codo) del powermove sobre el del hold</b>, con la <b>misma duración</b>, solo con torque absoluto, técnica perfecta (cadera recta) y sin sensaciones ni impacto:</p>
+    <p>Se integra con 101 posiciones y la regla del trapecio. Decisiones del autor (14 nov): el INT2 es <b>el impulso angular resultante (hombro + codo) del powermove sobre el del hold</b>, con la <b>misma duración</b>, solo con torque absoluto, técnica perfecta (cadera recta) y sin sensaciones ni impacto:</p>
     <div class="eq">INT2 = (J_hombro + J_codo)_powermove ÷ (J_hombro + J_codo)_hold = (T̄_hombro + T̄_codo)_powermove ÷ (T_hombro + T_codo)_hold</div>
     <div class="tablewrap"><table class="def">
       <thead><tr><th>Powermove</th><th>Hombro ÷ hold</th><th>Codo ÷ hold</th><th>INT2 estándar</th></tr></thead>
@@ -917,13 +917,13 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
       <li><b>Por qué el press vale menos que el hold:</b> al girar hacia el pino (o hacia el colgado invertido) el centro de masas se acerca a la vertical del hombro y el brazo de momento se reduce; el máximo es la propia postura inicial.</li>
       <li><b>Por qué la flexión casi iguala al hold:</b> el cuerpo sigue horizontal, así que el torque del hombro no baja; solo cambia el del codo.</li>
       <li><b>Press = negativa</b> porque el recorrido es el mismo. Lo que los diferencia (la velocidad: frenar de golpe en la posición de máximo torque) no lo ve un modelo cuasiestático. Se registran por separado.</li>
-      <li><b>Por qué vale para cualquier altura y peso:</b> con proporciones medias todas las longitudes son proporcionales a H y todas las masas a M, así que todos los torques son proporcionales a M·H y el cociente no cambia. Comprobado de 150 cm y 50 kg a 200 cm y 100 kg. Solo cambia con medidas reales (por ejemplo, los brazos de Juan dan un codo distinto en la flexión) o con otra técnica: para eso está el <b>INT2 modificado</b> de la calculadora.</li>
+      <li><b>Por qué vale para cualquier altura y peso:</b> con proporciones medias todas las longitudes son proporcionales a H y todas las masas a M, así que todos los torques son proporcionales a M·H y el cociente no cambia. Comprobado de 150 cm y 50 kg a 200 cm y 100 kg. Solo cambia con medidas reales (por ejemplo, los brazos del autor dan un codo distinto en la flexión) o con otra técnica: para eso está el <b>INT2 modificado</b> de la calculadora.</li>
       <li>Las activaciones musculares influyen, pero las valora el entrenador fuera de la fórmula.</li>
     </ul>
 
     <h3 id="how-9">9. INT1 y RPE-T</h3>
     <div class="eq">INT1 = (T_hombro + T_codo)(postura, con su goma) ÷ (T_hombro + T_codo)(full, sin goma)<br>RPE-T = 10 × (T_hombro + T_codo)(postura) ÷ (T_hombro + T_codo)(tu techo)</div>
-    <p>El INT1 se ancla a la full, fija para todos, y es lo que entra en la carga. La RPE-T se ancla a <b>tu techo</b> (la progresión que mantienes 2 segundos o más) y dice a qué parte de tu máximo entrenas; no entra en la carga. Con las medidas de Juan (1,68 m, 65 kg): half y straddle 45° ≈ 0,91; straddle 60° y straddle half ≈ 0,84; ADV90 0,75; tuck 0,59; full G5 0,92 y G10 0,84; maltese 1,28.</p>
+    <p>El INT1 se ancla a la full, fija para todos, y es lo que entra en la carga. La RPE-T se ancla a <b>tu techo</b> (la progresión que mantienes 2 segundos o más) y dice a qué parte de tu máximo entrenas; no entra en la carga. Con las medidas del autor (1,68 m, 65 kg): half y straddle 45° ≈ 0,91; straddle 60° y straddle half ≈ 0,84; ADV90 0,75; tuck 0,59; full G5 0,92 y G10 0,84; maltese 1,28.</p>
 
     <h3 id="how-10">10. Skills: maltese, front lever touch y SAT</h3>
     <p><b>Vista frontal.</b> Cada mano soporta la mitad del peso. El torque de cada hombro es esa fuerza por la distancia horizontal hombro–mano, que tiene dos partes: la <b>sagital</b> d (la de la vista lateral) y la <b>frontal</b> lat (cuánto queda la mano por fuera del hombro). El torque combinado es la suma vectorial:</p>
@@ -941,7 +941,7 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
       <li><b>Fatiga:</b> carga = c × (1 + b × A). A suma la fracción de máximo de cada esfuerzo, x = INT2 × s ÷ s_máx, dentro de la serie (intraserie) y arrastra lo que queda de la serie anterior de su familia, × e^(−descanso ÷ τ) (interserie). b = 0,25 hasta el 60 % del torque de tu techo y 0,165 desde el 80 %, lineal entre medias; τ = 60 s; w = 0 entre empuje y tirón. En poco torque (pino, colgado invertido) no hay carga y A baja con e^(−t ÷ τ).</li>
       <li><b>s_máx:</b> el récord del bloque en tu techo; en otras posturas, tu máximo si lo pones o la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n), con n = 7,8 estándar.</li>
       <li><b>Pesas:</b> INOL = series × reps × (1 + c_h × segundos de aguante) ÷ (100 − % 1RM), con masa total en lastrados y tope en el 99 %; c_h = 0,4 provisional. Sin fatiga acumulada.</li>
-      <li><b>Dos cifras, sin sumar</b> (decisión de Juan, 19 nov): LAD-Au e INOL se siguen por separado, como tendencias conjuntas. El ACWR solo usa la LAD-Au, y con él se decide si programar más carga.</li>
+      <li><b>Dos cifras, sin sumar</b> (decisión del autor, 19 nov): LAD-Au e INOL se siguen por separado, como tendencias conjuntas. El ACWR solo usa la LAD-Au, y con él se decide si programar más carga.</li>
       <li><b>Esfuerzo:</b> número de fallos anotados y de series cerca del fallo (reserva ≤ 1″ o ≤ 1 rep; estimada por el modelo si no se anota). En pesas, cercanía por RIR si estás entrenado en RIR; si no, por Epley.</li>
     </ul>
 
@@ -970,17 +970,17 @@ button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:
       <li><b>Gomas ideales.</b> Fuerza vertical y constante; una goma real cambia de fuerza al estirarse y no siempre tira en vertical.</li>
       <li><b>Straddle por proyección.</b> Las piernas abiertas se proyectan con cos(apertura); no se calcula el torque fuera del plano lateral, salvo en la vista frontal de la maltese y el SAT.</li>
       <li><b>Anchura de hombros estimada</b> (0,23 × H) si no la mides.</li>
-      <li><b>Dirección del torque del codo en la flexión.</b> El modelo da extensión en todo el recorrido; la experiencia de Juan (tríceps al subir, bíceps y coactivación en el bloqueo) no se recoge. Falta un vídeo lateral para contrastarlo.</li>
-      <li><b>Sin percepción ni fatiga.</b> El esfuerzo percibido, la fatiga acumulada, la técnica y el coste metabólico no entran en el INT2 estándar (decisión de Juan).</li>
+      <li><b>Dirección del torque del codo en la flexión.</b> El modelo da extensión en todo el recorrido; la experiencia del autor (tríceps al subir, bíceps y coactivación en el bloqueo) no se recoge. Falta un vídeo lateral para contrastarlo.</li>
+      <li><b>Sin percepción ni fatiga.</b> El esfuerzo percibido, la fatiga acumulada, la técnica y el coste metabólico no entran en el INT2 estándar (decisión del autor).</li>
       <li><b>Población.</b> Pensado para adultos con proporciones típicas; con morfologías muy distintas, usar medidas propias.</li>
     </ul>
 
     <h3 id="how-rigor">14. Nivel de rigor y referencias</h3>
-    <p class="small">Escala de LAD: A revisión sistemática o metaanálisis · B estudio revisado por pares · C libro, manual o tesis · D actas o preprint · E web o foro · F criterio de Juan o estimación nuestra.</p>
+    <p class="small">Escala de LAD: A revisión sistemática o metaanálisis · B estudio revisado por pares · C libro, manual o tesis · D actas o preprint · E web o foro · F criterio del autor o estimación nuestra.</p>
     <ul>
       <li><b>B</b> · de Leva, P. (1996). Adjustments to Zatsiorsky-Seluyanov's segment inertia parameters. <i>Journal of Biomechanics</i>, 29(9), 1223–1230. Parámetros de los segmentos (citados de memoria, por verificar).</li>
       <li><b>E</b> · Brey Fitness (web). Torques de la plancha por progresión para 70 kg y 1,75 m. Usado solo para comparar.</li>
-      <li><b>F</b> · Decisiones de Juan Gil Saiz (14 nov 2026): INT1 = % del techo; techo = progresión que mantienes 2″ o más; gomas en kg; INT2 = impulso angular resultante sobre el hold, con técnica perfecta y solo torque; anillas como factor aparte.</li>
+      <li><b>F</b> · Decisiones del autor (14 nov 2026): INT1 = % del techo; techo = progresión que mantienes 2″ o más; gomas en kg; INT2 = impulso angular resultante sobre el hold, con técnica perfecta y solo torque; anillas como factor aparte.</li>
       <li><b>F</b> · Estimaciones nuestras: tronco 0,288 × H, anchura de hombros 0,23 × H, geometría de maltese, SAT y FL touch, flexión por bajada del centro de masas.</li>
     </ul>
     <p class="small">El resto de fuentes del modelo LAD (y su nivel) están en el documento LAD.</p>
