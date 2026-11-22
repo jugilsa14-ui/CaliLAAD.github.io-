@@ -202,17 +202,17 @@ td.acts{white-space:nowrap}td.acts button{margin-right:6px}
 
 /* ===== CALI.LAAD · gris oscuro y azul, siempre oscuro (el autor, 22 nov) ===== */
 :root{
-  --bg:#232527; --panel:#2C2F33; --ink:#ECEEF0; --muted:#A0A5AC; --line:#3C4046;
-  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#35393E; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark;
+  --bg:#33363B; --panel:#3C4046; --ink:#F0F2F4; --muted:#B0B5BC; --line:#4C5158;
+  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#464A51; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark;
   --display:"Saira",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
-  --plate:#1E2022; --plate2:#2A2D31;
+  --plate:#2B2E32; --plate2:#383B40;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#232527; --panel:#2C2F33; --ink:#ECEEF0; --muted:#A0A5AC; --line:#3C4046;
-  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#35393E; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}}
+  --bg:#33363B; --panel:#3C4046; --ink:#F0F2F4; --muted:#B0B5BC; --line:#4C5158;
+  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#464A51; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#232527; --panel:#2C2F33; --ink:#ECEEF0; --muted:#A0A5AC; --line:#3C4046;
-  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#35393E; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}
+  --bg:#33363B; --panel:#3C4046; --ink:#F0F2F4; --muted:#B0B5BC; --line:#4C5158;
+  --accent:#2FB36B; --accent2:#9BD8B4; --ok:#D9DEE3; --warn:#fbbf24; --soft:#464A51; --band:#a78bfa; --accent-ink:#0E1A13; color-scheme:dark}
 body{background:var(--bg)}
 h1,h2,h3{font-family:var(--display);letter-spacing:.01em}
 h2{font-weight:700}
@@ -396,6 +396,7 @@ tr.detrow td{background:var(--soft);display:table-cell}
 @media (max-width:640px){.rprev{grid-template-columns:repeat(2,minmax(0,1fr))}.rprev b{font-size:20px}
   .brow{grid-template-columns:repeat(2,minmax(0,1fr)) auto}.brow label:nth-of-type(1){grid-column:1}.brow button.x{grid-column:3;grid-row:1}
   .brow label.chk{grid-column:1/-1;padding:0}}
+input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 </style>
 
 <div class="wrap">
