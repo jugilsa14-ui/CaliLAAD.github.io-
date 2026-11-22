@@ -266,10 +266,102 @@ button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .lastbox{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline}
 .lastbox b{font-family:var(--display);font-size:22px}
 .tiles b,.rprev b{font-family:var(--display);font-weight:700}
+/* cuenta */
+.acct{position:absolute;top:14px;right:16px;display:flex;gap:8px;align-items:center;font-size:12px;color:#AEB8C6;max-width:55%}
+.acct span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct button{padding:4px 10px;font-size:12px;background:transparent;color:#DCE3EC;border-color:#3A4452}
+/* acceso */
+body.gated{overflow:hidden}
+.gate{position:fixed;inset:0;z-index:50;background:rgba(10,12,16,.92);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px}
+.gate[hidden]{display:none}
+.gbox{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;margin-top:6vh}
+.gbrand{font-size:34px;margin:0 0 4px}
+.gbox h2{font-size:22px;margin:0}
+.gsub{color:var(--muted);margin:0}
+.gbox form{display:flex;flex-direction:column;gap:10px}
+.gbox label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.gbox label[hidden],.gtabs[hidden]{display:none}
+.gbox input[type=email],.gbox input[type=password]{font:inherit;font-size:15px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.gbox .gcons{flex-direction:row;align-items:flex-start;gap:8px;line-height:1.4}
+.gbox .gcons input{margin-top:3px}
+.gtabs button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.linkb{background:none;border:0;color:var(--accent2);padding:0;font-weight:500;text-decoration:underline;align-self:flex-start}
+.linkb[hidden]{display:none}
+.gmsg{min-height:1.2em;margin:0;font-size:13px;color:var(--warn)}
+.gtry{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:13px}
+.gtry[hidden]{display:none}
+.gtry p{margin:0}
+button.btnbig{font-family:var(--display);font-weight:700;font-size:16px;padding:11px 18px;color:#fff}
+/* nueva sesión */
+.nb .nbgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px}
+@media (max-width:880px){.nb .nbgrid{grid-template-columns:minmax(0,1fr)}}
+.nb h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+.nbcol{display:flex;flex-direction:column;gap:12px;min-width:0}
+.field{display:flex;flex-direction:column;gap:6px}
+.field[hidden]{display:none}
+.flab{font-size:12px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{padding:8px 12px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font-weight:500}
+.chips button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+#b_steps button{border-style:dashed;background:transparent}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;align-self:flex-start;background:var(--soft)}
+.stepper button{border:0;border-radius:0;width:52px;height:48px;font-size:22px;background:transparent}
+.stepper output{min-width:76px;text-align:center;font-family:var(--display);font-size:28px;font-weight:700}
+.stepper output::after{content:"″";font-size:.7em;color:var(--muted)}
+.stepper.small button{width:40px;height:44px;font-size:18px}
+.stepper.small output{min-width:44px;font-size:20px}
+.stepper.small output::after{content:"×"}
+.addrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:34px}
+.seq .pill{background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px}
+.seq .arr{font-style:normal;color:var(--muted)}
+.seq button{padding:4px 10px;font-size:12px}
+.slist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+.slist li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:4px 10px;align-items:center;background:var(--soft);border-radius:10px;padding:10px 12px;counter-increment:s}
+.slist li::before{content:counter(s);grid-row:span 2;font-family:var(--display);font-weight:700;color:var(--muted);font-size:18px}
+.slist li.w::before{content:"kg";font-size:12px}
+.slist .sname{font-weight:600;font-size:14px;min-width:0;overflow-wrap:anywhere}
+.slist .smeta{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);grid-column:2}
+.slist .smeta b{font-family:var(--display);font-size:15px;color:var(--ink)}
+.slist .sacts{grid-row:1/span 2;grid-column:3;display:flex;flex-direction:column;gap:4px}
+.slist .sacts button{padding:4px 10px;font-size:12px}
+.wdet summary{cursor:pointer;font-weight:600;font-size:14px}
+.wform{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:10px}
+.wform label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.wform label.grow{flex:1;min-width:180px}
+.wform input[type=number]{width:84px}
+.wform label.chk{flex-direction:row;align-items:center;gap:6px}
+#r_save{min-width:180px}
+@media (max-width:720px){.acct{position:static;justify-content:flex-end;max-width:none;margin:-6px 0 6px}}
 </style>
 
 <div class="wrap">
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="g_title" hidden>
+  <div class="gbox">
+    <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
+    <h2 id="g_title">Crea tu cuenta</h2>
+    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes.</p>
+    <div class="seg gtabs" role="tablist" aria-label="Acceso">
+      <button type="button" role="tab" id="g_tup" aria-selected="true">Crear cuenta</button>
+      <button type="button" role="tab" id="g_tin" aria-selected="false">Entrar</button>
+    </div>
+    <form id="g_form" novalidate>
+      <label>Correo electrónico <input id="g_email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
+      <label id="g_pwl">Contraseña <input id="g_pw" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres"></label>
+      <label class="chk gcons" id="g_consl"><input id="g_cons" type="checkbox"> Acepto que CALI.LAAD guarde mi correo y mis sesiones para darme el servicio. Puedo borrarlos cuando quiera.</label>
+      <button class="primary btnbig" id="g_go" type="submit">Crear cuenta</button>
+      <button type="button" class="linkb" id="g_forgot">He olvidado mi contraseña</button>
+      <p class="gmsg" id="g_msg" role="status"></p>
+    </form>
+    <div class="gtry" id="g_try" hidden>
+      <p>Las cuentas se activan en cuanto conectemos el servidor. Mientras tanto puedes probar la web: tus sesiones se guardan solo en este navegador.</p>
+      <button type="button" id="g_local">Probar sin cuenta</button>
+    </div>
+  </div>
+</div>
+
   <header class="hero">
+    <div class="acct" id="acct"></div>
     <h1 class="brand" aria-label="CALI.LAAD"><span>CALI</span><i class="dot" aria-hidden="true"></i><span>LAAD</span></h1>
     <p class="lead">Calistenia de fuerza, medida. Calcula la carga de cada sesión con el método LAD, guárdala y mira cómo progresas.</p>
     <div class="tube" aria-hidden="true"></div>
@@ -568,18 +660,57 @@ button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 
   </div>
   <div class="tabpanel" id="tab-reg" role="tabpanel" aria-labelledby="t-reg" hidden>
-  <section class="panel" aria-labelledby="r_h-save">
-    <div class="head"><h2 id="r_h-save">Guardar una sesión</h2><span id="r_store" class="tag"></span></div>
-    <p class="notes" style="margin-top:0">La sesión que tengas en la <a href="#tab-calc" onclick="window.LADtab('calc');return false;">calculadora</a> se guarda en tu registro con su fecha. Antes de guardar, revisa las series y las pesas allí.</p>
+  <section class="panel nb" aria-labelledby="r_h-save">
+    <div class="head"><h2 id="r_h-save">Nueva sesión</h2><span id="r_store" class="tag"></span></div>
     <div class="rform">
       <label>Fecha <input id="r_date" type="date"></label>
-      <label class="grow">Nombre o nota <input id="r_note" type="text" maxlength="200" placeholder="p. ej. Lunes · holds RAW + combos"></label>
-      <label>sRPE (0–5) <input id="r_srpe" type="number" min="0" max="5" step="1" placeholder="—"></label>
+      <label class="grow">Nota <input id="r_note" type="text" maxlength="200" placeholder="p. ej. holds RAW y combos en half"></label>
+      <label>Dureza de la sesión (0–5) <input id="r_srpe" type="number" min="0" max="5" step="1" placeholder="—"></label>
     </div>
-    <div id="r_preview" class="rprev"></div>
-    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <button class="primary" id="r_save" type="button">Guardar en mi registro</button>
-      <span id="r_msg" class="tag" role="status"></span>
+
+    <div class="nbgrid">
+      <div class="nbcol">
+        <h3>Añadir series de skills</h3>
+        <div class="field"><span class="flab">Skill</span><div class="chips" id="b_fam" role="radiogroup" aria-label="Skill"></div></div>
+        <div class="field"><span class="flab">Progresión</span><div class="chips" id="b_prog" role="radiogroup" aria-label="Progresión"></div></div>
+        <div class="field"><span class="flab">Goma</span><div class="chips" id="b_band" role="radiogroup" aria-label="Goma"></div></div>
+        <div class="field"><span class="flab">Tipo de serie</span><div class="chips" id="b_kind" role="radiogroup" aria-label="Tipo de serie"></div></div>
+        <div id="b_holdbox" class="field"><span class="flab">Segundos de hold</span>
+          <div class="stepper"><button type="button" data-st="-0.5" aria-label="Medio segundo menos">−</button><output id="b_secs">3</output><button type="button" data-st="0.5" aria-label="Medio segundo más">+</button></div></div>
+        <div id="b_combobox" class="field" hidden><span class="flab">Combo, paso a paso</span>
+          <div class="chips" id="b_steps"></div>
+          <div class="seq" id="b_seq" aria-live="polite"></div></div>
+        <div class="field"><span class="flab">Cómo acabó</span><div class="chips" id="b_end" role="radiogroup" aria-label="Cómo acabó"></div></div>
+        <div class="field"><span class="flab">Descanso antes</span><div class="chips" id="b_rest" role="radiogroup" aria-label="Descanso antes"></div></div>
+        <div class="addrow">
+          <div class="stepper small"><button type="button" data-n="-1" aria-label="Una serie menos">−</button><output id="b_n">1</output><button type="button" data-n="1" aria-label="Una serie más">+</button></div>
+          <button class="primary btnbig" id="b_add" type="button">Añadir 1 serie</button>
+        </div>
+        <details class="wdet"><summary>Añadir pesas</summary>
+          <div class="wform">
+            <label class="grow">Ejercicio <input id="w_name" type="text" placeholder="Fondos lastrados"></label>
+            <label>Series <input id="w_s" type="number" min="1" step="1" value="3"></label>
+            <label>Reps <input id="w_r" type="number" min="1" step="1" value="3"></label>
+            <label>Kg <input id="w_kg" type="number" min="0" step="0.5" value="20"></label>
+            <label>1RM (kg) <input id="w_rm" type="number" min="0" step="0.5" value="40"></label>
+            <label>Aguante por rep (s) <input id="w_h" type="number" min="0" step="0.25" value="0"></label>
+            <label class="chk"><input id="w_bw" type="checkbox" checked> Con mi peso (fondos, dominadas)</label>
+            <button id="w_add" type="button">Añadir pesas</button>
+          </div>
+        </details>
+      </div>
+      <div class="nbcol">
+        <h3>Tu sesión</h3>
+        <div id="r_preview" class="rprev"></div>
+        <ol class="slist" id="b_list"></ol>
+        <p class="notes" id="b_empty">Elige skill, progresión y segundos, y pulsa «Añadir». Cada serie aparece aquí con su carga.</p>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="primary btnbig" id="r_save" type="button">Guardar sesión</button>
+          <button id="b_clear" type="button">Empezar de cero</button>
+          <span id="r_msg" class="tag" role="status"></span>
+        </div>
+        <p class="notes">Para combos poco habituales, anillas o tus propios máximos, ajusta la sesión en la <a href="#tab-calc" onclick="window.LADtab('calc');return false;">calculadora</a>: es la misma sesión.</p>
+      </div>
     </div>
   </section>
   <section class="panel" aria-labelledby="r_h-list">
@@ -588,7 +719,7 @@ button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
       <thead><tr><th>Fecha</th><th>Sesión</th><th>LAD-Au</th><th>Base</th><th>INOL</th><th>Series</th><th>Fallos</th><th>Cerca del fallo</th><th>sRPE</th><th></th></tr></thead>
       <tbody id="r_rows"></tbody>
     </table></div>
-    <p class="notes" id="r_empty">Todavía no hay sesiones. Monta una en la calculadora y guárdala aquí.</p>
+    <p class="notes" id="r_empty">Todavía no hay sesiones. Añade tus series arriba y pulsa «Guardar sesión».</p>
     <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <button id="r_export" type="button">Exportar copia (JSON)</button>
       <label class="filebtn">Importar copia <input id="r_import" type="file" accept="application/json,.json"></label>
@@ -1530,7 +1661,7 @@ function bOf(r){return r<=0.6?0.25:r>=0.8?0.165:0.25+(r-0.6)/0.2*(0.165-0.25);}
 function compute(){
   const tau=Math.max(1,+state.tau||60), w=Math.max(0,+state.w||0), Tfull=torque(P(0),'full');
   const fam={plancha:{A:0,t:null},front:{A:0,t:null}};
-  let clock=0, tB=0, tL=0, fallos=0, cerca=0, estim=0;
+  let clock=0, tB=0, tL=0, fallos=0, cerca=0, estim=0; const perS=[], perW=[];
   state.series.forEach((s,i)=>{
     const card=$('series').querySelector('.serie[data-i="'+i+'"]'); if(!card) return;
     const f=s.fam, o=f==='plancha'?'front':'plancha';
@@ -1560,7 +1691,7 @@ function compute(){
     else if(s.end==='paro'&&+s.res>=0&&s.res!==''&&last){cerc=last.secs/(last.secs+(+s.res));near=+s.res<=1;note='anotada';}
     else {cerc=Math.min(1,cer);note='estimada';if(last&&(last.mv==='hold'||last.mv==='aux')){const rem=last.smax*(1-last.b*last.A)-last.secs;near=rem<=1;}if(near)estim++;}
     if(near)cerca++;
-    tB+=base; tL+=load;
+    tB+=base; tL+=load; perS.push({base,load,near});
     card.querySelector('[data-o=sum]').textContent='Serie: base '+fmt(base)+' · con fatiga '+fmt(load)+' LAD · A al empezar '+fmt(A0)+' · cercanía '+fmt(cerc)+' ('+note+')'+(near?' · cerca del fallo':'');
   });
   let tI=0, wNear=0, wFail=0;
@@ -1575,12 +1706,12 @@ function compute(){
     tr.querySelector('[data-o=p]').textContent=isFinite(pct)?fmt(pct,1)+' %':'—';
     tr.querySelector('[data-o=l]').textContent=fmt(inol);
     tr.querySelector('[data-o=c]').textContent=fmt(cerc)+(near?' · cerca':'');
-    if(isFinite(inol)) tI+=inol; if(near) wNear+=(+r.series||0); if(fail) wFail+=(+r.series||0);
+    perW.push({inol,pct}); if(isFinite(inol)) tI+=inol; if(near) wNear+=(+r.series||0); if(fail) wFail+=(+r.series||0);
   });
   $('tB').textContent=fmt(tB);$('tF2').textContent=fmt(tL-tB);$('tS').textContent=fmt(tL);$('tI').textContent=fmt(tI);
   $('eff').innerHTML='<b>Esfuerzo:</b> '+fallos+' fallo'+(fallos===1?'':'s')+' anotado'+(fallos===1?'':'s')+' en skills · '+cerca+' serie'+(cerca===1?'':'s')+' de skills cerca del fallo (reserva ≤ 1″'+(estim?', '+estim+' estimada'+(estim===1?'':'s'):'')+') · pesas: '+wNear+' serie'+(wNear===1?'':'s')+' cerca del fallo (reserva ≤ 1 rep)'+(wFail?', '+wFail+' al fallo':'')+(state.rir?'':' según Epley')+'.';
   $('exTag').hidden=!state.example;
-  return {tB,tL,tI,fallos,cerca,wNear,wFail};
+  return {tB,tL,tI,fallos,cerca,wNear,wFail,perS,perW};
 }
 function all(){renderSeries();renderWeights();compute();save();}
 function touched(){state.example=false;}
@@ -1626,12 +1757,62 @@ $('i2reset').addEventListener('click',()=>{state.i2mod={on:false,plancha:{},fron
 $('i2sim').addEventListener('click',()=>{if(!window.LADsim)return;const v=window.LADsim.int2();state.i2mod={on:true,plancha:v.plancha||{},front:v.front||{}};renderI2();compute();save();$('i2msg').textContent='Copiado del simulador (tus medidas y tu técnica): plancha press '+fmt(v.plancha.press)+' · negativa '+fmt(v.plancha.neg)+' · flexión '+fmt(v.plancha.flex)+'; front press '+fmt(v.front.press)+' · negativa '+fmt(v.front.neg)+' · pull-up '+fmt(v.front.flex)+'.';});
 window.LADcalc={refresh(){cache={};compute();},
   snapshot(){const t=compute();return Object.assign({state:JSON.parse(JSON.stringify(state))},t);},
+  getState(){return JSON.parse(JSON.stringify(state));},
+  setState(series,weights){state.series=JSON.parse(JSON.stringify(series));state.weights=JSON.parse(JSON.stringify(weights));state.example=false;all();},
   load(sess){const p=sess.profile||{};['H','M','sP','sF'].forEach(k=>{if(p[k]!=null)state[k]=p[k];});if(p.tP)state.tP=p.tP;if(p.tF)state.tF=p.tF;
     state.series=JSON.parse(JSON.stringify(sess.series||[]));state.weights=JSON.parse(JSON.stringify(sess.weights||[]));state.example=false;cache={};syncInputs();all();
     $('msg').textContent='Cargada la sesión del '+sess.date+'. Si la cambias, guárdala de nuevo (se añade como sesión nueva; borra la antigua si quieres).';}};
 calcINT2();renderI2();all();
 })();
 </script>
+<script>
+/* Acceso con correo (CALI.LAAD). La lógica de cuentas está en el registro (window.CALIauth). */
+(function(){
+const $=id=>document.getElementById(id);
+let mode='up', conf={configured:false}, recovery=false;
+function setMode(m){mode=m;
+  $('g_tup').setAttribute('aria-selected',m==='up');$('g_tin').setAttribute('aria-selected',m==='in');
+  $('g_title').textContent=recovery?'Nueva contraseña':m==='up'?'Crea tu cuenta':'Entra en tu cuenta';
+  $('g_go').textContent=recovery?'Guardar contraseña':m==='up'?'Crear cuenta':'Entrar';
+  $('g_consl').hidden=m!=='up'||recovery; $('g_forgot').hidden=m!=='in'||recovery;
+  $('g_email').closest('label').hidden=recovery;
+  $('g_pw').autocomplete=m==='up'||recovery?'new-password':'current-password';
+  document.querySelector('.gtabs').hidden=recovery; $('g_msg').textContent='';}
+function show(o){conf=Object.assign({},conf,o||{});recovery=!!conf.recovery;
+  $('gate').hidden=false;document.body.classList.add('gated');
+  const off=!conf.configured;
+  $('g_try').hidden=!off; $('g_go').disabled=off||!!conf.busy;
+  $('g_msg').textContent=conf.error||(conf.busy?'Conectando…':'');
+  setMode(mode);}
+function hide(){$('gate').hidden=true;document.body.classList.remove('gated');}
+window.CALIgate={show,hide};
+$('g_tup').addEventListener('click',()=>setMode('up'));
+$('g_tin').addEventListener('click',()=>setMode('in'));
+$('g_local').addEventListener('click',()=>{hide();window.CALIauth&&window.CALIauth.local();});
+$('g_forgot').addEventListener('click',async()=>{
+  const em=$('g_email').value.trim(); if(!em){$('g_msg').textContent='Escribe tu correo y vuelve a pulsar.';return;}
+  const err=await window.CALIauth.reset(em); $('g_msg').textContent=err?'No se pudo enviar: '+err:'Te hemos enviado un correo para cambiar la contraseña.';});
+$('g_form').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!window.CALIauth||!conf.configured)return;
+  const em=$('g_email').value.trim(), pw=$('g_pw').value;
+  if(recovery){if(pw.length<8){$('g_msg').textContent='La contraseña necesita 8 caracteres o más.';return;}
+    const err=await window.CALIauth.newPassword(pw);$('g_msg').textContent=err?'No se pudo cambiar: '+err:'Contraseña cambiada.';if(!err){recovery=false;hide();}return;}
+  if(!/^\S+@\S+\.\S+$/.test(em)){$('g_msg').textContent='Revisa el correo: falta algo (por ejemplo, la @).';return;}
+  if(pw.length<8){$('g_msg').textContent='La contraseña necesita 8 caracteres o más.';return;}
+  if(mode==='up'&&!$('g_cons').checked){$('g_msg').textContent='Marca la casilla para poder crear la cuenta.';return;}
+  $('g_go').disabled=true; $('g_msg').textContent=mode==='up'?'Creando tu cuenta…':'Entrando…';
+  const err=mode==='up'?await window.CALIauth.signUp(em,pw):await window.CALIauth.signIn(em,pw);
+  $('g_go').disabled=false;
+  if(err){$('g_msg').textContent=/Invalid login/i.test(err)?'Correo o contraseña incorrectos.':/not confirmed/i.test(err)?'Confirma tu correo: abre el enlace que te enviamos.':/registered/i.test(err)?'Ese correo ya tiene cuenta: pulsa «Entrar».':'No se pudo: '+err;return;}
+  if(mode==='up')$('g_msg').textContent='Cuenta creada. Revisa tu correo y abre el enlace para confirmarla; después, entra.';
+});
+// cuenta en la cabecera
+window.CALIaccount=email=>{const box=$('acct');if(!box)return;
+  box.innerHTML=email?'<span title="'+email.replace(/"/g,'&quot;')+'">'+email.replace(/</g,'&lt;')+'</span><button type="button" id="a_out">Salir</button>':'';
+  if(email)$('a_out').addEventListener('click',()=>window.CALIauth.signOut());};
+})();
+</script>
+
 <script>
 (function(){
 const $=id=>document.getElementById(id);
@@ -1648,7 +1829,11 @@ const longDate=s=>D(s).toLocaleDateString('es-ES',{weekday:'short',day:'numeric'
 
 /* ---------- almacenamiento: db de Claude por usuario, o este navegador ---------- */
 const LKEY='lad-registro-v1';
-let sessions=[], mode='none', col=null;
+// Cuentas de CALI.LAAD (Supabase). Rellenar con la Project URL y la clave pública (anon / publishable). Nunca la secreta.
+const SB_CONF={url:'',key:''};
+const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
+let sessions=[], mode='none', col=null, sb=null, sbUser=null;
+const inClaude=!!(window.claude&&window.claude.use);
 function setStore(t){$('r_store').textContent=t;}
 function localLoad(){try{return JSON.parse(localStorage.getItem(LKEY)||'[]')||[]}catch(e){return []}}
 function localSave(){try{localStorage.setItem(LKEY,JSON.stringify(sessions));return true}catch(e){return false}}
@@ -1656,7 +1841,12 @@ async function initStore(){
   sessions=localLoad(); mode='local';
   setStore('Guardado en este navegador · haz copias con «Exportar»');
   renderAll();
-  if(!(window.claude&&window.claude.use)) return;
+  if(inClaude){window.CALIgate&&window.CALIgate.hide();return initClaude();}
+  if(SB_CONF.url&&SB_CONF.key) return initSupabase();
+  let tried=false;try{tried=localStorage.getItem('cali-local')==='1'}catch(e){}
+  if(!tried)window.CALIgate&&window.CALIgate.show({configured:false}); else setStore('Modo prueba · guardado solo en este navegador');
+}
+async function initClaude(){
   try{
     const db=await window.claude.use('db'); const user=await window.claude.use('user');
     const id=user?await user.id():null;
@@ -1666,15 +1856,49 @@ async function initStore(){
     col.onSnapshot(snap=>{
       settled=true; clearTimeout(timer);
       const remote=snap.docs.filter(d=>d.exists&&d.id.startsWith('s_')).map(d=>Object.assign({},d.data(),{id:d.id}));
-      // primera vez con cuenta: sube lo que hubiera en este navegador
       if(mode!=='db'){mode='db';const local=localLoad().filter(l=>!remote.some(r=>r.id===l.id));local.forEach(l=>col.doc(l.id).set(clean(l)).catch(()=>{}));if(local.length)remote.push(...local);}
       sessions=remote; setStore('Guardado en tu cuenta de Claude · privado: solo lo ves tú');
       renderAll();
     },err=>{settled=true;clearTimeout(timer);mode='local';col=null;setStore('No se pudo usar tu cuenta: guardado en este navegador');});
   }catch(e){}
 }
+/* ---------- cuentas con correo (Supabase) ---------- */
+function loadLib(){return new Promise((ok,ko)=>{if(window.supabase)return ok();const s=document.createElement('script');s.src=SB_LIB;s.onload=ok;s.onerror=()=>ko(new Error('lib'));document.head.appendChild(s);});}
+async function initSupabase(){
+  window.CALIgate&&window.CALIgate.show({configured:true,busy:true});
+  try{await loadLib();}catch(e){window.CALIgate.show({configured:true,error:'No se pudo conectar con el servicio de cuentas. Revisa tu conexión y recarga la página.'});return;}
+  sb=window.supabase.createClient(SB_CONF.url,SB_CONF.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  sb.auth.onAuthStateChange((ev,session)=>{if(ev==='PASSWORD_RECOVERY')window.CALIgate.show({configured:true,recovery:true});else if(session&&session.user)useAccount(session.user);else if(ev==='SIGNED_OUT')signedOut();});
+  const {data}=await sb.auth.getSession();
+  if(data&&data.session) useAccount(data.session.user); else window.CALIgate.show({configured:true});
+}
+async function useAccount(user){
+  if(sbUser&&sbUser.id===user.id) return;
+  sbUser=user; window.CALIgate.hide(); window.CALIaccount&&window.CALIaccount(user.email);
+  setStore('Guardado en tu cuenta · '+user.email);
+  const {data,error}=await sb.from('sesiones').select('id,datos').order('fecha',{ascending:true});
+  if(error){setStore('No se pudieron leer tus sesiones: '+error.message);return;}
+  const remote=(data||[]).map(r=>Object.assign({},r.datos,{id:r.id}));
+  const local=localLoad().filter(l=>!remote.some(r=>r.id===l.id));
+  for(const l of local){await sb.from('sesiones').upsert({id:l.id,fecha:l.date,datos:clean(l)});remote.push(l);}
+  if(local.length){try{localStorage.removeItem(LKEY)}catch(e){}}
+  mode='sb'; sessions=remote; renderAll();
+}
+function signedOut(){sbUser=null;mode='local';sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
+window.CALIauth={
+  async signUp(email,pw){const {error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+location.pathname}});return error?error.message:null;},
+  async signIn(email,pw){const {error}=await sb.auth.signInWithPassword({email,password:pw});return error?error.message:null;},
+  async reset(email){const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});return error?error.message:null;},
+  async newPassword(pw){const {error}=await sb.auth.updateUser({password:pw});return error?error.message:null;},
+  async signOut(){await sb.auth.signOut();},
+  async wipe(){if(!sbUser)return;await sb.from('sesiones').delete().eq('user_id',sbUser.id);sessions=[];renderAll();},
+  local(){try{localStorage.setItem('cali-local','1')}catch(e){}mode='local';sessions=localLoad();setStore('Modo prueba · guardado solo en este navegador');renderAll();}
+};
 function clean(s){const o=Object.assign({},s);delete o.id;return JSON.parse(JSON.stringify(o));}
 async function putSession(s){
+  if(mode==='sb'&&sb){const {error}=await sb.from('sesiones').upsert({id:s.id,fecha:s.date,datos:clean(s)});
+    if(error){$('r_msg').textContent='No se pudo guardar en tu cuenta: '+error.message;return false;}
+    const i=sessions.findIndex(x=>x.id===s.id); if(i>=0)sessions[i]=s; else sessions.push(s); renderAll(); return true;}
   if(mode==='db'&&col){try{await col.doc(s.id).set(clean(s));return true}catch(e){
     if(e&&e.code==='quota_exceeded'){$('r_msg').textContent='El registro está lleno: borra sesiones antiguas o exporta una copia.';return false;}
     mode='local';col=null;setStore('No se pudo guardar en tu cuenta: guardado en este navegador');}}
@@ -1682,6 +1906,7 @@ async function putSession(s){
   const ok=localSave(); renderAll(); return ok;
 }
 async function delSession(id){
+  if(mode==='sb'&&sb){const {error}=await sb.from('sesiones').delete().eq('id',id);if(!error){sessions=sessions.filter(s=>s.id!==id);renderAll();}return;}
   if(mode==='db'&&col){try{await col.doc(id).delete();return}catch(e){}}
   sessions=sessions.filter(s=>s.id!==id); localSave(); renderAll();
 }
@@ -1725,6 +1950,7 @@ $('r_save').addEventListener('click',async()=>{
   $('r_save').disabled=true; const ok=await putSession(s); $('r_save').disabled=false;
   $('r_msg').textContent=ok?'Guardada: '+longDate(s.date)+' · '+fmt(s.ladau,1)+' LAD-Au.':'No se pudo guardar.';
   $('r_note').value='';$('r_srpe').value='';
+  if(ok&&window.CALIbuilder)window.CALIbuilder.saved();
 });
 
 /* ---------- lista ---------- */
@@ -1874,9 +2100,97 @@ function renderHome(){
     :'<p class="notes" style="margin:0">Todavía no has guardado ninguna sesión. Pulsa «Nueva sesión», monta tus series en la calculadora y guárdala en el registro.</p>';
 }
 function renderAll(){renderList();renderHome();if(!$('tab-evo').hidden)renderEvo();}
-window.LADreg={show(t){if(t==='reg')preview();if(t==='evo')renderEvo();if(t==='home')renderHome();},refresh:renderAll};
+window.LADreg={preview,show(t){if(t==='reg'){preview();window.CALIbuilder&&window.CALIbuilder.render();}if(t==='evo')renderEvo();if(t==='home')renderHome();},refresh:renderAll};
 $('r_date').value=todayISO();
 initStore();
+})();
+</script>
+
+<script>
+/* Nueva sesión: constructor rápido de series. Escribe en la misma sesión que la calculadora. */
+(function(){
+const $=id=>document.getElementById(id);
+const fmt=(v,d=1)=>isFinite(v)?v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const nz=v=>fmt(v,v%1?(v*10%1?2:1):0);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const B={fam:'plancha',prog:'full',band:0,kind:'hold',secs:3,end:'paro',rest:180,n:1,seq:[]};
+try{Object.assign(B,JSON.parse(localStorage.getItem('cali-builder')||'{}'),{seq:[],n:1});}catch(e){}
+function keep(){try{const o=Object.assign({},B);delete o.seq;localStorage.setItem('cali-builder',JSON.stringify(o));}catch(e){}}
+const PROGS=[['full','Full'],['half','Half'],['sthalf','Straddle half'],['st45','Straddle 45°'],['st60','Straddle 60°'],['adv90','ADV90'],['tuck','Tuck']];
+const BANDS=[[0,'RAW'],[5,'G5'],[10,'G10']];
+const PMV=()=>B.fam==='plancha'?[['flex','Flexión'],['press','Press'],['neg','Negativa']]:[['flex','Pull-up'],['press','Press'],['neg','Negativa']];
+const MVN={hold:'hold',press:'press',neg:'negativa',flex:null};
+function chips(id,list,val,key){
+  $(id).innerHTML=list.map(([v,t])=>'<button type="button" role="radio" aria-checked="'+(String(v)===String(val))+'" data-'+key+'="'+v+'">'+t+'</button>').join('');
+}
+function stepName(e){return e.mv==='hold'?(e.secs===1?'deadstop 1″':'hold '+nz(e.secs)+'″'):e.mv==='flex'?(B.fam==='plancha'?'flexión':'pull-up'):MVN[e.mv];}
+function renderForm(){
+  chips('b_fam',[['plancha','Plancha'],['front','Front lever']],B.fam,'fam');
+  chips('b_prog',PROGS,B.prog,'prog');
+  chips('b_band',BANDS,B.band,'band');
+  chips('b_kind',[['hold','Hold'],['combo','Combo']],B.kind,'kind');
+  chips('b_end',[['paro','Paré yo'],['fallo','Caída (fallo)']],B.end,'end');
+  chips('b_rest',[[60,'1′'],[120,'2′'],[180,'3′'],[240,'4′'],[300,'5′']],B.rest,'rest');
+  $('b_secs').textContent=nz(B.secs); $('b_n').textContent=B.n;
+  $('b_holdbox').hidden=B.kind!=='hold'; $('b_combobox').hidden=B.kind!=='combo';
+  $('b_steps').innerHTML=[['d','+ Deadstop 1″'],['h2','+ Hold 2″'],['h3','+ Hold 3″']].concat(PMV().map(([v,t])=>[v,'+ '+t])).map(([v,t])=>'<button type="button" data-step="'+v+'">'+t+'</button>').join('');
+  $('b_seq').innerHTML=B.seq.length?B.seq.map((e,i)=>'<span class="pill">'+esc(stepName(e))+'</span>'+(i<B.seq.length-1?'<i class="arr">→</i>':'')).join('')+' <button type="button" class="x" id="b_undo" aria-label="Quitar el último paso">Quitar último</button>':'<span class="notes">Pulsa los pasos en el orden en que los hiciste.</span>';
+  $('b_add').textContent='Añadir '+B.n+' serie'+(B.n>1?'s':'');
+}
+function effortList(){
+  const base={pos:B.prog,band:+B.band,part:false,smax:'',i1:0.5};
+  if(B.kind==='hold') return [Object.assign({mv:'hold',secs:B.secs},base)];
+  return B.seq.map(e=>Object.assign({},base,{mv:e.mv,secs:e.mv==='hold'?e.secs:''}));
+}
+function serieName(s){
+  const e0=s.efs[0]||{}, prog=(PROGS.find(p=>p[0]===e0.pos)||[0,e0.pos])[1], band=+e0.band?' G'+e0.band:' RAW';
+  const fam=s.fam==='plancha'?'Plancha':'Front';
+  if(s.efs.length===1&&e0.mv==='hold') return fam+' '+prog.toLowerCase()+band+' · hold '+nz(+e0.secs||0)+'″';
+  return fam+' '+prog.toLowerCase()+band+' · '+s.efs.map(e=>e.mv==='hold'?(+e.secs===1?'deadstop':'hold '+nz(+e.secs)+'″'):e.mv==='flex'?(s.fam==='plancha'?'flexión':'pull-up'):e.mv==='press'?'press':e.mv==='neg'?'negativa':e.mv).join(' → ');
+}
+function render(){
+  renderForm();
+  if(!window.LADcalc||!window.LADcalc.snapshot) return;
+  const snap=window.LADcalc.snapshot(), st=snap.state;
+  const items=st.series.map((s,i)=>{const r=snap.perS[i]||{};return '<li><div class="sname">'+esc(serieName(s))+'</div><div class="smeta"><span>'+(s.end==='fallo'?'caída':s.end==='paro'?'paré':'')+(s.rest?' · descanso '+Math.round(s.rest/60*10)/10+'′':'')+'</span><b>'+fmt(r.load,1)+' LAD</b></div>'+
+    '<div class="sacts"><button type="button" data-dup="'+i+'">Repetir</button><button type="button" class="x" data-del="'+i+'" aria-label="Quitar serie">Quitar</button></div></li>';});
+  const witems=st.weights.map((w,i)=>{const r=snap.perW[i]||{};return '<li class="w"><div class="sname">'+esc(w.name||'Pesas')+' · '+w.series+'×'+w.reps+' @'+nz(+w.kg||0)+' kg'+(+w.hold?' · aguante '+nz(+w.hold)+'″':'')+'</div><div class="smeta"><span>'+(isFinite(r.pct)?fmt(r.pct,0)+' % del 1RM':'')+'</span><b>INOL '+fmt(r.inol,2)+'</b></div>'+
+    '<div class="sacts"><button type="button" class="x" data-wdel="'+i+'" aria-label="Quitar pesas">Quitar</button></div></li>'});
+  $('b_list').innerHTML=items.join('')+witems.join('');
+  $('b_empty').hidden=!!(items.length||witems.length);
+  window.LADreg&&window.LADreg.preview&&window.LADreg.preview();
+}
+function mutate(fn){const st=window.LADcalc.getState();fn(st);window.LADcalc.setState(st.series,st.weights);render();}
+document.querySelector('.nb').addEventListener('click',e=>{
+  const d=e.target.dataset;
+  if(d.fam){B.fam=d.fam;B.seq=[];}
+  else if(d.prog)B.prog=d.prog; else if(d.band!=null)B.band=+d.band; else if(d.kind)B.kind=d.kind;
+  else if(d.end)B.end=d.end; else if(d.rest)B.rest=+d.rest;
+  else if(d.st){B.secs=Math.max(0.5,Math.round((B.secs+(+d.st))*2)/2);}
+  else if(d.n){B.n=Math.max(1,Math.min(10,B.n+(+d.n)));}
+  else if(d.step){const s=d.step;B.seq.push(s==='d'?{mv:'hold',secs:1}:s==='h2'?{mv:'hold',secs:2}:s==='h3'?{mv:'hold',secs:3}:{mv:s});}
+  else if(e.target.id==='b_undo')B.seq.pop();
+  else if(d.dup!=null){mutate(st=>{st.series.splice(+d.dup+1,0,JSON.parse(JSON.stringify(st.series[+d.dup])));});return;}
+  else if(d.del!=null){mutate(st=>st.series.splice(+d.del,1));return;}
+  else if(d.wdel!=null){mutate(st=>st.weights.splice(+d.wdel,1));return;}
+  else return;
+  keep(); renderForm();
+});
+$('b_add').addEventListener('click',()=>{
+  const efs=effortList(); if(!efs.length){$('r_msg').textContent='Añade al menos un paso al combo.';return;}
+  mutate(st=>{for(let i=0;i<B.n;i++)st.series.push({fam:B.fam,rest:st.series.length||i?B.rest:0,ring:false,fan:1,end:B.end,res:'',efs:JSON.parse(JSON.stringify(efs))});});
+  $('r_msg').textContent=B.n+' serie'+(B.n>1?'s añadidas':' añadida')+'.'; B.seq=[];B.n=1;renderForm();
+});
+$('w_add').addEventListener('click',()=>{
+  const w={name:$('w_name').value.trim()||'Pesas',series:+$('w_s').value||1,reps:+$('w_r').value||1,kg:+$('w_kg').value||0,bw:$('w_bw').checked,rm:+$('w_rm').value||0,hold:+$('w_h').value||0,rir:''};
+  if(!(w.rm>0)){$('r_msg').textContent='Pon tu 1RM del ejercicio para calcular el INOL.';return;}
+  mutate(st=>st.weights.push(w)); $('r_msg').textContent='Pesas añadidas.';
+});
+$('b_clear').addEventListener('click',()=>{mutate(st=>{st.series=[];st.weights=[];});$('r_msg').textContent='Sesión vacía.';});
+window.CALIbuilder={render,saved(){mutate(st=>{st.series=[];st.weights=[];});}};
+// la primera vez, el registro empieza vacío (la calculadora trae un ejemplo)
+try{const st=window.LADcalc&&window.LADcalc.getState();if(st&&st.example)window.LADcalc.setState([],[]);}catch(e){}
+renderForm();
 })();
 </script>
 
