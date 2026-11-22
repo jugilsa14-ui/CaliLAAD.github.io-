@@ -1,0 +1,1800 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CALI.LAAD</title>
+<meta name="description" content="CALI.LAAD: simulador, calculadora de carga, registro y evolución para calistenia de fuerza, con el método LAD.">
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una página con pestañas. Simulador (impulso a la izquierda, figura y curva a la derecha, medidas a todo el ancho), calculadora (perfil, INT2 modificado, series, pesas, total), tablas y explicación */
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --ink:#18202b; --muted:#5b6575; --line:#dde1e8;
+  --accent:#1f5fd6; --accent2:#c2410c; --ok:#15803d; --warn:#b45309; --soft:#e8eefb; --band:#7c3aed; --accent-ink:#ffffff;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141b; --panel:#161d27; --ink:#e7ebf1; --muted:#9aa5b5; --line:#2a3442;
+  --accent:#6f9cff; --accent2:#fb923c; --ok:#4ade80; --warn:#fbbf24; --soft:#1d2a40; --band:#a78bfa; --accent-ink:#0b1220; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --panel:#161d27; --ink:#e7ebf1; --muted:#9aa5b5; --line:#2a3442;
+  --accent:#6f9cff; --accent2:#fb923c; --ok:#4ade80; --warn:#fbbf24; --soft:#1d2a40; --band:#a78bfa; --accent-ink:#0b1220; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-size:26px;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-size:16px;margin:0 0 10px}
+.lead{color:var(--muted);max-width:80ch;margin:4px 0 0}
+.grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:880px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.fields{display:grid;grid-template-columns:1fr 104px;gap:6px 10px;align-items:center}
+.fields label{font-size:13px}
+.fields small{display:block;color:var(--muted);font-size:11px;line-height:1.35}
+input[type=number],select{font:inherit;font-family:var(--mono);font-size:13px;width:100%;box-sizing:border-box;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+select{font-family:var(--body)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.sub{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;font-weight:600}
+button{font:inherit;font-weight:600;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,tr[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button[aria-pressed="true"]{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.figure svg,.chart svg{width:100%;height:auto;display:block}
+.readout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+@media (max-width:520px){.readout{grid-template-columns:minmax(0,1fr)}}
+.readout div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.readout b{display:block;font-family:var(--mono);font-size:18px}
+.readout span{font-size:11px;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.big{font-family:var(--mono);font-weight:600;color:var(--accent)}
+tr.cur{background:var(--soft)}
+tr[tabindex]{cursor:pointer}
+tr[tabindex]:hover{background:var(--soft)}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;border:1px solid var(--accent);color:var(--accent)}
+.warn{color:var(--warn);font-size:12px}
+.notes{color:var(--muted);font-size:13px;max-width:95ch}
+.notes li{margin-bottom:4px}
+.tablewrap{overflow-x:auto}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px}
+details summary{cursor:pointer;font-weight:600}
+.leftcol{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (min-width:881px){.leftcol{position:sticky;top:12px}}
+.cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 24px;align-items:start}
+@media (max-width:1100px){.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.col{min-width:0}
+.axread{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;margin:4px 0}
+.axread b{font-family:var(--mono);font-size:14px}
+.auxgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}
+@media (max-width:820px){.auxgrid{grid-template-columns:minmax(0,1fr)}}
+.col input[type=range]{width:100%}
+[hidden]{display:none!important}
+.gripctl{margin:8px 0 4px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.gc label{font-size:13px;font-weight:600;display:block}
+.gc label small{font-weight:400;color:var(--muted);font-size:11px}
+.gcrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.gcrow input[type=range]{flex:1;min-width:160px}
+.gcrow input[type=number]{width:76px}
+.gcrow span{font-size:12px;color:var(--muted)}
+button.mini-b{padding:4px 9px;font-size:12px;font-weight:500}
+.views{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;align-items:start}
+@media (max-width:700px){.views{grid-template-columns:minmax(0,1fr)}}
+.vt{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:2px}
+.fnote{font-size:12px;color:var(--muted);margin:4px 0 0}
+.col .fields{grid-template-columns:minmax(0,1fr) 92px}
+.resbox{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.resbox .sel{font-size:12px;color:var(--muted);margin:-4px 0 10px}
+.imp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.imp div{background:var(--soft);border-radius:8px;padding:8px 10px;min-width:0}
+.imp b{display:block;font-family:var(--mono);font-size:22px;line-height:1.2}
+.imp span{font-size:11px;color:var(--muted)}
+.imp .tot{background:var(--accent)}
+.imp .tot b,.imp .tot span{color:var(--panel)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.mini{margin-top:10px;font-size:12px}
+.mini td,.mini th{padding:4px 6px}
+.mini tr.cur td{font-weight:600}
+
+#tab-calc h2{font-family:var(--display);font-size:17px;margin:0}
+#tab-calc .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:12px}
+#tab-calc .prof{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:720px){#tab-calc .prof{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#tab-calc .f{display:flex;flex-direction:column;gap:4px;min-width:0}
+#tab-calc .f label{font-size:12px;color:var(--muted);font-weight:500}
+#tab-calc input,#tab-calc select{font:inherit;font-size:13px;width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+#tab-calc input[type=number]{font-family:var(--mono)}
+#tab-calc button{font:inherit;font-weight:600;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+#tab-calc button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+#tab-calc button.x{padding:4px 9px;font-weight:500;color:var(--muted)}
+#tab-calc button:focus-visible,#tab-calc input:focus-visible,#tab-calc select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#tab-calc .tablewrap{overflow-x:auto}
+#tab-calc table{border-collapse:collapse;width:100%;font-size:13px}
+#tab-calc th,#tab-calc td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:middle}
+#tab-calc th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);white-space:nowrap}
+#tab-calc td input,#tab-calc td select{min-width:54px}
+#tab-calc td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+#tab-calc td.load{font-family:var(--mono);font-weight:600;color:var(--accent);white-space:nowrap}
+#tab-calc .head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#tab-calc .total{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:560px){#tab-calc .total{grid-template-columns:minmax(0,1fr)}}
+#tab-calc .total div{background:var(--soft);border-radius:8px;padding:12px}
+#tab-calc .total b{display:block;font-family:var(--mono);font-size:24px}
+#tab-calc .total span{font-size:12px;color:var(--muted)}
+#tab-calc .series{display:flex;flex-direction:column;gap:12px}
+#tab-calc .serie{border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+#tab-calc .shead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:13px}
+#tab-calc .shead label{display:flex;align-items:center;gap:6px;color:var(--muted);white-space:nowrap}
+#tab-calc .shead input[type=number]{width:76px}
+#tab-calc .shead select{width:auto}
+#tab-calc .shead .sp{flex:1}
+#tab-calc .sfoot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+#tab-calc .total .main{background:var(--accent);color:var(--accent-ink)}
+#tab-calc .total .main span{color:var(--accent-ink);opacity:.85}
+#tab-calc details summary{cursor:pointer;font-size:13px;font-weight:600}
+#tab-calc .notes{color:var(--muted);font-size:13px;max-width:90ch;margin:0}
+#tab-calc .notes li{margin-bottom:4px}
+#tab-calc .tag{font-size:11px;color:var(--muted)}
+#tab-calc .ex{font-size:11px;font-weight:600;color:var(--warn);border:1px solid var(--warn);border-radius:999px;padding:1px 8px}
+#tab-calc td select{min-width:100px}
+#tab-calc td[data-l="Postura"] select{min-width:150px}
+#tab-calc .chk{display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap;color:var(--muted)}
+#tab-calc .chk input,#tab-calc td .chk input{width:18px;height:18px;min-width:0;margin:0}
+@media (max-width:720px){
+  #tab-calc .tablewrap{overflow:visible}
+  #tab-calc thead{display:none}
+  #tab-calc tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;padding:12px 0;border-bottom:1px solid var(--line)}
+  #tab-calc tbody td{border:0;padding:0;display:flex;flex-direction:column;gap:2px;min-width:0}
+  #tab-calc tbody td::before{content:attr(data-l);font-size:11px;color:var(--muted)}
+  #tab-calc td select,#tab-calc td input,#tab-calc td[data-l="Postura"] select{min-width:0}
+  #tab-calc td[data-l="Postura"],#tab-calc td[data-l="Ejercicio"]{grid-column:1/-1}
+  #tab-calc td:last-child{align-items:flex-end;justify-content:flex-end}
+}
+
+/* pestañas */
+.tabbar{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px;position:sticky;top:0;z-index:5;background:var(--bg);padding-top:8px}
+.tabbar button{font-family:var(--display);font-size:15px;padding:8px 14px}
+.tabbar button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tabpanel{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (min-width:881px){.leftcol{top:64px}}
+/* calculadora dentro de la página */
+#tab-calc .panel{display:flex;flex-direction:column;gap:12px}
+#tab-calc h2{margin:0;font-size:17px}
+#tab-calc .chk{display:flex;align-items:center;gap:6px}
+/* explicación */
+.doc{max-width:none}
+.doc h3{font-family:var(--display);font-size:16px;margin:26px 0 6px;scroll-margin-top:70px}
+.doc p,.doc li{max-width:82ch;line-height:1.6}
+.doc .lede{font-size:15px;color:var(--ink);margin:0 0 6px}
+.doc .small{font-size:13px;color:var(--muted)}
+.doc .eq{font-family:var(--mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;margin:8px 0;overflow-x:auto;line-height:1.7;max-width:82ch}
+.doc .toc{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;margin:6px 0 4px}
+.doc .toc a,.doc a{color:var(--accent)}
+.doc table.def{max-width:82ch}
+.doc table.def td{vertical-align:top}
+/* registro y evolución */
+#tab-reg .panel,#tab-evo .panel{display:flex;flex-direction:column;gap:12px}
+#tab-reg h2,#tab-evo h2{margin:0;font-size:17px}
+.rform{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.rform label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.rform label.grow{flex:1;min-width:220px}
+input[type=date],input[type=text]{font:inherit;font-size:13px;box-sizing:border-box;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.rprev,.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.rprev div,.tiles div{background:var(--soft);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.rprev b,.tiles b{font-family:var(--display);font-size:22px}
+.rprev span,.tiles span{font-size:12px;color:var(--muted)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chartbox2{min-width:0}.svgc{min-width:0}.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted);margin:4px 0 10px}.legend i{display:inline-block;width:12px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.chartgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+td.acts{white-space:nowrap}td.acts button{margin-right:6px}
+.filebtn{display:inline-flex;align-items:center;gap:6px;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:6px 10px;cursor:pointer;background:var(--panel)}
+.filebtn input{width:0;height:0;opacity:0;position:absolute}
+.filebtn:focus-within{outline:2px solid var(--accent)}
+
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>CALI.LAAD</h1>
+    <p class="lead">Calistenia de fuerza: simulador, calculadora de carga, registro y evolución de tus entrenamientos. Modelo LAD de cuantificación de la carga en calistenia de fuerza (autor: Juan Gil Saiz). Unidad: 1 LAD = 1 segundo al torque de la full de su skill (hombro + codo). Las pesas van aparte, en INOL. El simulador calcula el torque en el hombro y en el codo y el impulso angular de cada postura y powermove; la calculadora puntúa tu sesión; las tablas lo resumen y «Cómo funciona» lo explica a fondo, con los límites del modelo.</p>
+  </header>
+  <div class="tabbar" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="t-sim" aria-controls="tab-sim" aria-selected="true">Simulador</button>
+    <button type="button" role="tab" id="t-calc" aria-controls="tab-calc" aria-selected="false">Calculadora</button>
+    <button type="button" role="tab" id="t-reg" aria-controls="tab-reg" aria-selected="false">Registro</button>
+    <button type="button" role="tab" id="t-evo" aria-controls="tab-evo" aria-selected="false">Evolución</button>
+    <button type="button" role="tab" id="t-tab" aria-controls="tab-tab" aria-selected="false">Tablas</button>
+    <button type="button" role="tab" id="t-how" aria-controls="tab-how" aria-selected="false">Cómo funciona</button>
+  </div>
+  <div class="tabpanel" id="tab-sim" role="tabpanel" aria-labelledby="t-sim">
+  <div class="grid">
+    <div class="leftcol">
+    <section class="panel resbox" aria-labelledby="h-imp" aria-live="polite">
+      <h2 id="h-imp">Impulso angular</h2>
+      <p class="sel" id="impSel"></p>
+      <div class="imp">
+        <div><b id="iSh">—</b><span>Hombro (N·m·s)</span></div>
+        <div><b id="iEl">—</b><span>Codo (N·m·s)</span></div>
+        <div><b id="iI2">—</b><span>INT2 · hombro + codo ÷ hold</span></div>
+        <div><b id="iI1">—</b><span id="iI1l">INT1 · hombro + codo ÷ full</span></div>
+        <div><b id="iLAD">—</b><span>LAD · INT1 × INT2 × segundos × reps</span></div>
+        <div class="tot" style="grid-column:1/-1"><b id="iTot">—</b><span id="iTotL">Total · hombro + codo (N·m·s)</span></div>
+      </div>
+      <div class="fields" style="margin-top:12px">
+        <label for="dur">Duración <small>s del recorrido o del hold; la misma para todos los powermoves</small></label><input id="dur" type="number" min="0.25" step="0.25" value="1">
+        <label for="reps">Repeticiones <small>el total multiplica el impulso de una repetición</small></label><input id="reps" type="number" min="1" step="1" value="1">
+        <label for="techoP">Tu techo en plancha <small>la progresión que mantienes 2″ o más, sin goma</small></label><select id="techoP"></select>
+        <label for="techoF">Tu techo en front lever <small>ídem</small></label><select id="techoF"></select>
+      </div>
+      <div class="tablewrap"><table class="mini">
+        <thead><tr><th></th><th>Hombro</th><th>Codo</th><th>÷ mayor</th></tr></thead>
+        <tbody id="impTbl"></tbody>
+      </table></div>
+      <p class="notes" style="margin:8px 0 0;font-size:12px">Impulso angular = ∫ torque · dt a lo largo del recorrido (torque medio × duración), con las medidas, la goma y la técnica que tengas puestas. Elige skill y powermove a la derecha (maltese, FL touch y SAT son holds), o pulsa una postura en la tabla de INT1 para ver su hold.</p>
+    </section>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+      <section class="panel" aria-labelledby="h-fig">
+        <div class="row" style="justify-content:space-between">
+          <div class="tabs" role="group" aria-label="Skill">
+            <button type="button" data-fam="plancha" aria-pressed="true">Plancha</button>
+            <button type="button" data-fam="front" aria-pressed="false">Front lever</button>
+            <button type="button" data-sk="maltese" aria-pressed="false">Maltese</button>
+            <button type="button" data-sk="fltouch" aria-pressed="false">FL touch</button>
+            <button type="button" data-sk="sat" aria-pressed="false">SAT</button>
+          </div>
+          <div class="tabs" role="group" aria-label="Powermove">
+            <button type="button" data-mv="press" aria-pressed="true">Press</button>
+            <button type="button" data-mv="neg" aria-pressed="false">Negativa</button>
+            <button type="button" data-mv="flex" aria-pressed="false" id="mvflex">Flexión</button>
+          </div>
+        </div>
+        <h2 id="h-fig" style="margin:10px 0 0"></h2>
+        <div class="figure" id="figure" style="margin-top:6px"></div>
+        <div id="gripCtl" class="gripctl" hidden>
+          <div class="gc" style="margin-bottom:8px">
+            <label for="skProg">Progresión <small>tuck, advanced tuck, straddle, half o full: cambia la palanca de la skill</small></label>
+            <div class="gcrow"><select id="skProg" style="max-width:320px"></select></div>
+          </div>
+          <div id="malCtl" class="gc">
+            <label for="malGripR">Apertura de las manos <small>de la plancha normal (manos bajo los hombros) a la maltese (hombros a la altura de las muñecas)</small></label>
+            <div class="gcrow"><input id="malGripR" type="range" step="0.5"><input id="malGrip" type="number" step="1" value="" aria-label="Separación de las manos en cm"><span>cm</span>
+            <button type="button" class="mini-b" id="malNormal">Plancha normal</button><button type="button" class="mini-b" id="malFull">Maltese (full)</button><button type="button" class="mini-b" id="malProg">Maltese en esta progresión</button></div>
+          </div>
+          <div id="satCtl" class="gc">
+            <label for="satGripR">Apertura de las manos <small>desde el agarre a la anchura de los hombros (como el front)</small></label>
+            <div class="gcrow"><input id="satGripR" type="range" step="0.5"><input id="satGrip" type="number" step="1" value="" aria-label="Separación de las manos en cm"><span>cm</span>
+            <button type="button" class="mini-b" id="satNormal">Agarre de hombros</button></div>
+          </div>
+        </div>
+        <div class="row" id="playrow">
+          <button class="primary" id="play" type="button">Reproducir</button>
+          <label for="s" style="font-size:12px;color:var(--muted)">Progreso</label>
+          <input id="s" type="range" min="0" max="100" value="0" style="flex:1;min-width:140px">
+          <span id="sval" class="big">0 %</span>
+        </div>
+        <div class="readout">
+          <div><b id="rSh">—</b><span>Torque en el hombro (N·m, los dos brazos)</span></div>
+          <div><b id="rEl">—</b><span id="rElDir">Torque en el codo (N·m, los dos brazos)</span></div>
+          <div><b id="rLean">—</b><span>Ángulo del antebrazo con la vertical</span></div>
+        </div>
+        <p id="figwarn" class="warn" hidden></p>
+      </section>
+
+      <section class="panel chart" id="chartPanel" aria-labelledby="h-chart">
+        <h2 id="h-chart">Torque a lo largo del recorrido</h2>
+        <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Hombro</span><span><i class="sw" style="background:var(--accent2)"></i>Codo</span><span><i class="sw" style="background:var(--muted)"></i>Valor en el hold (discontinua)</span></div>
+        <div id="chart"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel" aria-labelledby="h-aux">
+    <h2 id="h-aux">Auxiliares</h2>
+    <p class="notes" style="margin:0">Ejercicios con tu peso que no son la parte principal. Torque en el hombro y en el codo con tus medidas, y su carga en LAD: INT1 (hombro + codo ÷ la full de su skill) × segundos. Modelo en desarrollo (ver límites abajo).</p>
+    <div class="auxgrid">
+      <div class="fields">
+        <label for="axEx">Ejercicio</label><select id="axEx">
+          <option value="flex">Flexiones (pies en el suelo)</option>
+          <option value="leanel">Lean planche elevada (forma de plancha, pies apoyados)</option>
+          <option value="aus">Australian pull-ups extendidas y elevadas (forma de front, pies apoyados)</option>
+          <option value="pull">Dominadas / pull-ups</option>
+          <option value="dip">Fondos / dips</option>
+        </select>
+        <label for="axGrip" id="axGripL">Separación de las manos <small>cm entre muñecas; igual a la anchura de hombros = manos bajo los hombros</small></label><input id="axGrip" type="number" step="1" value="">
+        <label for="axLean" id="axLeanL">Inclinación <small>°</small></label><input id="axLean" type="number" step="1" value="0">
+        <label for="axE" id="axEL">Recorrido: codo hasta <small>°</small></label><input id="axE" type="number" step="5" value="90">
+        <label for="axT" id="axTL">Segundos por repetición <small>1,5″ estándar (no purista)</small></label><input id="axT" type="number" step="0.25" value="1.5">
+      </div>
+      <div>
+        <div class="figure" id="axFig"></div>
+        <div class="gcrow" id="axPosRow" style="margin:4px 0 2px"><label for="axPos" style="font-size:13px;font-weight:600">Posición en el recorrido</label><input id="axPos" type="range" min="0" max="100" step="1" value="100" style="flex:1;min-width:160px"><span id="axPosL" class="n"></span></div>
+        <div class="axread" id="axRead"></div>
+        <div class="chart" id="axChart" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="tablewrap"><table class="mini" id="axTbl"><tbody></tbody></table></div>
+    <p class="notes" id="axNote" style="margin:4px 0 0"></p>
+    <details style="margin-top:6px"><summary>Cómo se calcula y límites</summary>
+      <ul class="notes">
+        <li><b>Con pies apoyados</b> (flexiones, lean planche elevada, australian): el cuerpo es rígido y se apoya en manos y pies; el reparto del peso sale del equilibrio de momentos respecto a las manos. En el movimiento, el cuerpo gira alrededor de los pies.</li>
+        <li><b>Sin pies</b> (dominadas, fondos): el centro de masas queda bajo o sobre las manos. Con el cuerpo vertical el hombro casi no tiene torque en la vista lateral: lo cargan la <b>inclinación del tronco</b> y, en dominadas y flexiones, las <b>manos por fuera de los hombros</b> (parte frontal, como en la maltese). El codo sí carga.</li>
+        <li><b>Carga:</b> INT1 = torque medio de hombro + codo ÷ el de la full de su skill (plancha para empuje, front para tracción). LAD de una repetición = INT1 × segundos de la repetición; en el hold, × sus segundos. La fatiga se suma en la calculadora.</li>
+        <li><b>Límites:</b> la parte frontal del codo se aproxima con el brazo recto; no se modelan la escápula, la rotación del brazo ni el apoyo con fricción (solo fuerzas verticales); la inclinación y la anchura de manos son tuyas, el modelo no las conoce. Estimación nuestra (rigor F).</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="panel" aria-labelledby="h-medidas">
+    <h2 id="h-medidas">Tus medidas y tu técnica</h2>
+    <div class="cols">
+      <div class="col">
+      <div class="fields">
+        <label for="H">Altura <small>cm</small></label><input id="H" type="number" step="0.5" value="168">
+        <label for="M">Peso <small>kg</small></label><input id="M" type="number" step="0.1" value="65">
+        <label for="shW">Anchura de hombros <small>cm, acromion → acromion (para la vista frontal). Por defecto ≈ 0,23 × altura, estimación por verificar</small></label><input id="shW" type="number" step="0.5" value="38.5">
+      </div>
+      <div class="fields" style="margin-top:6px">
+        <label for="legfull">Pierna extendida <small>espina ilíaca anterosuperior → punta del dedo gordo, en punta. Solo con rodillas estiradas; vacío = segmentos</small></label><input id="legfull" type="number" step="0.5" placeholder="—">
+      </div>
+      <div class="row" style="margin-top:10px"><button id="reset" type="button">Proporciones medias para mi altura</button></div>
+      <p class="notes" style="margin-top:8px">Los valores iniciales son proporciones medias (de Leva, 1996) escaladas a tu altura. Sustitúyelos por los tuyos. Se guardan solo en tu navegador: cada persona que abra la página mete los suyos.</p>
+      <details style="margin-top:6px">
+        <summary>Cómo tomar las medidas</summary>
+        <ol class="notes" style="padding-left:18px;margin:8px 0 0">
+          <li>Cinta métrica en línea recta entre los dos puntos, de pie y con ayuda. Dos veces cada una; usa la media.</li>
+          <li><b>Brazo:</b> acromion (punta ósea del hombro) → epicóndilo lateral del codo.</li>
+          <li><b>Antebrazo:</b> epicóndilo lateral → apófisis estiloides de la muñeca (lado del pulgar).</li>
+          <li><b>Mano:</b> muñeca → nudillo del dedo corazón.</li>
+          <li><b>Tronco:</b> acromion → trocánter mayor (hueso que sobresale en el lateral de la cadera).</li>
+          <li><b>Cabeza y cuello:</b> vértebra C7 (la que sobresale en la base del cuello) → coronilla.</li>
+          <li><b>Muslo:</b> trocánter mayor → línea lateral de la rodilla.</li>
+          <li><b>Pierna:</b> línea de la rodilla → maléolo externo.</li>
+          <li><b>Pie:</b> talón → punta del dedo gordo.</li>
+          <li><b>Pierna extendida (opcional):</b> espina ilíaca anterosuperior → punta del dedo gordo, pierna estirada y pie en punta.</li>
+        </ol>
+      </details>
+
+      </div>
+      <div class="col">
+      <div class="sub" style="margin-top:0">Segmentos (cm)</div>
+      <div class="fields" id="segfields"></div>
+      </div>
+      <div class="col">
+      <div class="sub" style="margin-top:0">Goma</div>
+      <div class="fields">
+        <label for="bandKg">Asistencia <small>kg que quita la goma (G5 = 5, G10 = 10…)</small></label><input id="bandKg" type="number" min="0" max="40" step="5" value="0">
+        <label for="bandAt">Dónde va <small>bajo el centro de gravedad resta peso; en otro punto cambia el torque</small></label><select id="bandAt"></select>
+      </div>
+
+      <div class="sub">Técnica de los powermoves</div>
+      <div class="fields">
+        <label for="base">Progresión <small>postura de la que salen</small></label><select id="base"></select>
+        <label for="tilt0">Inclinación del cuerpo en el hold <small>° (+ cadera más alta)</small></label><input id="tilt0" type="number" min="-15" max="15" step="1" value="0">
+        <label for="hipP">Press: flexión de cadera (carpado) <small>° a mitad del recorrido</small></label><input id="hipP" type="number" min="0" max="100" step="5" value="0">
+        <label for="extP">Press: extensión de cadera <small>° a mitad del recorrido</small></label><input id="extP" type="number" min="0" max="60" step="5" value="0">
+        <label for="hipN">Negativa: flexión de cadera (carpado) <small>° a mitad del recorrido</small></label><input id="hipN" type="number" min="0" max="100" step="5" value="0">
+        <label for="extN">Negativa: extensión de cadera <small>° a mitad del recorrido</small></label><input id="extN" type="number" min="0" max="60" step="5" value="0">
+        <label for="fdepth">Flexión / pull-up: bajada del centro de masas <small>% del recorrido; 100 = hasta la altura de las muñecas (plancha) o de la barra (front)</small></label><input id="fdepth" type="number" min="0" max="100" step="5" value="100">
+        <label for="tiltb">Flexión / pull-up: inclinación en ese punto <small>° (+ cadera más alta)</small></label><input id="tiltb" type="number" min="-25" max="25" step="1" value="0">
+      </div>
+      <p class="notes" style="margin:6px 0 0">Técnica perfecta = cadera recta (todo a 0). Si pones flexión y extensión en el mismo powermove, se restan.</p>
+
+      </div>
+      <div class="col">
+      <div class="sub" style="margin-top:0">Front lever touch</div>
+      <div class="fields">
+        <label for="flE">Flexión de codo <small>° (con las piernas estiradas los brazos solo llegan hasta ≈ 70°; con tuck, más)</small></label><input id="flE" type="number" min="0" max="130" step="5" value="70">
+        <label for="flTilt">Inclinación del cuerpo <small>° (+ cadera más alta, más lejos de la barra)</small></label><input id="flTilt" type="number" min="-30" max="30" step="1" value="0">
+      </div>
+      <div class="sub" style="margin-top:10px">SAT (straight arm touch)</div>
+      <div class="fields">
+        <label for="satTilt">Inclinación del cuerpo <small>° (+ cadera más alta, más lejos de la barra)</small></label><input id="satTilt" type="number" min="-30" max="30" step="1" value="0">
+      </div>
+      </div>
+    </div>
+  </section>
+  </div>
+  <div class="tabpanel" id="tab-calc" role="tabpanel" aria-labelledby="t-calc" hidden>
+  <section class="panel" aria-labelledby="c_h-perfil">
+    <h2 id="c_h-perfil">Tú</h2>
+    <div class="prof">
+      <div class="f"><label for="c_H">Altura (cm)</label><input id="c_H" type="number" step="0.5" value="168"></div>
+      <div class="f"><label for="c_M">Peso (kg)</label><input id="c_M" type="number" step="0.1" value="65"></div>
+      <div class="f"><label for="c_tP">Techo en plancha</label><select id="c_tP"></select></div>
+      <div class="f"><label for="c_tF">Techo en front lever</label><select id="c_tF"></select></div>
+      <div class="f"><label for="c_sP">Tu máximo en el techo de plancha (s)</label><input id="c_sP" type="number" step="0.25" min="0" value="4"></div>
+      <div class="f"><label for="c_sF">Tu máximo en el techo de front (s)</label><input id="c_sF" type="number" step="0.25" min="0" value="6"></div>
+      <div class="f"><label for="c_nP">n de la curva · plancha</label><input id="c_nP" type="number" step="0.1" min="0.5" value="7.8"></div>
+      <div class="f"><label for="c_nF">n de la curva · front</label><input id="c_nF" type="number" step="0.1" min="0.5" value="7.8"></div>
+    </div>
+    <label class="chk" style="font-size:13px;color:var(--ink);white-space:normal;align-items:flex-start"><input id="c_own" type="checkbox"> Usar mis medidas del simulador para los torques (si no, proporciones medias para tu altura)</label>
+    <p class="notes"><b>1 LAD = 1 segundo al torque de la full de su skill.</b> INT1 = torque de hombro + codo de la postura ÷ el de la full. El techo y su máximo (récord del bloque, test 1) sirven para la fatiga y la RPE-T. Sin máximo medido en una postura, se estima con la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n); n = 7,8 es el valor estándar (half frente a full de Juan, rigor F).</p>
+    <details>
+      <summary>Parámetros del modelo (valores estándar)</summary>
+      <div class="prof" style="margin-top:10px">
+        <div class="f"><label for="c_tau">τ, recuperación (s)</label><input id="c_tau" type="number" step="5" min="1" value="60"></div>
+        <div class="f"><label for="c_w">w, arrastre a la otra familia</label><input id="c_w" type="number" step="0.05" min="0" max="1" value="0"></div>
+        <div class="f"><label for="c_ch">c_h, reps por segundo de aguante (pesas)</label><input id="c_ch" type="number" step="0.05" min="0" value="0.4"></div>
+      </div>
+      <label class="chk" style="font-size:13px;color:var(--ink);margin-top:8px"><input id="c_rir" type="checkbox"> Estoy entrenado en RIR (error ≤ 1 rep en 3 series al fallo de control): la cercanía de las pesas usa mi RIR; si no, Epley</label>
+      <p class="notes" style="margin-top:6px">b sale del % de torque del esfuerzo respecto a tu techo: ≤ 60 % → 0,25; ≥ 80 % → 0,165; lineal entre medias (García-Ramos et al., 2018). Recuperación f(t) = e^(−t/τ).</p>
+    </details>
+  </section>
+
+  <section class="panel" aria-labelledby="c_h-i2">
+    <div class="head"><h2 id="c_h-i2">INT2 modificado</h2>
+      <label class="chk" style="font-size:13px;color:var(--ink)"><input id="c_i2on" type="checkbox"> Usar mi INT2</label></div>
+    <p class="notes">INT2 = impulso angular del movimiento (hombro + codo) ÷ el de un hold de los mismos segundos. Por defecto, el estándar: técnica perfecta (cadera recta). Si tu técnica es distinta, pon tu valor (o cópialo del <a href="#tab-sim" onclick="window.LADtab('sim');return false;">simulador</a>) y marca «Usar mi INT2».</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Powermove</th><th>Estándar</th><th>Plancha · tu valor</th><th>Front lever · tu valor</th></tr></thead>
+      <tbody id="c_i2Rows"></tbody>
+    </table></div>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button id="c_i2reset" type="button">Volver al estándar</button><button id="c_i2sim" type="button">Copiar mi INT2 del simulador</button><span id="c_i2msg" class="tag"></span></div>
+  </section>
+
+  <section class="panel" aria-labelledby="c_h-skills">
+    <div class="head"><h2 id="c_h-skills">Skills y auxiliares (LAD)</h2><button class="primary" id="c_addS" type="button">Añadir serie</button></div>
+    <p class="notes">Una serie es una lista de esfuerzos seguidos (un hold suelto o un combo). Carga de cada esfuerzo = INT1 × INT2 × segundos × (anillas) × (1 + b × A). A es la fatiga acumulada: sube con cada esfuerzo de la serie (intraserie) y arrastra lo que queda de la serie anterior de la misma familia según el descanso (interserie). En «poco torque» (pino, colgado invertido) no hay carga y A se recupera. Powermove sin segundos = 1,5″.</p>
+    <div id="c_series" class="series"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="c_h-pesas">
+    <div class="head"><h2 id="c_h-pesas">Pesas (INOL)</h2><button class="primary" id="c_addW" type="button">Añadir ejercicio</button></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg (lastre o carga)</th><th>Con mi peso</th><th>1RM (kg, mismo criterio)</th><th>Aguante por rep (s)</th><th>RIR</th><th>% 1RM</th><th>INOL</th><th>Cercanía</th><th></th></tr></thead>
+      <tbody id="c_wRows"></tbody>
+    </table></div>
+    <p class="notes">INOL = series × reps × (1 + c_h × segundos de aguante) ÷ (100 − % del 1RM), con tope en el 99 %. «Con mi peso»: fondos, dominadas y anillas; el % usa la masa total (peso + lastre) ÷ (peso + 1RM de lastre). Las pesas no llevan fatiga acumulada. Cercanía: reps ÷ (reps + RIR) si estás entrenado en RIR; si no, reps ÷ reps máximas por Epley, 30 × (1 ÷ % − 1).</p>
+  </section>
+
+  <section class="panel" aria-labelledby="c_h-total">
+    <div class="head"><h2 id="c_h-total">Carga de la sesión</h2><span id="c_exTag" class="ex" hidden>Ejemplo: microdosis del martes 17 nov y pesas del miércoles 11 nov. Cambia o borra estas filas</span></div>
+    <div class="total">
+      <div><b id="c_tB">0,00</b><span>LAD-Au · carga base</span></div>
+      <div><b id="c_tF2">0,00</b><span>Recargo por fatiga (LAD)</span></div>
+      <div class="main"><b id="c_tS">0,00</b><span>LAD-Au (skills + auxiliares) · entra en el ACWR</span></div>
+      <div class="main"><b id="c_tI">0,00</b><span>INOL de pesas · cifra aparte, sin sumar</span></div>
+    </div>
+    <p class="notes" id="c_eff"></p>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+      <button id="c_toreg" class="primary" type="button" onclick="window.LADtab('reg')">Guardar en mi registro</button>
+      <button id="c_copy" type="button">Copiar resumen</button>
+      <button id="c_ex" type="button">Cargar el ejemplo</button>
+      <button id="c_clear" type="button">Vaciar la sesión</button>
+      <span id="c_msg" class="tag" role="status"></span>
+    </div>
+  </section>
+
+  </div>
+  <div class="tabpanel" id="tab-reg" role="tabpanel" aria-labelledby="t-reg" hidden>
+  <section class="panel" aria-labelledby="r_h-save">
+    <div class="head"><h2 id="r_h-save">Guardar una sesión</h2><span id="r_store" class="tag"></span></div>
+    <p class="notes" style="margin-top:0">La sesión que tengas en la <a href="#tab-calc" onclick="window.LADtab('calc');return false;">calculadora</a> se guarda en tu registro con su fecha. Antes de guardar, revisa las series y las pesas allí.</p>
+    <div class="rform">
+      <label>Fecha <input id="r_date" type="date"></label>
+      <label class="grow">Nombre o nota <input id="r_note" type="text" maxlength="200" placeholder="p. ej. Lunes · holds RAW + combos"></label>
+      <label>sRPE (0–5) <input id="r_srpe" type="number" min="0" max="5" step="1" placeholder="—"></label>
+    </div>
+    <div id="r_preview" class="rprev"></div>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button class="primary" id="r_save" type="button">Guardar en mi registro</button>
+      <span id="r_msg" class="tag" role="status"></span>
+    </div>
+  </section>
+  <section class="panel" aria-labelledby="r_h-list">
+    <div class="head"><h2 id="r_h-list">Mis sesiones</h2><span id="r_count" class="tag"></span></div>
+    <div class="tablewrap"><table class="rtable">
+      <thead><tr><th>Fecha</th><th>Sesión</th><th>LAD-Au</th><th>Base</th><th>INOL</th><th>Series</th><th>Fallos</th><th>Cerca del fallo</th><th>sRPE</th><th></th></tr></thead>
+      <tbody id="r_rows"></tbody>
+    </table></div>
+    <p class="notes" id="r_empty">Todavía no hay sesiones. Monta una en la calculadora y guárdala aquí.</p>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button id="r_export" type="button">Exportar copia (JSON)</button>
+      <label class="filebtn">Importar copia <input id="r_import" type="file" accept="application/json,.json"></label>
+      <span id="r_iomsg" class="tag" role="status"></span>
+    </div>
+  </section>
+  </div>
+  <div class="tabpanel" id="tab-evo" role="tabpanel" aria-labelledby="t-evo" hidden>
+  <section class="panel" aria-labelledby="e_h-per">
+    <div class="head"><h2 id="e_h-per">Evolución</h2><span id="e_range" class="tag"></span></div>
+    <div class="seg" role="group" aria-label="Periodo">
+      <button type="button" data-w="4">Último mes (4 semanas)</button>
+      <button type="button" data-w="7">7 semanas</button>
+      <button type="button" data-w="12">12 semanas</button>
+      <button type="button" data-w="all">Todo</button>
+      <button type="button" data-w="custom">Personalizado</button>
+    </div>
+    <div class="rform" id="e_custom" hidden>
+      <label>Desde <input id="e_from" type="date"></label>
+      <label>Hasta <input id="e_to" type="date"></label>
+    </div>
+    <div class="tiles" id="e_tiles"></div>
+    <p class="notes" id="e_none" hidden>No hay sesiones en este periodo.</p>
+  </section>
+  <section class="panel" aria-labelledby="e_h-w">
+    <h2 id="e_h-w">Carga por semana</h2>
+    <p class="notes" style="margin-top:0">LAD-Au (skills y auxiliares) e INOL (pesas) van por separado: no se suman. Porcentaje = cambio frente a la semana anterior.</p>
+    <div class="chartbox2"><div id="e_cw" class="svgc" aria-label="LAD-Au e INOL por semana"></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Semana</th><th>Sesiones</th><th>LAD-Au</th><th>Cambio</th><th>INOL</th><th>Cambio</th><th>Fallos</th><th>Cerca del fallo</th><th>ACWR (domingo)</th></tr></thead><tbody id="e_wrows"></tbody></table></div>
+  </section>
+  <section class="panel" aria-labelledby="e_h-d">
+    <h2 id="e_h-d">Día a día y ACWR</h2>
+    <p class="notes" style="margin-top:0">ACWR = media de 7 días ÷ media de 28 días de la LAD-Au (Gabbett, 2016). Franja 0,8–1,3: referencia de deportes de equipo, sin validar en calistenia (Impellizzeri et al., 2020). Con menos de 28 días registrados es aproximado.</p>
+    <div class="chartbox2"><div id="e_cd" class="svgc" aria-label="LAD-Au diaria y ACWR"></div></div>
+  </section>
+  <section class="panel" aria-labelledby="e_h-p">
+    <div class="head"><h2 id="e_h-p">Progresión por skill</h2>
+      <div class="seg" role="group" aria-label="Skill"><button type="button" data-sk="plancha" aria-pressed="true">Plancha</button><button type="button" data-sk="front" aria-pressed="false">Front lever</button></div></div>
+    <p class="notes" style="margin-top:0">Por semana y progresión: segundos de hold sueltos, mejor hold suelto, powermoves sueltos y combos. Los holds y powermoves de un combo solo cuentan en el combo; un deadstop es un hold pequeño, así que deadstop + powermove es combo.</p>
+    <div class="chartgrid">
+      <div class="chartbox2"><div id="e_cp" class="svgc" aria-label="Segundos de hold sueltos por semana"></div></div>
+      <div class="chartbox2"><div id="e_cb" class="svgc" aria-label="Mejor hold por semana"></div></div>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>Progresión</th><th>Semana</th><th>Segundos de hold</th><th>Series</th><th>Mejor hold</th><th>Powermoves sueltos</th><th>Combos · s · powermoves</th></tr></thead><tbody id="e_prows"></tbody></table></div>
+  </section>
+  </div>
+  <div class="tabpanel" id="tab-tab" role="tabpanel" aria-labelledby="t-tab" hidden>
+  <section class="panel" aria-labelledby="h-res">
+    <h2 id="h-res">INT2 · factor biomecánico</h2>
+    <p class="notes" style="margin-top:0">INT2 = torque medio a lo largo del recorrido ÷ torque del hold, solo torque y con técnica perfecta (cadera recta), sin percepción ni impacto. Integral con 101 posiciones y regla del trapecio; mismo tempo para todos los powermoves. Se calcula aparte para el hombro y para el codo. La última columna ordena los powermoves frente al de mayor impulso angular en el hombro.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Powermove</th><th>Recorrido</th><th>Hombro ÷ hold</th><th>Codo ÷ hold</th><th>Hombro máx. (N·m)</th><th>Codo máx. (N·m)</th><th>÷ mayor impulso</th><th>Codo: músculos (matiz, no entra en el número)</th></tr></thead>
+      <tbody id="restbl"></tbody>
+    </table></div>
+    <p id="holdinfo" class="notes" style="margin-top:10px"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-hip">
+    <h2 id="h-hip">Efecto de la cadera en el press y la negativa</h2>
+    <p class="notes" style="margin-top:0">Factor del INT2 según el ángulo de cadera a mitad del recorrido, con tus medidas. Con el cuerpo rígido sale igual en el hombro y en el codo. Las filas marcadas son las que tienes puestas.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Cadera a mitad del recorrido</th><th>Factor (hombro y codo)</th><th>Frente a cadera recta</th><th>Ahora en</th></tr></thead>
+      <tbody id="hiptbl"></tbody>
+    </table></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-int1">
+    <div class="row" style="justify-content:space-between;align-items:flex-end">
+      <h2 id="h-int1" style="margin:0">INT1 y RPE-T</h2>
+      <span class="notes" id="techoNote"></span>
+    </div>
+    <p class="notes">INT1 = torque de hombro + codo de la postura (con la goma que tengas puesta) ÷ el de la full sin goma: es la intensidad de la carga LAD. RPE-T = 10 × torque ÷ torque de tu techo (γ = 1): a qué parte de tu máximo entrenas; más de 10 = por encima de tu techo. Tu techo se elige en la banda izquierda. Pulsa una fila para verla en la figura del simulador.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Postura</th><th>Hombro (N·m)</th><th>Codo (N·m)</th><th>INT1 (÷ full)</th><th>RPE-T (÷ techo × 10)</th></tr></thead>
+      <tbody id="int1tbl"></tbody>
+    </table></div>
+    <p id="int1note" class="notes" style="margin-top:10px"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-pop">
+    <h2 id="h-pop">Poblaciones por altura y peso</h2>
+    <p class="notes" style="margin-top:0">Torque en el hombro del hold de la full (plancha o front lever, en N·m) con proporciones medias, sin goma. El INT2 (powermove ÷ hold) sale igual para todas las alturas y pesos con proporciones medias; solo cambia con medidas reales de segmentos.</p>
+    <div class="tablewrap"><table id="poptbl"></table></div>
+  </section>
+  </div>
+  <div class="tabpanel" id="tab-how" role="tabpanel" aria-labelledby="t-how" hidden>
+  <section class="panel doc" aria-labelledby="h-how">
+    <h2 id="h-how">Cómo funciona</h2>
+    <p class="lede">Esta pestaña explica, paso a paso, qué calcula cada número de la página, con qué supuestos y de dónde salen los datos. Al final están los límites del modelo y el nivel de rigor de cada fuente. Los cálculos son nuestros (rigor F, ver <a href="#how-rigor">nivel de rigor</a>) salvo donde se cita otra cosa.</p>
+    <nav class="toc" aria-label="Índice">
+      <a href="#how-1">1. Qué es LAD</a><a href="#how-2">2. Notación</a><a href="#how-3">3. El cuerpo</a><a href="#how-4">4. Equilibrio</a><a href="#how-5">5. Torques</a><a href="#how-6">6. Gomas</a><a href="#how-7">7. Powermoves</a><a href="#how-8">8. Impulso angular e INT2</a><a href="#how-9">9. INT1</a><a href="#how-10">10. Skills</a><a href="#how-11">11. Carga de la sesión</a><a href="#how-12">12. Validación</a><a href="#how-13">13. Límites del modelo</a><a href="#how-rigor">14. Rigor y referencias</a>
+    </nav>
+
+    <h3 id="how-1">1. Qué es LAD y qué hace esta página</h3>
+    <p>LAD (<i>Load Definition</i>, autor Juan Gil Saiz) es un modelo para cuantificar la carga de un entrenamiento de calistenia de fuerza. <b>1 LAD = 1 segundo al torque de la full de su skill</b> (hombro + codo; plancha para el empuje, front para el tirón). Cada esfuerzo vale INT1 × INT2 × segundos, con dos coeficientes:</p>
+    <ul>
+      <li><b>INT1</b>: cuánto pesa la <b>postura</b> (la palanca): su torque de hombro + codo ÷ el de la full.</li>
+      <li><b>INT2</b>: cuánto pesa el <b>powermove</b> (press, negativa, flexión, pull-up) respecto a mantener la postura quieta (hold).</li>
+    </ul>
+    <p>La guía completa del método, con la fatiga, las pesas (INOL), la carga global y el registro de fallo, está en el documento «Método LAD · guía de cuantificación». Los dos coeficientes salen de un modelo biomecánico del cuerpo que calcula el <b>torque</b> (momento de fuerza) que tienen que hacer el hombro y el codo en cada instante. El simulador enseña ese modelo; la calculadora lo usa para puntuar la sesión; las tablas lo resumen.</p>
+
+    <h3 id="how-2">2. Notación y unidades</h3>
+    <div class="tablewrap"><table class="def">
+      <thead><tr><th>Símbolo</th><th>Significado</th><th>Unidad</th></tr></thead>
+      <tbody>
+        <tr><td>H, M</td><td>Altura y peso del deportista</td><td>m, kg</td></tr>
+        <tr><td>g</td><td>Aceleración de la gravedad, 9,81</td><td>m/s²</td></tr>
+        <tr><td>mᵢ, Lᵢ</td><td>Masa y longitud del segmento i</td><td>kg, m</td></tr>
+        <tr><td>xᵢ, yᵢ</td><td>Posición del centro de masas del segmento i (x horizontal, y vertical; las manos en el origen)</td><td>m</td></tr>
+        <tr><td>CM</td><td>Centro de masas de todo el cuerpo</td><td>—</td></tr>
+        <tr><td>S, E, W</td><td>Hombro, codo y muñeca (agarre)</td><td>—</td></tr>
+        <tr><td>T_hombro, T_codo</td><td>Torque en el hombro y en el codo, sumando los dos brazos</td><td>N·m</td></tr>
+        <tr><td>J</td><td>Impulso angular: torque acumulado en el tiempo, J = ∫ T dt</td><td>N·m·s</td></tr>
+        <tr><td>F_goma</td><td>Fuerza de la goma = kg de asistencia × g</td><td>N</td></tr>
+        <tr><td>φ, e, θ</td><td>Ángulo del antebrazo, flexión del codo e inclinación del tronco</td><td>°</td></tr>
+        <tr><td>s, s_máx</td><td>Segundos de un hold y tu máximo en esa postura</td><td>s</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="how-3">3. El cuerpo: segmentos y proporciones</h3>
+    <p>El cuerpo se representa en un plano (vista lateral) como una cadena de segmentos rígidos: mano, antebrazo, brazo, tronco, cabeza y cuello, muslo, pierna y pie. Brazos y piernas cuentan dos veces (izquierdo y derecho). Para cada segmento hacen falta tres datos: su longitud, su masa y dónde está su centro de masas.</p>
+    <p>Por defecto se usan las proporciones medias de <b>de Leva (1996)</b> para hombres, escaladas a tu altura y a tu peso. Los valores están citados de memoria y quedan <b>pendientes de verificar</b> contra el artículo. La longitud del tronco (hombro → cadera) se fija en 0,288 × H, porque la definición original del tronco sobrestimaba el torque frente a las referencias publicadas (ver <a href="#how-12">validación</a>).</p>
+    <div class="tablewrap"><table class="def">
+      <thead><tr><th>Segmento</th><th>Longitud (× H)</th><th>CM desde el extremo proximal (× L)</th><th>Masa (% de M, cada uno)</th><th>Medida en el simulador</th></tr></thead>
+      <tbody>
+        <tr><td>Brazo (×2)</td><td>0,162</td><td>0,577</td><td>2,71 %</td><td>acromion → epicóndilo lateral</td></tr>
+        <tr><td>Antebrazo (×2)</td><td>0,154</td><td>0,457</td><td>1,62 %</td><td>epicóndilo → estiloides de la muñeca</td></tr>
+        <tr><td>Mano (×2)</td><td>0,050</td><td>0,790</td><td>0,61 %</td><td>muñeca → nudillo del corazón</td></tr>
+        <tr><td>Tronco</td><td>0,288</td><td>0,449</td><td>43,46 %</td><td>acromion → trocánter mayor</td></tr>
+        <tr><td>Cabeza y cuello</td><td>0,140</td><td>0,402</td><td>6,94 %</td><td>C7 → coronilla</td></tr>
+        <tr><td>Muslo (×2)</td><td>0,243</td><td>0,410</td><td>14,16 %</td><td>trocánter → línea de la rodilla</td></tr>
+        <tr><td>Pierna (×2)</td><td>0,249</td><td>0,446</td><td>4,33 %</td><td>rodilla → maléolo externo</td></tr>
+        <tr><td>Pie (×2)</td><td>0,148</td><td>0,442</td><td>1,37 %</td><td>talón → punta del dedo gordo</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">La suma de masas es el 100 % del peso. Si introduces tus medidas, sustituyen a las longitudes por defecto; las masas siguen siendo porcentajes medios. La <b>pierna extendida</b> (espina ilíaca anterosuperior → punta del dedo gordo, en punta) escala muslo + pierna + pie solo cuando las rodillas están estiradas.</p>
+    <p><b>Progresiones.</b> Cada progresión fija tres ángulos: flexión de cadera, flexión de rodilla y apertura de cada pierna (straddle).</p>
+    <div class="tablewrap"><table class="def">
+      <thead><tr><th>Progresión</th><th>Cadera</th><th>Rodilla</th><th>Apertura por pierna</th></tr></thead>
+      <tbody>
+        <tr><td>Tuck</td><td>135°</td><td>145°</td><td>0°</td></tr>
+        <tr><td>Advanced tuck (ADV90)</td><td>90°</td><td>90°</td><td>0°</td></tr>
+        <tr><td>Straddle half</td><td>0°</td><td>90°</td><td>45°</td></tr>
+        <tr><td>Half (tibias al cielo)</td><td>0°</td><td>90°</td><td>0°</td></tr>
+        <tr><td>Straddle 60°</td><td>0°</td><td>0°</td><td>60°</td></tr>
+        <tr><td>Straddle 45°</td><td>0°</td><td>0°</td><td>45°</td></tr>
+        <tr><td>Full</td><td>0°</td><td>0°</td><td>0°</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Las piernas abiertas se proyectan sobre el plano lateral: su longitud efectiva se multiplica por cos(apertura). Es la forma de meter el straddle en un modelo plano.</p>
+
+    <h3 id="how-4">4. Equilibrio: el centro de masas sobre las manos</h3>
+    <p>El modelo es <b>cuasiestático</b>: en cada instante el cuerpo está en equilibrio, como si el movimiento fuera muy lento. Para que no caiga hacia delante ni hacia atrás, el centro de masas tiene que estar en la vertical de las manos. Con una goma, la condición incluye su fuerza:</p>
+    <div class="eq">Σ mᵢ · g · xᵢ − F_goma · x_goma = 0</div>
+    <p>Para una postura dada (inclinación del tronco, cadera, rodillas y codo), el único grado de libertad que queda es el ángulo del antebrazo φ. El programa recorre φ de 5° a 215° en pasos de 0,5°, localiza el cambio de signo de la ecuación y lo afina por bisección. Solo acepta soluciones con el hombro y el codo por encima de las manos (en el front lever, por debajo de la barra). Si no hay ninguna, la postura es <b>imposible</b> con esas medidas y la página lo avisa.</p>
+    <p class="small">El front lever es la misma física reflejada en vertical: colgado de la barra, el centro de masas tiene que estar en la vertical de las manos. Como solo importan las distancias horizontales, con el mismo cuerpo y la misma postura da el mismo torque que la plancha.</p>
+
+    <h3 id="how-5">5. Torques en el hombro y en el codo</h3>
+    <p>Una vez colocado el cuerpo, el torque en una articulación es el peso de todo lo que cuelga «más allá» de ella multiplicado por su distancia horizontal a la articulación (el brazo de momento):</p>
+    <div class="eq">T_hombro = g · Σ (cuerpo) mᵢ · (xᵢ − x_S) − F_goma · (x_goma − x_S)<br>T_codo = g · [Σ (cuerpo) mᵢ · (xᵢ − x_E) + m_brazo · (x_brazo − x_E)] − F_goma · (x_goma − x_E)</div>
+    <p>«Cuerpo» es tronco, cabeza, muslos, piernas y pies. Los valores son la suma de los dos lados (cada hombro hace la mitad). Como el centro de masas está sobre las manos, el torque del hombro es, en la práctica, el peso por la distancia horizontal entre el hombro y la vertical de las manos: por eso en la plancha full de 1,68 m y 65 kg salen 257 N·m con el hombro a unos 43 cm de esa vertical.</p>
+    <p class="small">El signo del torque del codo dice si la carga tiende a extenderlo o a flexionarlo; el valor que se usa en el INT2 es el absoluto. Qué músculos lo frenan (bíceps, tríceps, coactivación) no lo decide el modelo: aparece como matiz al lado y lo valora el entrenador.</p>
+
+    <h3 id="how-6">6. Gomas</h3>
+    <p>Una goma se modela como una fuerza vertical constante igual a sus kilos × g (G5 = 5 kg, G10 = 10 kg, G15 = 15 kg, decisión de Juan). Dónde se coloca cambia su efecto:</p>
+    <ul>
+      <li><b>Bajo el centro de gravedad:</b> equivale a pesar esos kilos menos. Full de 1,68 m y 65 kg con G10: 215 N·m (sin goma, 257).</li>
+      <li><b>En otro punto (cadera, rodillas, tobillos, pecho):</b> además de restar peso, cambia dónde cae el centro de masas y por tanto el brazo de momento. La misma G10 en los tobillos deja el hombro en 129 N·m, porque actúa con mucha más palanca.</li>
+    </ul>
+
+    <h3 id="how-7">7. Powermoves: cómo se modela cada recorrido</h3>
+    <p>Cada powermove es una secuencia de 101 posturas de equilibrio (de 0 % a 100 % del recorrido).</p>
+    <ul>
+      <li><b>Press</b> (plancha → pino; front → colgado invertido): el tronco gira de la horizontal a ±90° con los brazos rectos. La cadera puede ir recta (técnica perfecta), carpada o en extensión: el ángulo que pongas es el de mitad de recorrido y varía como sen(π·t), cero al principio y al final.</li>
+      <li><b>Negativa:</b> el mismo recorrido al revés, con su propia cadera.</li>
+      <li><b>Flexión (plancha) y pull-up (front):</b> el recorrido se mide por la <b>bajada del centro de masas</b>. Al 100 % llega a la altura de las muñecas (plancha) o de la barra (front). En cada punto se busca la flexión de codo que deja el centro de masas a esa altura, con el centro de masas sobre las manos. Con 1,68 m y 65 kg en full, los brazos solo permiten llegar a un codo de 73°, con el centro de masas a 2 cm; con progresiones recogidas sí se llega hasta las muñecas (advanced tuck, codo ≈ 100°).</li>
+    </ul>
+    <p class="small">Para acelerar el cálculo, la relación codo → altura del centro de masas se calcula una vez por inclinación y se interpola, y cada postura del recorrido se busca a partir de la anterior. No cambia los resultados.</p>
+
+    <h3 id="how-8">8. Impulso angular e INT2</h3>
+    <p>El <b>impulso angular</b> es el torque acumulado a lo largo del tiempo:</p>
+    <div class="eq">J = ∫ |T(t)| dt ≈ D · T̄  (con duración D y ritmo uniforme)</div>
+    <p>Se integra con 101 posiciones y la regla del trapecio. Decisiones de Juan (14 nov): el INT2 es <b>el impulso angular resultante (hombro + codo) del powermove sobre el del hold</b>, con la <b>misma duración</b>, solo con torque absoluto, técnica perfecta (cadera recta) y sin sensaciones ni impacto:</p>
+    <div class="eq">INT2 = (J_hombro + J_codo)_powermove ÷ (J_hombro + J_codo)_hold = (T̄_hombro + T̄_codo)_powermove ÷ (T_hombro + T_codo)_hold</div>
+    <div class="tablewrap"><table class="def">
+      <thead><tr><th>Powermove</th><th>Hombro ÷ hold</th><th>Codo ÷ hold</th><th>INT2 estándar</th></tr></thead>
+      <tbody>
+        <tr><td>Hold</td><td>1,00</td><td>1,00</td><td>1</td></tr>
+        <tr><td>Press</td><td>0,64</td><td>0,64</td><td>0,64</td></tr>
+        <tr><td>Negativa</td><td>0,64</td><td>0,64</td><td>0,64</td></tr>
+        <tr><td>Flexión / pull-up (recorrido completo)</td><td>1,00</td><td>0,86</td><td>0,95</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><b>Por qué el press vale menos que el hold:</b> al girar hacia el pino (o hacia el colgado invertido) el centro de masas se acerca a la vertical del hombro y el brazo de momento se reduce; el máximo es la propia postura inicial.</li>
+      <li><b>Por qué la flexión casi iguala al hold:</b> el cuerpo sigue horizontal, así que el torque del hombro no baja; solo cambia el del codo.</li>
+      <li><b>Press = negativa</b> porque el recorrido es el mismo. Lo que los diferencia (la velocidad: frenar de golpe en la posición de máximo torque) no lo ve un modelo cuasiestático. Se registran por separado.</li>
+      <li><b>Por qué vale para cualquier altura y peso:</b> con proporciones medias todas las longitudes son proporcionales a H y todas las masas a M, así que todos los torques son proporcionales a M·H y el cociente no cambia. Comprobado de 150 cm y 50 kg a 200 cm y 100 kg. Solo cambia con medidas reales (por ejemplo, los brazos de Juan dan un codo distinto en la flexión) o con otra técnica: para eso está el <b>INT2 modificado</b> de la calculadora.</li>
+      <li>Las activaciones musculares influyen, pero las valora el entrenador fuera de la fórmula.</li>
+    </ul>
+
+    <h3 id="how-9">9. INT1 y RPE-T</h3>
+    <div class="eq">INT1 = (T_hombro + T_codo)(postura, con su goma) ÷ (T_hombro + T_codo)(full, sin goma)<br>RPE-T = 10 × (T_hombro + T_codo)(postura) ÷ (T_hombro + T_codo)(tu techo)</div>
+    <p>El INT1 se ancla a la full, fija para todos, y es lo que entra en la carga. La RPE-T se ancla a <b>tu techo</b> (la progresión que mantienes 2 segundos o más) y dice a qué parte de tu máximo entrenas; no entra en la carga. Con las medidas de Juan (1,68 m, 65 kg): half y straddle 45° ≈ 0,91; straddle 60° y straddle half ≈ 0,84; ADV90 0,75; tuck 0,59; full G5 0,92 y G10 0,84; maltese 1,28.</p>
+
+    <h3 id="how-10">10. Skills: maltese, front lever touch y SAT</h3>
+    <p><b>Vista frontal.</b> Cada mano soporta la mitad del peso. El torque de cada hombro es esa fuerza por la distancia horizontal hombro–mano, que tiene dos partes: la <b>sagital</b> d (la de la vista lateral) y la <b>frontal</b> lat (cuánto queda la mano por fuera del hombro). El torque combinado es la suma vectorial:</p>
+    <div class="eq">T_hombro = T_sagital · √(d² + lat²) ÷ d</div>
+    <ul>
+      <li><b>Maltese.</b> Con brazos rectos de longitud L (brazo + antebrazo): L² = d² + lat² + h², donde h es la altura del hombro sobre la muñeca. En la plancha normal (manos bajo los hombros, lat = 0) sale la plancha; al abrir las manos el hombro baja, y cuando h = 0 (hombros a la altura de las muñecas) es la maltese completa. Con 1,68 m y 65 kg: 257 N·m en plancha normal, 274 con las manos a 70 cm y 321 en la maltese completa (manos a ≈ 102 cm). <b>La progresión cuenta</b> a igual anchura de manos: con las manos a la anchura de la maltese full (≈ 102 cm), en straddle 45° salen 302 N·m, en advanced tuck 275 y en tuck 246, porque al acortar la palanca el centro de masas queda más cerca del hombro y el brazo baja de la horizontal. Si en cada progresión abres hasta que los brazos quedan horizontales («Maltese en esta progresión»), el torque vuelve a ≈ 320 N·m: con los brazos horizontales el brazo de momento es el brazo entero y la progresión solo cambia la anchura necesaria (en tuck, ≈ 131 cm).</li>
+      <li><b>SAT.</b> Brazos rectos; la apertura del agarre da la abducción, sen(abd) = lat ÷ L, y en la vista lateral el brazo se ve acortado por cos(abd). Con agarre de hombros sale como el front (257 N·m); con las manos a 100 cm, 317 N·m, porque la parte frontal ya cuenta. La progresión cambia el torque como en el front: con agarre de hombros, straddle 45° 234 N·m, advanced tuck 198, tuck 155.</li>
+      <li><b>Front lever touch.</b> Codo flexionado e inclinación del cuerpo; el simulador dice a qué distancia queda el cuerpo de la barra y avisa si la atravesaría. Con el cuerpo horizontal sale igual que el front (257 N·m), y con las piernas estiradas los brazos solo llegan hasta un codo de ≈ 70°. Con codo a 70°: straddle 45° 234 N·m, advanced tuck 198, tuck 155. La progresión se elige en la zona gráfica, junto a la apertura de las manos.</li>
+    </ul>
+    <p class="small">La anchura de hombros por defecto (0,23 × H) es una estimación nuestra, pendiente de verificar; conviene medirla (acromion → acromion).</p>
+
+    <h3 id="how-11">11. Carga LAD de la sesión (calculadora)</h3>
+    <ul>
+      <li><b>Esfuerzo de skill o auxiliar:</b> c = INT1 × INT2 × segundos (powermove sin vídeo: 1,5″; parcial: la mitad; anillas: × F_anillas, el RPE percibido en anillas ÷ en paralelas).</li>
+      <li><b>Fatiga:</b> carga = c × (1 + b × A). A suma la fracción de máximo de cada esfuerzo, x = INT2 × s ÷ s_máx, dentro de la serie (intraserie) y arrastra lo que queda de la serie anterior de su familia, × e^(−descanso ÷ τ) (interserie). b = 0,25 hasta el 60 % del torque de tu techo y 0,165 desde el 80 %, lineal entre medias; τ = 60 s; w = 0 entre empuje y tirón. En poco torque (pino, colgado invertido) no hay carga y A baja con e^(−t ÷ τ).</li>
+      <li><b>s_máx:</b> el récord del bloque en tu techo; en otras posturas, tu máximo si lo pones o la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n), con n = 7,8 estándar.</li>
+      <li><b>Pesas:</b> INOL = series × reps × (1 + c_h × segundos de aguante) ÷ (100 − % 1RM), con masa total en lastrados y tope en el 99 %; c_h = 0,4 provisional. Sin fatiga acumulada.</li>
+      <li><b>Dos cifras, sin sumar</b> (decisión de Juan, 19 nov): LAD-Au e INOL se siguen por separado, como tendencias conjuntas. El ACWR solo usa la LAD-Au, y con él se decide si programar más carga.</li>
+      <li><b>Esfuerzo:</b> número de fallos anotados y de series cerca del fallo (reserva ≤ 1″ o ≤ 1 rep; estimada por el modelo si no se anota). En pesas, cercanía por RIR si estás entrenado en RIR; si no, por Epley.</li>
+    </ul>
+
+    <h3 id="how-12">12. Validación</h3>
+    <p>Comparación con los valores publicados por Brey Fitness (web, rigor E) para 70 kg y 1,75 m, con proporciones medias y sin goma (torque del hombro, N·m):</p>
+    <div class="tablewrap"><table class="def">
+      <thead><tr><th>Postura</th><th>Este modelo</th><th>Brey Fitness</th><th>Diferencia</th></tr></thead>
+      <tbody>
+        <tr><td>Full</td><td>288</td><td>286</td><td>+0,7 %</td></tr>
+        <tr><td>Half (rodillas a 90°)</td><td>267</td><td>265</td><td>+0,8 %</td></tr>
+        <tr><td>Straddle 45°</td><td>263</td><td>260</td><td>+1,2 %</td></tr>
+        <tr><td>Straddle 60°</td><td>244</td><td>242</td><td>+0,8 %</td></tr>
+        <tr><td>Tuck</td><td>174</td><td>168</td><td>+3,6 %</td></tr>
+        <tr><td>Advanced tuck</td><td>221</td><td>201</td><td>+10 %</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Las posturas extendidas coinciden dentro del 1–4 %. El advanced tuck se separa un 10 %, probablemente por cómo se define la posición de las rodillas (inferencia nuestra, sin comprobar). Coincidir con otra estimación no es una validación experimental: ninguno de los dos modelos se ha contrastado con medidas de fuerza reales.</p>
+
+    <h3 id="how-13">13. Límites del modelo</h3>
+    <ul>
+      <li><b>Plano y cuasiestático.</b> No hay inercia ni aceleraciones: supone movimiento lento y uniforme. No ve que una negativa rápida obliga a frenar de golpe, ni la diferencia entre concéntrico, excéntrico e isométrico.</li>
+      <li><b>Torque externo, no esfuerzo muscular.</b> Da el torque que hay que vencer, no qué músculo lo produce ni cuánto le cuesta según su longitud y su ángulo (relación longitud–tensión, ventaja mecánica). Por eso el FL touch o el SAT con el cuerpo horizontal salen como el front aunque se consideren distintos.</li>
+      <li><b>Segmentos rígidos y articulaciones puntuales.</b> El hombro es un punto fijo al final del tronco: la protracción, la retracción y la depresión de la escápula no cambian la geometría. La muñeca tampoco se modela (no hay torque de muñeca).</li>
+      <li><b>Proporciones y masas medias.</b> de Leva (1996), población masculina, citadas de memoria y pendientes de verificar. Con tus medidas mejoran las longitudes, pero las masas siguen siendo porcentajes medios.</li>
+      <li><b>Masa de los brazos.</b> En el FL touch y el SAT el equilibrio se resuelve sin contar la masa de los brazos.</li>
+      <li><b>Gomas ideales.</b> Fuerza vertical y constante; una goma real cambia de fuerza al estirarse y no siempre tira en vertical.</li>
+      <li><b>Straddle por proyección.</b> Las piernas abiertas se proyectan con cos(apertura); no se calcula el torque fuera del plano lateral, salvo en la vista frontal de la maltese y el SAT.</li>
+      <li><b>Anchura de hombros estimada</b> (0,23 × H) si no la mides.</li>
+      <li><b>Dirección del torque del codo en la flexión.</b> El modelo da extensión en todo el recorrido; la experiencia de Juan (tríceps al subir, bíceps y coactivación en el bloqueo) no se recoge. Falta un vídeo lateral para contrastarlo.</li>
+      <li><b>Sin percepción ni fatiga.</b> El esfuerzo percibido, la fatiga acumulada, la técnica y el coste metabólico no entran en el INT2 estándar (decisión de Juan).</li>
+      <li><b>Población.</b> Pensado para adultos con proporciones típicas; con morfologías muy distintas, usar medidas propias.</li>
+    </ul>
+
+    <h3 id="how-rigor">14. Nivel de rigor y referencias</h3>
+    <p class="small">Escala de LAD: A revisión sistemática o metaanálisis · B estudio revisado por pares · C libro, manual o tesis · D actas o preprint · E web o foro · F criterio de Juan o estimación nuestra.</p>
+    <ul>
+      <li><b>B</b> · de Leva, P. (1996). Adjustments to Zatsiorsky-Seluyanov's segment inertia parameters. <i>Journal of Biomechanics</i>, 29(9), 1223–1230. Parámetros de los segmentos (citados de memoria, por verificar).</li>
+      <li><b>E</b> · Brey Fitness (web). Torques de la plancha por progresión para 70 kg y 1,75 m. Usado solo para comparar.</li>
+      <li><b>F</b> · Decisiones de Juan Gil Saiz (14 nov 2026): INT1 = % del techo; techo = progresión que mantienes 2″ o más; gomas en kg; INT2 = impulso angular resultante sobre el hold, con técnica perfecta y solo torque; anillas como factor aparte.</li>
+      <li><b>F</b> · Estimaciones nuestras: tronco 0,288 × H, anchura de hombros 0,23 × H, geometría de maltese, SAT y FL touch, flexión por bajada del centro de masas.</li>
+    </ul>
+    <p class="small">El resto de fuentes del modelo LAD (y su nivel) están en el documento LAD.</p>
+  </section>
+  </div>
+</div>
+
+<script>
+/* LAD · motor biomecánico compartido (simulador y web simple).
+   Modelo plano cuasiestático. Muñeca/agarre en el origen. Coordenadas de plancha (cuerpo por encima de las manos);
+   el front lever es la misma física reflejada en vertical (solo cuentan distancias horizontales). */
+const LAD=(function(){
+const g=9.81;
+// de Leva (1996), hombre: longitud de referencia (mm, estatura 1741), CDM desde proximal, % de masa (citado de memoria, por verificar)
+const SEG=[
+ {k:'uarm', name:'Brazo', hint:'acromion → epicóndilo lateral del codo', ref:281.7/1741, com:0.5772, mass:2.71, n:2},
+ {k:'farm', name:'Antebrazo', hint:'epicóndilo lateral → estiloides de la muñeca', ref:268.9/1741, com:0.4574, mass:1.62, n:2},
+ {k:'hand', name:'Mano', hint:'muñeca → nudillo del dedo corazón', ref:86.2/1741, com:0.79, mass:0.61, n:2},
+ {k:'trunk', name:'Tronco', hint:'acromion → trocánter mayor', ref:0.288, com:0.4486, mass:43.46, n:1},
+ {k:'head', name:'Cabeza y cuello', hint:'C7 → coronilla', ref:242.9/1741, com:0.4024, mass:6.94, n:1},
+ {k:'thigh', name:'Muslo', hint:'trocánter mayor → línea de la rodilla', ref:422.2/1741, com:0.4095, mass:14.16, n:2},
+ {k:'shank', name:'Pierna', hint:'línea de la rodilla → maléolo externo', ref:434.0/1741, com:0.4459, mass:4.33, n:2},
+ {k:'foot', name:'Pie', hint:'talón → punta del dedo gordo', ref:258.1/1741, com:0.4415, mass:1.37, n:2}
+];
+// Progresiones: ángulos en grados. hip = flexión de cadera (+ piernas hacia el suelo), kn = flexión de rodilla, beta = apertura de cada pierna (straddle)
+const PROG=[
+ {id:'tuck', name:'Tuck', hip:135, kn:145, beta:0},
+ {id:'adv90', name:'Advanced tuck (ADV90)', hip:90, kn:90, beta:0},
+ {id:'sthalf', name:'Straddle half', hip:0, kn:90, beta:45},
+ {id:'half', name:'Half (half lay, tibias al cielo)', hip:0, kn:90, beta:0},
+ {id:'st60', name:'Straddle (60° por pierna)', hip:0, kn:0, beta:60},
+ {id:'st45', name:'Straddle (45° por pierna)', hip:0, kn:0, beta:45},
+ {id:'full', name:'Full', hip:0, kn:0, beta:0}
+];
+const BANDPOS=[
+ {id:'com', name:'Bajo el centro de gravedad (resta peso)'},
+ {id:'hip', name:'Cadera'},
+ {id:'knee', name:'Rodillas'},
+ {id:'ankle', name:'Tobillos / pies'},
+ {id:'chest', name:'Pecho'}
+];
+const rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI, U=a=>[Math.cos(a),Math.sin(a)];
+const add=(p,v,l)=>[p[0]+v[0]*l,p[1]+v[1]*l];
+function defaultSeg(Hcm){const o={};SEG.forEach(s=>o[s.k]=+(s.ref*Hcm).toFixed(1));return o;}
+// cfg: {H(cm), M(kg), seg:{k:cm}, legfull(cm|0), bandKg, bandAt}
+function params(cfg){
+  const P={H:cfg.H/100, M:cfg.M, L:{}, m:{}, c:{}, bandF:(cfg.bandKg||0)*g, bandAt:cfg.bandAt||'com'};
+  SEG.forEach(s=>{P.L[s.k]=(cfg.seg[s.k]||s.ref*cfg.H)/100; P.m[s.k]=s.mass/100*cfg.M*s.n; P.c[s.k]=s.com;});
+  const lf=(cfg.legfull||0)/100; P.legScale=1;
+  if(lf>0){P.legScale=lf/(P.L.thigh+P.L.shank+0.75*P.L.foot);}
+  return P;
+}
+// q: {phi, e, th, hip, kn, beta} en radianes. Las piernas extendidas (kn=0) usan la medida de pierna extendida si existe.
+function pose(P,q){
+  const ls=(q.kn===0?P.legScale:1)*Math.cos(q.beta||0), as=q.armScale||1;
+  const Lf=P.L.farm*as, Lu=P.L.uarm*as;
+  const W=[0,0], E=add(W,U(q.phi),Lf), S=add(E,U(q.phi+q.e),Lu);
+  const Hp=add(S,U(q.th),P.L.trunk), td=q.th-q.hip, Kn=add(Hp,U(td),P.L.thigh*ls), sd=td+q.kn, An=add(Kn,U(sd),P.L.shank*ls);
+  const C={
+    farm:add(W,U(q.phi),P.c.farm*Lf), uarm:add(S,U(q.phi+q.e+Math.PI),P.c.uarm*Lu), hand:[0,0],
+    trunk:add(S,U(q.th),P.c.trunk*P.L.trunk), head:add(S,U(q.th+Math.PI),P.c.head*P.L.head),
+    thigh:add(Hp,U(td),P.c.thigh*P.L.thigh*ls), shank:add(Kn,U(sd),P.c.shank*P.L.shank*ls), foot:add(An,U(sd),P.c.foot*P.L.foot*0.68*ls)
+  };
+  return {W,E,S,Hp,Kn,An,Head:add(S,U(q.th+Math.PI),P.L.head),Toe:add(An,U(sd),P.L.foot*0.75*ls),C};
+}
+const BODY=['trunk','head','thigh','shank','foot'];
+function com(P,o){let mx=0,my=0,m=0;for(const k in o.C){mx+=P.m[k]*o.C[k][0];my+=P.m[k]*o.C[k][1];m+=P.m[k]}return [mx/m,my/m,m];}
+function bandPoint(P,o){
+  switch(P.bandAt){case 'hip':return o.Hp;case 'knee':return o.Kn;case 'ankle':return o.An;case 'chest':return add(o.S,U(Math.atan2(o.Hp[1]-o.S[1],o.Hp[0]-o.S[0])),0.3*P.L.trunk);default:return com(P,o);}
+}
+// Resuelve el ángulo del antebrazo para que el centro de masas (con la goma) quede sobre las manos.
+function solve(P,q0,minS){
+  minS=minS==null?0.02:minS;
+  const q=Object.assign({e:0,th:0,hip:0,kn:0,beta:0},q0), hint=q.phiHint; delete q.phiHint;
+  const f=a=>{q.phi=a;const o=pose(P,q);const c=com(P,o);const bp=bandPoint(P,o);return c[2]*g*c[0]-P.bandF*bp[0];};
+  const scan=(d0,d1)=>{
+    let prev=null,pa=null;
+    for(let d=d0;d<=d1;d+=0.5){
+      const a=rad(d),v=f(a);
+      if(prev!==null&&prev*v<=0){
+        let lo=pa,hi=a,flo=prev;
+        for(let i=0;i<40;i++){const mid=(lo+hi)/2,fm=f(mid);if(flo*fm<=0){hi=mid}else{lo=mid;flo=fm}}
+        q.phi=(lo+hi)/2; const o=pose(P,q);
+        if(o.S[1]>minS&&o.E[1]>0.02){
+          const bp=bandPoint(P,o); let Tsh=0,Tel=0;
+          BODY.forEach(k=>{Tsh+=P.m[k]*(o.C[k][0]-o.S[0]);Tel+=P.m[k]*(o.C[k][0]-o.E[0])});
+          Tel+=P.m.uarm*(o.C.uarm[0]-o.E[0]);
+          Tsh=g*Tsh-P.bandF*(bp[0]-o.S[0]); Tel=g*Tel-P.bandF*(bp[0]-o.E[0]);
+          return {o,q:Object.assign({},q),Tsh,Tel};
+        }
+      }
+      prev=v;pa=a;
+    }
+    return null;
+  };
+  // con pista (posición vecina ya resuelta) se busca primero cerca de ella: mucho más rápido y mantiene la continuidad
+  if(hint!=null){const hd=deg(hint), r=scan(Math.max(5,hd-12),Math.min(215,hd+12)); if(r) return r;}
+  return scan(5,215);
+}
+function progQ(id){const p=PROG.find(x=>x.id===id)||PROG[PROG.length-1];return {hip:rad(p.hip),kn:rad(p.kn),beta:rad(p.beta)};}
+// Postura estática de una progresión
+function hold(P,id,tilt){return solve(P,Object.assign({th:rad(tilt||0)},progQ(id)));}
+// Powermove en el instante s (0..1). opt: {base, tilt, hipP, hipN, edepth, tiltb} (grados)
+function powerAt(P,mv,s,opt,hint){
+  const b=progQ(opt.base||'full'), t0=rad(opt.tilt||0);
+  if(mv==='flex'){const w=Math.sin(Math.PI*s);return flexAt(P,b,t0+rad(opt.tiltb||0)*w,(opt.fdepth==null?100:opt.fdepth)/100*w);}
+  const t=mv==='neg'?1-s:s, hp=rad(mv==='neg'?(opt.hipN||0):(opt.hipP||0));
+  const end=opt.front?rad(-90):rad(90); // plancha: al pino (cadera sobre el hombro); front: al colgado invertido (cadera hacia la barra)
+  return solve(P,{e:0,th:t0+(end-t0)*t,hip:b.hip+hp*Math.sin(Math.PI*t),kn:b.kn,beta:b.beta,phiHint:hint});
+}
+// Flexión (plancha) / pull-up (front): el recorrido se mide por la bajada del centro de masas.
+// frac = 0 → hold (codo recto); frac = 1 → centro de masas a la altura de las muñecas (plancha) o de la barra (front).
+// Se busca la flexión de codo que deja el centro de masas a esa altura, con el centro de masas sobre las manos.
+function flexAt(P,b,th,frac){
+  // tabla codo → altura del centro de masas para esta inclinación (se calcula una vez y se guarda)
+  P._ft=P._ft||{}; const key=th.toFixed(5)+'|'+b.hip+'|'+b.kn+'|'+b.beta;
+  let T=P._ft[key];
+  if(!T){
+    T=[]; let hint=null;
+    for(let d=0;d<=150;d+=1){
+      const sd=solve(P,{e:rad(d),th,hip:b.hip,kn:b.kn,beta:b.beta,phiHint:hint},-0.15); if(!sd) break;
+      hint=sd.q.phi; T.push({e:rad(d),y:com(P,sd.o)[1],s:sd});
+    }
+    P._ft[key]=T;
+  }
+  if(!T.length) return null;
+  if(frac<=0) return T[0].s;
+  const yt=T[0].y*(1-Math.min(1,frac));
+  let k=T.findIndex(t=>t.y<=yt);
+  if(k<0) return T[T.length-1].s; // no se puede bajar más: posición más profunda alcanzable
+  if(k===0) return T[0].s;
+  const a=T[k-1], c=T[k], u=(a.y-yt)/(a.y-c.y), e=a.e+(c.e-a.e)*u;
+  const r=solve(P,{e,th,hip:b.hip,kn:b.kn,beta:b.beta,phiHint:a.s.q.phi},-0.15)||c.s;
+  r.depth=frac; return r;
+}
+function sweep(P,mv,opt,N){N=N||101;const out=[];let h=null;for(let i=0;i<N;i++){const r=powerAt(P,mv,i/(N-1),opt,h);out.push(r);h=r?r.q.phi:null;}return out;}
+function meanAbs(arr,key){let s=0,n=0;for(let i=1;i<arr.length;i++){if(arr[i]&&arr[i-1]){s+=(Math.abs(arr[i][key])+Math.abs(arr[i-1][key]))/2;n++}}return n?s/n:NaN;}
+// Posturas con la cadera cerca de la barra (FL touch, SAT). Las variables son las del atleta: flexión de codo (FL touch)
+// o apertura del agarre (SAT), inclinación del cuerpo y progresión de las piernas. Se resuelve como cualquier hold
+// (centro de masas sobre las manos) y se devuelve a qué distancia queda el cuerpo de la barra, en la vertical del agarre (gap, m).
+// Los hombros pueden quedar hasta 10 cm al otro lado de la línea de la barra. legsCross = el cuerpo atravesaría la barra.
+function touch(P,e,armScale,tiltDeg,prog){
+  const s=solve(P,Object.assign({e:rad(e||0),th:rad(tiltDeg||0),armScale:armScale||1},progQ(prog||'full')),-0.10);
+  if(!s) return null;
+  // la barra es un punto en vista lateral (origen): el cuerpo la atraviesa si la línea hombro–cadera–rodilla–tobillo–pie pasa por x = 0 al otro lado (y < 0)
+  const L=[s.o.S,s.o.Hp,s.o.Kn,s.o.An,s.o.Toe]; let cross=false, yb=null;
+  for(let i=0;i<L.length-1;i++){const a=L[i],b=L[i+1];if((a[0]<=0&&b[0]>=0)||(a[0]>=0&&b[0]<=0)){const t=Math.abs(b[0]-a[0])<1e-9?0:(0-a[0])/(b[0]-a[0]);const y=a[1]+t*(b[1]-a[1]);if(yb===null||y<yb)yb=y;if(y<-0.01)cross=true;}}
+  s.gap=yb===null?s.o.Hp[1]:yb; s.legsCross=cross;
+  return s;
+}
+function flTouch(P,elbowDeg,prog,tiltDeg){return touch(P,elbowDeg==null?60:elbowDeg,1,tiltDeg,prog);}
+function sat(P,abdDeg,prog,tiltDeg){return touch(P,0,Math.cos(rad(abdDeg||0)),tiltDeg,prog);}
+// armDeg: ángulo del brazo por debajo de la horizontal (0 = maltese: hombros y muñecas a la misma altura). Con el centro de masas sobre las manos,
+// el brazo de palanca del hombro es la proyección horizontal del brazo entero; las piernas no lo cambian en este modelo.
+function maltese(P,armDeg,prog){
+  const f=hold(P,prog||'full',0); if(!f) return null;
+  const dx=Math.abs(f.o.S[0]), ex=Math.abs(f.o.E[0]), c=Math.cos(rad(armDeg||0)), reach=(P.L.uarm+P.L.farm)*c;
+  if(dx>reach) return null;
+  return {o:f.o,q:f.q,Tsh:f.Tsh*reach/dx,Tel:f.Tel*P.L.farm*c/ex,maltese:true};
+}
+// ---- Auxiliares ----
+// Plancha apoyada (flexiones, lean planche elevada, australian / remo con forma de front): manos en el origen y pies apoyados.
+// Dos apoyos verticales: la reacción de los pies sale del equilibrio de momentos respecto a las manos.
+// El front con pies apoyados (australian) es la misma física reflejada en vertical.
+// opt: {leanDeg: ángulo del brazo recto con la vertical arriba (+ hombros por delante de las manos), feet: 'floor'|'level', prog}
+function plankSetup(P,opt){
+  const pq=progQ(opt.prog||'full'), L=P.L.uarm+P.L.farm, a=rad(opt.leanDeg||0);
+  const phi0=Math.PI/2+a; // brazo recto: del agarre al hombro
+  const at=th=>pose(P,Object.assign({phi:phi0,e:0,th},pq));
+  let th0=0;
+  if(opt.feet==='floor'){ // pies en el suelo: la punta del pie a la altura de las manos
+    let lo=rad(-89),hi=rad(30);const f=t=>at(t).Toe[1];
+    if(f(lo)*f(hi)>0) return null;
+    for(let i=0;i<60;i++){const m=(lo+hi)/2;if(f(lo)*f(m)<=0)hi=m;else lo=m;}
+    th0=(lo+hi)/2;
+  }
+  const o0=at(th0), toe=o0.Toe, S0=o0.S, D=Math.hypot(toe[0]-S0[0],toe[1]-S0[1]);
+  const delta=Math.atan2(toe[1]-S0[1],toe[0]-S0[0])-th0;
+  return {pq,toe,D,delta,L,th0,gripLat:opt.gripLat||0};
+}
+function plankAt(P,setup,eDeg){
+  const {pq,toe,D,delta}=setup, Lu=P.L.uarm, Lf=P.L.farm, er=rad(eDeg||0);
+  const r=Math.sqrt(Lu*Lu+Lf*Lf+2*Lu*Lf*Math.cos(er)), dT=Math.hypot(toe[0],toe[1]);
+  // hombro: intersección de la circunferencia (manos, r) con la (pie, D); se toma la más alta
+  const a=(r*r-D*D+dT*dT)/(2*dT), h2=r*r-a*a; if(h2<0) return null;
+  const ux=toe[0]/dT, uy=toe[1]/dT, hh=Math.sqrt(h2);
+  const c1=[a*ux-hh*uy,a*uy+hh*ux], c2=[a*ux+hh*uy,a*uy-hh*ux], S=c1[1]>=c2[1]?c1:c2;
+  if(S[1]<0.03) return null;
+  // codo: intersección (manos, Lf) y (hombro, Lu); codo hacia los pies y arriba
+  const dS=Math.hypot(S[0],S[1]), b=(Lf*Lf-Lu*Lu+dS*dS)/(2*dS), k2=Lf*Lf-b*b, kk=Math.sqrt(Math.max(0,k2));
+  const sx=S[0]/dS, sy=S[1]/dS, E1=[b*sx-kk*sy,b*sy+kk*sx], E2=[b*sx+kk*sy,b*sy-kk*sx], E=E1[0]>=E2[0]?E1:E2;
+  const phi=Math.atan2(E[1],E[0]), erel=Math.atan2(S[1]-E[1],S[0]-E[0])-phi;
+  const th=Math.atan2(toe[1]-S[1],toe[0]-S[0])-delta;
+  const q=Object.assign({phi,e:erel,th},pq), o=pose(P,q);
+  let mx=0,m=0; for(const k in o.C){mx+=P.m[k]*o.C[k][0];m+=P.m[k];}
+  const Rt=g*mx/o.Toe[0], W=g*m; // reacción en los pies
+  if(Rt<0||Rt>W) return null;
+  let Tsh=0,Tel=0; BODY.forEach(k=>{Tsh+=P.m[k]*(o.C[k][0]-o.S[0]);Tel+=P.m[k]*(o.C[k][0]-o.E[0])});
+  Tel+=P.m.uarm*(o.C.uarm[0]-o.E[0]);
+  Tsh=g*Tsh-Rt*(o.Toe[0]-o.S[0]); Tel=g*Tel-Rt*(o.Toe[0]-o.E[0]);
+  const Rh=W-Rt, lat=setup.gripLat||0; let TshSag=Tsh, TshFront=0;
+  if(lat>0){TshFront=Rh*lat; Tsh=Math.hypot(Tsh,TshFront); Tel=Math.hypot(Tel,Rh*lat*Lf/(Lu+Lf));} // manos por fuera de los hombros: parte frontal (vista frontal)
+  return {o,q,Tsh,Tel,TshSag,TshFront,Rhand:Rh,Rfeet:Rt,W,eDeg};
+}
+// Colgado / apoyo vertical (dominadas, fondos): sin pies; el centro de masas sobre las manos.
+// mode 'pull': colgado de la barra (coordenadas reflejadas, cuerpo hacia abajo); 'dip': apoyo en paralelas, cuerpo por debajo de los hombros.
+// leanDeg: inclinación del tronco respecto a la vertical (+ hacia delante). gripLat: mano por fuera del hombro (m, solo dominadas).
+function hangAt(P,mode,eDeg,leanDeg,gripLat){
+  const th=mode==='pull'?rad(90-(leanDeg||0)):rad(-90+(leanDeg||0));
+  const s=solve(P,{e:rad(eDeg||0),th},-0.15); if(!s) return null;
+  if(mode==='pull'&&gripLat>0){
+    let m=0;BODY.forEach(k=>m+=P.m[k]); m+=P.m.uarm*0.5;
+    const L=P.L.uarm+P.L.farm, Tf=g*m*gripLat, Tfe=g*m*gripLat*P.L.farm/L;
+    s.TshSag=s.Tsh; s.TshFront=Tf; s.Tsh=Math.hypot(s.Tsh,Tf); s.Tel=Math.hypot(s.Tel,Tfe);
+  }
+  return s;
+}
+// recorrido máximo alcanzable con el codo (para avisar si el pedido no cabe)
+function maxElbow(fn,cap){let last=0;for(let d=0;d<=(cap||150);d+=1){if(!fn(d))break;last=d;}return last;}
+// ---- Vista frontal: anchura del agarre (maltese y SAT) ----
+// Cada mano soporta la mitad del peso. El torque en cada hombro es esa fuerza por la distancia horizontal hombro–mano,
+// que tiene una parte sagital (d, la de la vista lateral) y una frontal (lat = mano por fuera del hombro).
+// Plancha normal: manos bajo los hombros (lat = 0). Con brazos rectos: L² = d² + lat² + h², h = altura del hombro sobre la mano.
+function gripLat(gripCm,shWcm){return Math.max(0,(gripCm-shWcm)/200);}
+function malteseGrip(P,gripCm,shWcm,prog){
+  const L=P.L.uarm+P.L.farm, f=hold(P,prog||'full',0); if(!f) return null;
+  const d=Math.abs(f.o.S[0]), lat=gripLat(gripCm,shWcm), h2=L*L-d*d-lat*lat;
+  if(h2<-1e-9) return null;
+  const h=Math.sqrt(Math.max(0,h2)), hz=Math.hypot(d,lat), sag=Math.hypot(d,h);
+  // vista lateral: el brazo se ve acortado (proyección sagital)
+  const sx=Math.sign(f.o.S[0])||-1, qs=Object.assign({phi:Math.atan2(h,sx*d),e:0,th:0,armScale:sag/L},progQ(prog||'full')), side={o:pose(P,qs),q:qs};
+  const ex=Math.abs(f.o.E[0]);
+  return {o:side.o,q:side.q,Tsh:f.Tsh*hz/d,Tel:f.Tel*(P.L.farm/L*hz)/ex,TshSag:f.Tsh,TshFront:f.Tsh*lat/d,
+          maltese:true,grip:true,lat,d,h,L,armDown:deg(Math.asin(Math.min(1,h/L))),abd:deg(Math.atan2(lat,Math.max(1e-9,Math.hypot(d,h)))),full:h<0.005};
+}
+function malteseMaxGrip(P,shWcm,prog){const L=P.L.uarm+P.L.farm, f=hold(P,prog||'full',0); if(!f) return null; const d=Math.abs(f.o.S[0]); return d>=L?shWcm:shWcm+200*Math.sqrt(L*L-d*d);}
+function satGrip(P,gripCm,shWcm,prog,tiltDeg){
+  const L=P.L.uarm+P.L.farm, lat=gripLat(gripCm,shWcm); if(lat>=L*0.98) return null;
+  const abd=Math.asin(lat/L), s=touch(P,0,Math.cos(abd),tiltDeg,prog); if(!s) return null;
+  const d=Math.abs(s.o.S[0]), hz=Math.hypot(d,lat), k=d>1e-6?hz/d:1;
+  s.TshSag=s.Tsh; s.TshFront=Math.abs(s.Tsh)*lat/Math.max(d,1e-6); s.Tsh*=k; s.Tel*=k;
+  s.grip=true; s.lat=lat; s.d=d; s.h=Math.abs(s.o.S[1]); s.L=L; s.abd=deg(abd);
+  return s;
+}
+return {g,SEG,PROG,BANDPOS,rad,deg,defaultSeg,params,pose,com,solve,hold,powerAt,flexAt,sweep,meanAbs,flTouch,sat,maltese,progQ,bandPoint,gripLat,malteseGrip,malteseMaxGrip,satGrip,plankSetup,plankAt,hangAt,maxElbow};
+})();
+
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id), rad=LAD.rad;
+const segBox=$('segfields');
+LAD.SEG.forEach(s=>{const l=document.createElement('label');l.htmlFor='L_'+s.k;l.innerHTML=s.name+' <small>'+s.hint+'</small>';const i=document.createElement('input');i.type='number';i.step='0.1';i.id='L_'+s.k;segBox.append(l,i);});
+LAD.BANDPOS.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;$('bandAt').append(o)});
+LAD.PROG.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('base').append(o)});
+$('base').value='full';
+LAD.PROG.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('skProg').append(o)});
+$('skProg').value='full';
+const ids=['H','M','legfull','bandKg','bandAt','base','tilt0','hipP','extP','hipN','extN','fdepth','tiltb','flE','shW','malGrip','satGrip','axEx','axGrip','axLean','axE','axT','techoP','techoF','dur','reps','skProg','flTilt','satTilt',...LAD.SEG.map(s=>'L_'+s.k)];
+function defaults(){const d=LAD.defaultSeg(+$('H').value||168);LAD.SEG.forEach(s=>$('L_'+s.k).value=d[s.k]);$('shW').value=Math.round(0.23*(+$('H').value||168)*2)/2;}
+let saved=null;try{saved=JSON.parse(localStorage.getItem('lad-sim')||'null')}catch(e){}
+let fam='plancha', mv='press', sCur=0, view=null, sk=null;
+function fillTecho(){
+  [['techoP','plancha'],['techoF','front']].forEach(([id,f])=>{staticList(f).forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name;$(id).append(o)});$(id).value='full';});
+}
+function techoId(){return fam==='plancha'?$('techoP').value:$('techoF').value;}
+function staticList(f){
+  f=f||fam;
+  const l=LAD.PROG.map(p=>({id:p.id,name:p.name}));
+  if(f==='plancha') l.push({id:'maltese',name:'Maltese (completa)'}); else {l.push({id:'fltouch',name:'Front lever touch'});l.push({id:'sat',name:'SAT (straight arm touch)'});}
+  return l;
+}
+fillTecho();
+if(saved){ids.forEach(id=>{if(saved[id]!=null&&saved[id]!==''&&$(id))$(id).value=saved[id]});if(saved.techo&&!saved.techoP)$('techoP').value=saved.techo;}
+if(!saved||saved['L_uarm']==null) defaults();
+function save(){try{const o={};ids.forEach(id=>o[id]=$(id).value);localStorage.setItem('lad-sim',JSON.stringify(o))}catch(e){}}
+$('reset').addEventListener('click',()=>{defaults();update();});
+const fmt=(v,d=0)=>isFinite(v)?v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+
+let P,opt,hold,curves={};
+function cfg(){const seg={};LAD.SEG.forEach(s=>seg[s.k]=+$('L_'+s.k).value);return {H:+$('H').value||168,M:+$('M').value||65,seg,legfull:+$('legfull').value||0,bandKg:+$('bandKg').value||0,bandAt:$('bandAt').value};}
+function getOpt(){return {front:fam==='front',base:$('base').value,tilt:+$('tilt0').value,hipP:Math.abs(+$('hipP').value)-Math.abs(+$('extP').value),hipN:Math.abs(+$('hipN').value)-Math.abs(+$('extN').value),fdepth:+$('fdepth').value,tiltb:+$('tiltb').value};}
+function shWV(){return +$('shW').value||Math.round(0.23*(+$('H').value||168)*2)/2;}
+function malMax(){const v=LAD.malteseMaxGrip(P0||LAD.params(cfg()),shWV(),'full');return v==null?shWV():Math.floor(v*2)/2;}
+function malGripV(){const v=+$('malGrip').value;if(v>0)return v;const m=LAD.malteseMaxGrip(P0||LAD.params(cfg()),shWV(),'full');return m==null?shWV():m-1e-6;}
+function satGripV(){const v=+$('satGrip').value;return v>0?v:shWV();}
+function syncGrip(){
+  const sw=shWV(), mm=malMax(), Lc=(P?(P.L.uarm+P.L.farm):0.53)*100;
+  const mpv=LAD.malteseMaxGrip(P0||LAD.params(cfg()),sw,$('skProg').value), mp=mpv==null?mm:Math.floor(mpv*2)/2;
+  [['malGrip','malGripR',sw,Math.max(mm,mp)],['satGrip','satGripR',sw,Math.floor((sw+2*Lc*0.9)*2)/2]].forEach(([n,r,lo,hi])=>{const R_=$(r);R_.min=lo;R_.max=hi;$(n).placeholder=fmt(n==='malGrip'?mm:sw);let v=+$(n).value;if(!(v>0))v=n==='malGrip'?mm:sw;v=Math.min(Math.max(v,lo),hi+50);R_.value=Math.min(v,hi);});
+}
+// En las tablas y en el techo, «Maltese» es siempre la maltese completa (hombros a la altura de las muñecas, piernas en full),
+// sea cual sea la apertura que tengas puesta en el simulador.
+function tableState(id,Pp){Pp=Pp||P;if(id!=='maltese')return staticState(id,Pp);const m=LAD.malteseMaxGrip(Pp,shWV(),'full');return m==null?null:LAD.malteseGrip(Pp,m-1e-6,shWV(),'full');}
+function staticState(id,Pp){
+  Pp=Pp||P;
+  const pr=$('skProg').value;
+  if(id==='maltese') return LAD.malteseGrip(Pp,malGripV(),shWV(),pr);
+  if(id==='fltouch') return LAD.flTouch(Pp,+$('flE').value,pr,+$('flTilt').value);
+  if(id==='sat') return LAD.satGrip(Pp,satGripV(),shWV(),pr,+$('satTilt').value);
+  return LAD.hold(Pp,id,opt.tilt);
+}
+let P0;
+function compute(){
+  const cf=cfg(); P=LAD.params(cf); P0=LAD.params(Object.assign({},cf,{bandKg:0})); opt=getOpt();
+  hold=LAD.hold(P,opt.base,opt.tilt);
+  ['press','neg','flex'].forEach(m=>curves[m]=LAD.sweep(P,m,opt));
+}
+const MUS={
+ plancha:{hold:'Brazo recto: bíceps como flexor frente a la extensión del codo, con coactivación del tríceps.',press:'Brazo recto, misma dirección de torque que el hold.',neg:'Brazo recto, mismo torque que el press; acción excéntrica.',flex:'Tríceps al subir (concéntrico) y al bajar (excéntrico); en el bloqueo, bíceps con coactivación del tríceps.'},
+ front:{hold:'Brazo recto en suspensión: bíceps y flexores del codo frente a la extensión.',press:'Brazo recto, misma dirección de torque que el hold.',neg:'Brazo recto, mismo torque que el press; acción excéntrica.',flex:'Flexores del codo (bíceps, braquial) al subir (concéntrico) y al bajar (excéntrico).'}
+};
+function names(){return fam==='plancha'?{press:['Press','plancha → pino'],neg:['Negativa','pino → plancha'],flex:['Flexión','plancha → abajo → plancha']}:{press:['Press','front → colgado invertido'],neg:['Negativa','colgado invertido → front'],flex:['Pull-up','front → tirón hacia la barra → front']};}
+function renderTable(){
+  if(!hold){$('restbl').innerHTML='<tr><td colspan="8" class="warn">La postura base no es posible con estas medidas y esta goma.</td></tr>';return;}
+  const nm=names(), hs=Math.abs(hold.Tsh), he=Math.abs(hold.Tel);
+  const r={};['press','neg','flex'].forEach(m=>{const c=curves[m];r[m]={s:LAD.meanAbs(c,'Tsh')/hs,e:LAD.meanAbs(c,'Tel')/he,ok:c.every(Boolean),ms:Math.max(...c.filter(Boolean).map(x=>Math.abs(x.Tsh))),me:Math.max(...c.filter(Boolean).map(x=>Math.abs(x.Tel)))}});
+  const top=Math.max(1,r.press.s,r.neg.s,r.flex.s);
+  let h='<tr><td><b>Hold</b></td><td>referencia</td><td class="n">1,00</td><td class="n">1,00</td><td class="n">'+fmt(hs)+'</td><td class="n">'+fmt(he)+'</td><td class="n">'+fmt(1/top,2)+'</td><td>'+MUS[fam].hold+'</td></tr>';
+  ['press','neg','flex'].forEach(m=>{h+='<tr><td><b>'+nm[m][0]+'</b>'+(r[m].ok?'':' <span class="warn">(posiciones imposibles omitidas)</span>')+'</td><td>'+nm[m][1]+'</td><td class="n big">'+fmt(r[m].s,2)+'</td><td class="n big">'+fmt(r[m].e,2)+'</td><td class="n">'+fmt(r[m].ms)+'</td><td class="n">'+fmt(r[m].me)+'</td><td class="n">'+fmt(r[m].s/top,2)+'</td><td>'+MUS[fam][m]+'</td></tr>'});
+  $('restbl').innerHTML=h;
+  $('holdinfo').textContent='Hold de la postura base ('+LAD.PROG.find(p=>p.id===opt.base).name.toLowerCase()+'): '+fmt(hs)+' N·m en el hombro y '+fmt(he)+' N·m en el codo, sumando los dos brazos.'+(P.bandF>0?' Con goma de '+fmt(+$('bandKg').value)+' kg.':'')+(P.legScale!==1?' Pierna extendida medida: muslo, pierna y pie escalados ×'+fmt(P.legScale,3)+'.':'');
+}
+function renderHip(){
+  if(!hold){$('hiptbl').innerHTML='';return;}
+  const angs=[-60,-45,-30,-15,0,15,30,45,60,90], hs=Math.abs(hold.Tsh);
+  const cp=Math.round(opt.hipP), cn=Math.round(opt.hipN);
+  const list=[...new Set(angs.concat([cp,cn]))].sort((a,b)=>a-b);
+  const res=list.map(a=>{const c=LAD.sweep(P,'press',Object.assign({},opt,{hipP:a}),61);return {a,f:LAD.meanAbs(c,'Tsh')/hs,ok:c.every(Boolean)}});
+  const base=res.find(x=>x.a===0).f;
+  $('hiptbl').innerHTML=res.map(x=>{const lab=x.a===0?'Recta (técnica perfecta)':(x.a<0?'Extensión '+(-x.a)+'°':'Flexión (carpado) '+x.a+'°');const now=[x.a===cp?'press':'',x.a===cn?'negativa':''].filter(Boolean).join(' y ');const d=(x.f/base-1)*100;return '<tr'+(now?' class="cur"':'')+'><td>'+lab+(x.ok?'':' <span class="warn">(con posiciones imposibles)</span>')+'</td><td class="n big">'+fmt(x.f,2)+'</td><td class="n">'+(x.a===0?'—':(d>0?'+':'')+fmt(d)+' %')+'</td><td>'+now+'</td></tr>'}).join('');
+}
+function renderInt1(){
+  const list=staticList(), full=LAD.hold(P,'full',opt.tilt), t=tableState(techoId(),P0);
+  $('techoNote').textContent='Tu techo: '+(list.find(x=>x.id===techoId())||{}).name+(t?' ('+fmt(Math.abs(t.Tsh)+Math.abs(t.Tel))+' N·m de hombro + codo, sin goma)':'');
+  $('int1tbl').innerHTML=list.map(x=>{
+    const s=tableState(x.id), isT=x.id===techoId(), isV=view===x.id;
+    if(!s) return '<tr><td>'+x.name+'</td><td colspan="4" class="warn">No alcanzable con estas medidas</td></tr>';
+    const ts=Math.abs(s.Tsh)+Math.abs(s.Tel), pf=full?ts/(Math.abs(full.Tsh)+Math.abs(full.Tel)):NaN, i1=t?ts/(Math.abs(t.Tsh)+Math.abs(t.Tel))*10:NaN;
+    return '<tr tabindex="0" data-view="'+x.id+'"'+(isT||isV?' class="cur"':'')+'><td>'+x.name+(isT?' <span class="pill">techo</span>':'')+(isV?' <span class="pill">en la figura</span>':'')+'</td><td class="n">'+fmt(Math.abs(s.Tsh))+'</td><td class="n">'+fmt(Math.abs(s.Tel))+'</td><td class="n big">'+fmt(pf,3)+'</td><td class="n">'+fmt(i1,1)+'</td></tr>';
+  }).join('');
+  $('int1tbl').querySelectorAll('tr[data-view]').forEach(tr=>{const go=()=>{view=tr.dataset.view;if(view==='maltese'){$('malGrip').value='';$('skProg').value='full';sk='maltese';}else sk=null;setTabs();renderInt1();renderFigure();renderChart();renderImpulse();document.getElementById('h-fig').scrollIntoView({behavior:'smooth',block:'start'})};tr.addEventListener('click',()=>{window.LADtab&&window.LADtab('sim');go();});tr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+  $('int1note').textContent=(fam==='front'?'Front lever touch: codos a '+$('flE').value+'° e inclinación '+$('flTilt').value+'°. SAT: brazos extendidos, manos a '+fmt(satGripV())+' cm e inclinación '+$('satTilt').value+'°. Piernas: '+$('skProg').selectedOptions[0].text.toLowerCase()+'. ':'Maltese completa: hombros a la altura de las muñecas y piernas en full (manos a '+fmt((LAD.malteseMaxGrip(P0||P,shWV(),'full')||0))+' cm); la apertura que pongas en el simulador no cambia esta fila. ')+'El straddle y el straddle half se calculan proyectando las piernas abiertas sobre el plano lateral.';
+}
+function renderImpulse(){
+  const dur=Math.max(0.01,+$('dur').value||1), nm=names(), base=LAD.PROG.find(p=>p.id===opt.base).name;
+  const fState=tableState('full',P0), Tt=fState?Math.abs(fState.Tsh)+Math.abs(fState.Tel):NaN;
+  const rows=[], hs=hold?Math.abs(hold.Tsh):NaN, he=hold?Math.abs(hold.Tel):NaN;
+  rows.push({k:'hold',n:'Hold',sh:hs*dur,el:he*dur});
+  ['press','neg','flex'].forEach(m=>{const c=curves[m];rows.push({k:m,n:nm[m][0],sh:LAD.meanAbs(c,'Tsh')*dur,el:LAD.meanAbs(c,'Tel')*dur});});
+  const top=Math.max(...rows.map(r=>r.sh+r.el).filter(isFinite));
+  let cur, label, i2, i1;
+  if(view){const s=staticState(view),name=(staticList().find(x=>x.id===view)||{}).name;cur=s?{sh:Math.abs(s.Tsh)*dur,el:Math.abs(s.Tel)*dur}:{sh:NaN,el:NaN};label=(sk?'':(fam==='plancha'?'Plancha':'Front lever')+' · ')+'hold de '+name+(sk?' · piernas '+$('skProg').selectedOptions[0].text.split(' (')[0].toLowerCase():'');i2=1;i1=s?(Math.abs(s.Tsh)+Math.abs(s.Tel))/Tt*100:NaN;}
+  else{cur=rows.find(r=>r.k===mv);label=(fam==='plancha'?'Plancha':'Front lever')+' · '+nm[mv][0].toLowerCase()+' desde '+base.toLowerCase();i2=(cur.sh+cur.el)/((hs+he)*dur);i1=hold?(hs+he)/Tt*100:NaN;}
+  const extra=[];
+  if(P.bandF>0) extra.push('goma '+fmt(+$('bandKg').value)+' kg ('+LAD.BANDPOS.find(b=>b.id===P.bandAt).name.split(' (')[0].toLowerCase()+')');
+  if(!view&&mv==='press'&&opt.hipP) extra.push(opt.hipP>0?'carpado '+opt.hipP+'°':'extensión de cadera '+(-opt.hipP)+'°');
+  if(!view&&mv==='neg'&&opt.hipN) extra.push(opt.hipN>0?'carpado '+opt.hipN+'°':'extensión de cadera '+(-opt.hipN)+'°');
+  if(!view&&mv==='flex'){const c=curves.flex, deep=c[Math.floor(c.length/2)];extra.push('bajada '+opt.fdepth+' %'+(deep?' (codo hasta '+fmt(LAD.deg(deep.q.e))+'°, centro de masas a '+fmt(LAD.com(P,deep.o)[1]*100)+' cm de '+(fam==='front'?'la barra':'las muñecas')+')':''));}
+  const stS=sk?staticState(sk):null;
+  if(sk==='fltouch') extra.push('codo '+$('flE').value+'° · inclinación '+$('flTilt').value+'°');
+  if(sk==='sat') extra.push('manos a '+fmt(satGripV())+' cm'+(stS?' (abducción '+fmt(stS.abd)+'°)':'')+' · inclinación '+$('satTilt').value+'°');
+  if(stS&&stS.gap!=null) extra.push(stS.legsCross?'el cuerpo atravesaría la barra: no es real':'cuerpo a '+fmt(stS.gap*100)+' cm de la barra');
+  if(sk==='maltese') extra.push('manos a '+fmt(malGripV())+' cm'+(stS?' · brazo '+fmt(stS.armDown)+'° bajo la horizontal':''));
+  if(opt.tilt&&!sk) extra.push('inclinación '+opt.tilt+'°');
+  $('impSel').textContent=label+(extra.length?' · '+extra.join(' · '):'')+' · '+fmt(dur,2)+' s';
+  $('iSh').textContent=fmt(cur.sh); $('iEl').textContent=fmt(cur.el);
+  const reps=Math.max(1,Math.round(+$('reps').value||1)), tot=(cur.sh+cur.el)*reps;
+  $('iTot').textContent=fmt(tot); $('iTotL').textContent='Total · hombro + codo'+(reps>1?' × '+reps+' reps':'')+' (N·m·s)';
+  $('iI2').textContent=fmt(i2,2); $('iI1').textContent=isFinite(i1)?fmt(i1)+' %':'—'; $('iLAD').textContent=isFinite(i1)?fmt(i1/100*i2*dur*reps,2):'—';
+  $('iI1l').textContent='INT1 · hombro + codo ÷ full (sin goma)';
+  $('impTbl').innerHTML=rows.map(r=>'<tr'+(!view&&r.k===mv?' class="cur"':'')+'><td>'+r.n+'</td><td class="n">'+fmt(r.sh)+'</td><td class="n">'+fmt(r.el)+'</td><td class="n">'+fmt((r.sh+r.el)/top,2)+'</td></tr>').join('');
+}
+function renderPop(){
+  const Hs=[150,160,170,180,190,200], Ms=[50,60,70,80,90,100];
+  let h='<thead><tr><th>Altura \\ peso</th>'+Ms.map(m=>'<th>'+m+' kg</th>').join('')+'</tr></thead><tbody>';
+  Hs.forEach(H=>{h+='<tr><td class="n">'+H+' cm</td>'+Ms.map(M=>{const Pp=LAD.params({H,M,seg:LAD.defaultSeg(H)});const s=LAD.hold(Pp,'full',0);return '<td class="n">'+(s?fmt(Math.abs(s.Tsh)):'—')+'</td>'}).join('')+'</tr>'});
+  $('poptbl').innerHTML=h+'</tbody>';
+}
+function currentState(){return view?staticState(view):LAD.powerAt(P,mv,sCur,opt);}
+function seg(p,q,X,Y,st,w){return '<line x1="'+X(p)+'" y1="'+Y(p)+'" x2="'+X(q)+'" y2="'+Y(q)+'" style="stroke:'+st+'" stroke-width="'+w+'" stroke-linecap="round"/>';}
+function frontView(st,front){
+  const W=420,H=250, sw=shWV()/100, grip=(sw+2*st.lat), L=st.L, lat=st.lat, h=st.h, Lf=P.L.farm;
+  const sc=Math.min(340/Math.max(grip,0.6), 150/Math.max(L,0.4), 260), ox=W/2, oy=front?60:200, sy=front?-1:1;
+  const X=x=>(ox+x*sc).toFixed(1), Y=y=>(oy-sy*y*sc).toFixed(1);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Vista frontal: anchura del agarre">';
+  if(front) s+='<line x1="20" y1="'+oy+'" x2="'+(W-20)+'" y2="'+oy+'" style="stroke:var(--muted)" stroke-width="6" stroke-linecap="round"/>';
+  else s+='<line x1="20" y1="'+(oy+14)+'" x2="'+(W-20)+'" y2="'+(oy+14)+'" style="stroke:var(--line)" stroke-width="2"/>';
+  // torso visto de frente (sección) y cabeza
+  const tw=sw*0.95, td=0.20;
+  s+='<ellipse cx="'+X(0)+'" cy="'+Y(h)+'" rx="'+(tw/2*sc).toFixed(1)+'" ry="'+(td/2*sc).toFixed(1)+'" style="fill:var(--line);stroke:var(--ink)" stroke-width="2"/>';
+  s+='<circle cx="'+X(0)+'" cy="'+Y(h+sy*0)+'" r="'+(0.06*sc).toFixed(1)+'" style="fill:var(--ink)"/>';
+  [-1,1].forEach(k=>{
+    const hx=k*grip/2, shx=k*sw/2, ex=hx+(shx-hx)*(Lf/L), ey=h*(Lf/L);
+    s+='<line x1="'+X(hx)+'" y1="'+Y(0)+'" x2="'+X(ex)+'" y2="'+Y(ey)+'" style="stroke:var(--accent2)" stroke-width="7" stroke-linecap="round"/>';
+    s+='<line x1="'+X(ex)+'" y1="'+Y(ey)+'" x2="'+X(shx)+'" y2="'+Y(h)+'" style="stroke:var(--accent)" stroke-width="8" stroke-linecap="round"/>';
+    s+='<circle cx="'+X(shx)+'" cy="'+Y(h)+'" r="6" style="fill:var(--accent)"/><circle cx="'+X(hx)+'" cy="'+Y(0)+'" r="6" style="fill:var(--ink)"/>';
+    // vertical de la plancha normal (hombro sobre la muñeca)
+    s+='<line x1="'+X(shx)+'" y1="'+Y(0)+'" x2="'+X(shx)+'" y2="'+Y(h)+'" style="stroke:var(--muted)" stroke-dasharray="3 4"/>';
+  });
+  // cotas
+  const yd=front?oy-26:oy+32;
+  s+='<line x1="'+X(-grip/2)+'" y1="'+yd+'" x2="'+X(grip/2)+'" y2="'+yd+'" style="stroke:var(--ink)" stroke-width="1.5"/><text x="'+ox+'" y="'+(yd+(front?-6:14))+'" text-anchor="middle" font-size="12" style="fill:var(--ink)">manos '+fmt(grip*100)+' cm</text>';
+  const ys=+Y(h)+(front?1:-1)*(td/2*sc+14);
+  s+='<text x="'+ox+'" y="'+ys+'" text-anchor="middle" font-size="11" style="fill:var(--muted)">hombros '+fmt(sw*100)+' cm</text>';
+  s+='</svg>';
+  const extra=st.maltese?'Brazo '+fmt(st.armDown)+'° bajo la horizontal'+(st.full?' (maltese completa)':lat<0.005?' (plancha normal)':'')+' · ':'';
+  s+='<p class="fnote">'+extra+'mano '+fmt(lat*100)+' cm por fuera del hombro · abducción '+fmt(st.abd)+'°.<br>Torque del hombro (los dos): sagital '+fmt(Math.abs(st.TshSag))+' N·m · frontal '+fmt(Math.abs(st.TshFront))+' N·m · combinado '+fmt(Math.abs(st.Tsh))+' N·m (suma vectorial).</p>';
+  return s;
+}
+function renderFigure(){
+  const nm=names(), list=staticList();
+  $('h-fig').textContent=view?(list.find(x=>x.id===view)||{}).name+' · hold':nm[mv][0]+' · '+nm[mv][1];
+  $('playrow').style.opacity=view?'.45':'1'; $('s').disabled=!!view; $('play').disabled=!!view;
+  const st=currentState(), W=640,H=340, sc=Math.min(210,240/(P.H||1.68)), ox=320, front=fam==='front', oy=front?165:300, sy=front?-1:1;
+  const X=p=>(ox+p[0]*sc).toFixed(1), Y=p=>(oy-sy*p[1]*sc).toFixed(1);
+  let h='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Figura del cuerpo en la posición actual">';
+  if(front){h+='<line x1="'+(ox-60)+'" y1="'+oy+'" x2="'+(ox+60)+'" y2="'+oy+'" style="stroke:var(--muted)" stroke-width="6" stroke-linecap="round"/><line x1="'+(ox-60)+'" y1="'+(oy-40)+'" x2="'+(ox-60)+'" y2="'+oy+'" style="stroke:var(--line)" stroke-width="4"/><line x1="'+(ox+60)+'" y1="'+(oy-40)+'" x2="'+(ox+60)+'" y2="'+oy+'" style="stroke:var(--line)" stroke-width="4"/>';}
+  else{h+='<line x1="40" y1="'+(oy+18)+'" x2="600" y2="'+(oy+18)+'" style="stroke:var(--line)" stroke-width="2"/><rect x="'+(ox-14)+'" y="'+oy+'" width="28" height="18" rx="3" style="fill:var(--line)"/>';}
+  if(!st){h+='<text x="320" y="170" text-anchor="middle" style="fill:var(--warn)" font-size="14">Posición imposible con estas medidas</text></svg>';$('figure').innerHTML=h;$('figwarn').hidden=false;$('figwarn').textContent=sk==='fltouch'?'Con esta flexión de codo los brazos no llegan a poner el centro de masas bajo las manos. Baja la flexión del codo o usa una progresión más corta.':sk==='sat'?'Con este agarre el centro de masas no queda bajo las manos. Cierra un poco el agarre.':sk==='maltese'?'Con este agarre los brazos no llegan: más allá de la maltese los hombros tendrían que quedar por debajo de las muñecas. Cierra el agarre.':'El brazo no alcanza a colocar el centro de masas bajo o sobre el agarre en esta posición. Cambia la flexión del codo, la inclinación o la goma.';['rSh','rEl','rLean'].forEach(i=>$(i).textContent='—');return;}
+  $('figwarn').hidden=true;
+  const o=st.o,B='var(--ink)',A='var(--accent)';
+  h+=seg(o.S,o.Head,X,Y,B,9)+'<circle cx="'+X(o.Head)+'" cy="'+Y(o.Head)+'" r="13" style="fill:var(--ink)"/>';
+  h+=seg(o.S,o.Hp,X,Y,B,12)+seg(o.Hp,o.Kn,X,Y,B,10)+seg(o.Kn,o.An,X,Y,B,8)+seg(o.An,o.Toe,X,Y,B,6);
+  h+=seg(o.W,o.E,X,Y,'var(--accent2)',7)+seg(o.E,o.S,X,Y,A,8);
+  h+='<circle cx="'+X(o.S)+'" cy="'+Y(o.S)+'" r="6" style="fill:var(--accent)"/><circle cx="'+X(o.E)+'" cy="'+Y(o.E)+'" r="5" style="fill:var(--accent2)"/>';
+  if(P.bandF>0){const bp=LAD.bandPoint(P,o),bx=+X(bp),by=+Y(bp),y2=front?oy:by-80;h+='<line x1="'+bx+'" y1="'+by+'" x2="'+bx+'" y2="'+y2+'" style="stroke:var(--band)" stroke-width="3" stroke-dasharray="2 4"/><circle cx="'+bx+'" cy="'+by+'" r="4" style="fill:var(--band)"/><text x="'+(bx+8)+'" y="'+((by+y2)/2)+'" font-size="11" style="fill:var(--band)">goma '+fmt(+$('bandKg').value)+' kg</text>';}
+  const c=LAD.com(P,o), cx=+X(c), cy=+Y(c);
+  h+='<line x1="'+cx+'" y1="'+cy+'" x2="'+cx+'" y2="'+oy+'" style="stroke:var(--muted)" stroke-dasharray="4 4"/><circle cx="'+cx+'" cy="'+cy+'" r="7" style="fill:var(--panel);stroke:var(--ink)" stroke-width="2"/><circle cx="'+cx+'" cy="'+cy+'" r="2.5" style="fill:var(--ink)"/>';
+  h+='<text x="'+(cx+10)+'" y="'+(cy-10)+'" font-size="12" style="fill:var(--muted)">centro de masas</text>';
+  if(!st.maltese){const sx=+X(o.S), yl=front?oy-18:oy+32;h+='<line x1="'+sx+'" y1="'+yl+'" x2="'+cx+'" y2="'+yl+'" style="stroke:var(--accent)" stroke-width="2"/><text x="'+((sx+cx)/2)+'" y="'+(yl-5)+'" text-anchor="middle" font-size="11" style="fill:var(--accent)">'+fmt(Math.abs(c[0]-o.S[0])*100,1)+' cm</text>';}
+  else{h+='<text x="320" y="'+(H-10)+'" text-anchor="middle" font-size="12" style="fill:var(--muted)">El brazo se ve acortado: parte de su longitud va hacia fuera (vista frontal)</text>';}
+  h+='</svg>';
+  $('figure').innerHTML=st.grip?'<div class="views"><div><div class="vt">Vista lateral</div>'+h+'</div><div><div class="vt">Vista frontal</div>'+frontView(st,front)+'</div></div>':h;
+  $('rSh').textContent=fmt(Math.abs(st.Tsh)); $('rEl').textContent=fmt(Math.abs(st.Tel));
+  $('rElDir').textContent='Torque en el codo (N·m, los dos brazos) · tiende a '+(st.Tel>0?'extender':'flexionar')+' el codo';
+  $('rLean').textContent=fmt(Math.abs(90-LAD.deg(st.q.phi)))+'°';
+}
+function renderChart(){
+  const c=curves[mv], W=640,H=250,x0=52,x1=620,y0=30,y1=210;
+  if(!hold){$('chart').innerHTML='';return;}
+  const vals=c.filter(Boolean).flatMap(x=>[Math.abs(x.Tsh),Math.abs(x.Tel)]).concat([Math.abs(hold.Tsh)]);
+  let top=Math.max(...vals)*1.12;const step=top>300?100:50;top=Math.ceil(top/step)*step;
+  const X=i=>x0+(x1-x0)*i/(c.length-1),Y=v=>y1-(y1-y0)*v/top;
+  let h='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Torque en el hombro y el codo a lo largo del recorrido">';
+  for(let v=0;v<=top;v+=step)h+='<line x1="'+x0+'" x2="'+x1+'" y1="'+Y(v)+'" y2="'+Y(v)+'" style="stroke:var(--line)"/><text x="'+(x0-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="11" style="fill:var(--muted)">'+v+'</text>';
+  [0,25,50,75,100].forEach(p=>h+='<text x="'+(x0+(x1-x0)*p/100)+'" y="'+(y1+18)+'" text-anchor="middle" font-size="11" style="fill:var(--muted)">'+p+' %</text>');
+  h+='<text x="'+((x0+x1)/2)+'" y="'+(H-4)+'" text-anchor="middle" font-size="11" style="fill:var(--muted)">Progreso del recorrido · '+names()[mv][0].toLowerCase()+'</text><text x="'+(x0-8)+'" y="12" text-anchor="end" font-size="11" style="fill:var(--muted)">N·m</text>';
+  h+='<line x1="'+x0+'" x2="'+x1+'" y1="'+Y(Math.abs(hold.Tsh))+'" y2="'+Y(Math.abs(hold.Tsh))+'" style="stroke:var(--accent)" stroke-dasharray="5 5" opacity=".6"/><line x1="'+x0+'" x2="'+x1+'" y1="'+Y(Math.abs(hold.Tel))+'" y2="'+Y(Math.abs(hold.Tel))+'" style="stroke:var(--accent2)" stroke-dasharray="5 5" opacity=".6"/>';
+  const path=k=>{let d='',pen=false;c.forEach((p,i)=>{if(!p){pen=false;return}d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(Math.abs(p[k])).toFixed(1)+' ';pen=true});return d};
+  h+='<path d="'+path('Tsh')+'" fill="none" style="stroke:var(--accent)" stroke-width="2.5"/><path d="'+path('Tel')+'" fill="none" style="stroke:var(--accent2)" stroke-width="2.5"/>';
+  if(!view){const xi=x0+(x1-x0)*sCur;h+='<line x1="'+xi+'" x2="'+xi+'" y1="'+y0+'" y2="'+y1+'" style="stroke:var(--ink)" opacity=".35"/>';}
+  $('chart').innerHTML=h+'</svg>';
+}
+function update(){save();compute();syncGrip();renderTable();renderHip();renderInt1();renderFigure();renderChart();renderImpulse();if(window.renderAuxReady)renderAux();}
+ids.forEach(id=>{const el=$(id);el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{if(id==='H'&&!$('H').value)return;update()})});
+function setTabs(){document.querySelectorAll('[data-fam]').forEach(x=>x.setAttribute('aria-pressed',!sk&&x.dataset.fam===fam?'true':'false'));document.querySelectorAll('[data-sk]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.sk===sk?'true':'false'));document.querySelectorAll('[data-mv]').forEach(x=>{x.disabled=!!sk;x.setAttribute('aria-pressed',!sk&&!view&&x.dataset.mv===mv?'true':'false')});$('chartPanel').hidden=!!sk;$('playrow').hidden=!!sk;$('gripCtl').hidden=!sk;$('malCtl').hidden=sk!=='maltese';$('satCtl').hidden=sk!=='sat';}
+document.querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>{sk=b.dataset.sk;fam=sk==='maltese'?'plancha':'front';view=sk;setTabs();$('mvflex').textContent=fam==='plancha'?'Flexión':'Pull-up';update();}));
+document.querySelectorAll('[data-fam]').forEach(b=>b.addEventListener('click',()=>{fam=b.dataset.fam;view=null;sk=null;setTabs();$('mvflex').textContent=fam==='plancha'?'Flexión':'Pull-up';update();}));
+document.querySelectorAll('[data-mv]').forEach(b=>b.addEventListener('click',()=>{mv=b.dataset.mv;view=null;sk=null;setTabs();renderInt1();renderFigure();renderChart();renderImpulse();}));
+$('s').addEventListener('input',()=>{sCur=+$('s').value/100;$('sval').textContent=$('s').value+' %';renderFigure();renderChart();});
+let raf=null,t0=0;const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('play').addEventListener('click',()=>{
+  if(raf){cancelAnimationFrame(raf);raf=null;$('play').textContent='Reproducir';return}
+  if(reduce){sCur=1;$('s').value=100;$('sval').textContent='100 %';renderFigure();renderChart();return}
+  $('play').textContent='Pausa';t0=performance.now()-sCur*3000;
+  const step=t=>{sCur=((t-t0)%3000)/3000;$('s').value=Math.round(sCur*100);$('sval').textContent=$('s').value+' %';renderFigure();renderChart();raf=requestAnimationFrame(step)};
+  raf=requestAnimationFrame(step);
+});
+[['malGripR','malGrip'],['satGripR','satGrip']].forEach(([r,n])=>$(r).addEventListener('input',()=>{$(n).value=$(r).value;update();}));
+$('malNormal').addEventListener('click',()=>{$('malGrip').value=shWV();update();});
+$('malFull').addEventListener('click',()=>{$('malGrip').value='';update();});
+$('malProg').addEventListener('click',()=>{const m=LAD.malteseMaxGrip(P0||LAD.params(cfg()),shWV(),$('skProg').value);$('malGrip').value=m==null?shWV():Math.floor(m*2)/2;update();});
+$('satNormal').addEventListener('click',()=>{$('satGrip').value=shWV();update();});
+// ---------- Auxiliares ----------
+const AXDEF={
+  flex:{kind:'plank',feet:'floor',mirror:false,sk:'plancha',move:true,lean:0,e:90,leanL:'Inclinación del brazo arriba <small>° respecto a la vertical; 0 = manos bajo los hombros</small>',grip:true},
+  leanel:{kind:'plank',feet:'level',mirror:false,sk:'plancha',move:false,lean:30,leanL:'Inclinación del brazo (lean) <small>° respecto a la vertical (ejemplo 30°; con el ángulo de tu plancha full los pies ya no cargan)</small>',grip:true},
+  aus:{kind:'plank',feet:'level',mirror:true,sk:'front',move:true,lean:0,e:90,leanL:'Inclinación del brazo abajo <small>° respecto a la vertical; 0 = manos sobre los hombros</small>',grip:true},
+  pull:{kind:'hang',mode:'pull',mirror:true,sk:'front',move:true,lean:0,e:130,leanL:'Inclinación del tronco <small>° respecto a la vertical</small>',grip:true},
+  dip:{kind:'hang',mode:'dip',mirror:false,sk:'plancha',move:true,lean:0,e:90,leanL:'Inclinación del tronco hacia delante <small>° respecto a la vertical</small>',grip:false}
+};
+let axLast=null;
+function axSetupUI(reset){
+  const d=AXDEF[$('axEx').value];
+  $('axLeanL').innerHTML=d.leanL;
+  $('axGrip').parentNode && ($('axGrip').disabled=!d.grip);
+  $('axE').hidden=!d.move; $('axEL').hidden=!d.move;
+  $('axTL').innerHTML=d.move?'Segundos por repetición <small>1,5″ estándar (no purista)</small>':'Segundos del hold';
+  if(reset){$('axLean').value=d.lean; if(d.move)$('axE').value=d.e; $('axT').value=d.move?1.5:10;}
+}
+function axState(d,e,Pp){
+  const lat=d.grip?Math.max(0,((+$('axGrip').value||shWV())-shWV())/200):0, lean=+$('axLean').value||0;
+  if(d.kind==='plank'){const su=LAD.plankSetup(Pp,{leanDeg:lean,feet:d.feet,gripLat:lat});return su?LAD.plankAt(Pp,su,e):null;}
+  return LAD.hangAt(Pp,d.mode,e,lean,lat);
+}
+function axDraw(st,d){
+  const o=st.o, pts=[o.W,o.E,o.S,o.Hp,o.Kn,o.An,o.Toe,o.Head];
+  const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
+  const minx=Math.min(...xs,0)-0.15, maxx=Math.max(...xs,0)+0.15, miny=Math.min(...ys,0)-0.1, maxy=Math.max(...ys,0)+0.15;
+  const W=560,H=260, sc=Math.min((W-40)/(maxx-minx),(H-40)/(maxy-miny));
+  const X=p=>(20+(p[0]-minx)*sc).toFixed(1), Y=p=>(d.mirror? 20+(p[1]-miny)*sc : H-20-(p[1]-miny)*sc).toFixed(1);
+  const seg=(a,b,c,w)=>'<line x1="'+X(a)+'" y1="'+Y(a)+'" x2="'+X(b)+'" y2="'+Y(b)+'" style="stroke:'+c+'" stroke-width="'+w+'" stroke-linecap="round"/>';
+  let h='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Postura del auxiliar">';
+  const g0=[0,0]; const lineY=Y(g0);
+  h+= d.kind==='hang'&&d.mode==='pull' || d.feet&&d.mirror ? '<line x1="'+X([minx,0])+'" x2="'+X([maxx,0])+'" y1="'+lineY+'" y2="'+lineY+'" style="stroke:var(--muted)" stroke-width="5" stroke-linecap="round"/>' : '<line x1="10" x2="'+(W-10)+'" y1="'+lineY+'" y2="'+lineY+'" style="stroke:var(--line)" stroke-width="2"/>';
+  if(d.kind==='plank'){const t=o.Toe;h+='<rect x="'+(+X(t)-10)+'" y="'+(d.mirror?+Y(t)-2:+Y(t))+'" width="20" height="'+(d.feet==='floor'?0:Math.abs(+Y(t)-+lineY))+'" style="fill:var(--line)"/><circle cx="'+X(t)+'" cy="'+Y(t)+'" r="5" style="fill:var(--muted)"/>';}
+  h+=seg(o.S,o.Hp,'var(--ink)',9)+seg(o.Hp,o.Kn,'var(--ink)',7)+seg(o.Kn,o.An,'var(--ink)',6)+seg(o.An,o.Toe,'var(--ink)',4)+seg(o.S,o.Head,'var(--ink)',7);
+  h+=seg(o.W,o.E,'var(--accent2)',7)+seg(o.E,o.S,'var(--accent)',8);
+  h+='<circle cx="'+X(o.S)+'" cy="'+Y(o.S)+'" r="5" style="fill:var(--accent)"/><circle cx="'+X(o.W)+'" cy="'+Y(o.W)+'" r="5" style="fill:var(--ink)"/>';
+  const cm=LAD.com(P0||P,o); h+='<line x1="'+X(cm)+'" x2="'+X(cm)+'" y1="'+Y(cm)+'" y2="'+lineY+'" style="stroke:var(--band)" stroke-dasharray="4 3"/><circle cx="'+X(cm)+'" cy="'+Y(cm)+'" r="7" style="fill:none;stroke:var(--band)" stroke-width="2"/><text x="'+(+X(cm)+10)+'" y="'+(+Y(cm)-8)+'" font-size="11" style="fill:var(--band)">CM</text>';
+  h+='</svg>'; return h;
+}
+function axSeries(d,Pp,eUse){const N=41,out=[];for(let i=0;i<N;i++)out.push(axState(d,eUse*i/(N-1),Pp));return out;}
+function renderAux(){
+  const d=AXDEF[$('axEx').value]; if(!d) return;
+  if(!$('axGrip').value) $('axGrip').placeholder=fmt(shWV());
+  const Pp=P0||P, techo=tableState('full',Pp);
+  const Tt=techo?Math.abs(techo.Tsh):NaN, Tte=techo?Math.abs(techo.Tsh)+Math.abs(techo.Tel):NaN;
+  const tsec=+$('axT').value||0;
+  $('axPosRow').hidden=!d.move;
+  let sts, eUse=0;
+  if(d.move){const eM=+$('axE').value||0, mx=LAD.maxElbow(e=>axState(d,e,Pp),Math.max(eM,1)); eUse=Math.min(eM,mx);
+    sts=axSeries(d,Pp,eUse);
+    $('axNote').textContent=(eUse<eM?'Con estas medidas el codo solo llega a '+mx+'° en esta postura; se usa ese recorrido. ':'')+'Una repetición = codo de 0° a '+fmt(eUse,0)+'° y vuelta en '+fmt(tsec,2)+' s (la mitad a la ida).';
+  } else { sts=[axState(d,0,Pp)]; $('axNote').textContent=''; }
+  const ok=sts.filter(Boolean);
+  if(!ok.length){$('axFig').innerHTML='<p class="notes">Postura imposible con estos valores (los pies no pueden cargar peso negativo o los brazos no llegan). Cambia la inclinación.</p>';$('axChart').innerHTML='';$('axRead').innerHTML='';$('axTbl').tBodies[0].innerHTML='';return;}
+  const N=sts.length, pos=d.move?Math.round((+$('axPos').value||0)/100*(N-1)):0, cur=sts[pos]||ok.at(-1);
+  $('axFig').innerHTML=axDraw(cur,d);
+  // impulso: la ida dura t/2, repartida en N-1 tramos; la repetición es ida + vuelta (simétrica)
+  const dt=d.move?(tsec/2)/(N-1):0;
+  let Jsh=0,Jel=0; for(let i=1;i<=pos;i++){if(sts[i]&&sts[i-1]){Jsh+=dt*(Math.abs(sts[i].Tsh)+Math.abs(sts[i-1].Tsh))/2;Jel+=dt*(Math.abs(sts[i].Tel)+Math.abs(sts[i-1].Tel))/2;}}
+  const mSh=ok.reduce((s,x)=>s+Math.abs(x.Tsh),0)/ok.length, mEl=ok.reduce((s,x)=>s+Math.abs(x.Tel),0)/ok.length;
+  const Jrep=(mSh+mEl)*tsec, JLAD=Tte;
+  const eNow=d.move?eUse*pos/(N-1):0;
+  if(d.move) $('axPosL').textContent='codo '+fmt(eNow,0)+'°';
+  const o=cur.o, cm=LAD.com(Pp,o), toeX=o.Toe[0];
+  const cmTxt=d.kind==='plank'
+    ? 'Centro de masas a <b>'+fmt(Math.abs(cm[0])*100)+' cm</b> de la vertical de las manos, hacia los pies ('+fmt(cm[0]/toeX*100,0)+' % del camino manos → pies). Si estuviera sobre las manos, los pies no cargarían: sería la plancha (o el front) completa.'
+    : 'Centro de masas en la vertical de las manos (sin pies, es la condición de equilibrio).';
+  $('axRead').innerHTML='<span>Hombro <b>'+fmt(Math.abs(cur.Tsh))+' N·m</b></span><span>Codo <b>'+fmt(Math.abs(cur.Tel))+' N·m</b></span>'
+    +(d.move?'<span>Impulso hasta aquí (ida): hombro <b>'+fmt(Jsh)+'</b> · codo <b>'+fmt(Jel)+'</b> N·m·s</span>':'')
+    +'<span>Impulso '+(d.move?'de una repetición':'del hold')+': <b>'+fmt(Jrep)+' N·m·s</b>'+(isFinite(JLAD)?' = <b>'+fmt(Jrep/JLAD,2)+' LAD</b> (1 LAD = 1 s a '+fmt(JLAD,0)+' N·m, la full)':'')+'</span>'
+    +'<span style="flex-basis:100%;color:var(--muted)">'+cmTxt+'</span>';
+  if(d.move){
+    const mx=Math.max(...ok.map(x=>Math.max(Math.abs(x.Tsh),Math.abs(x.Tel))),1), W=560,H=160,L=44,B=134,R0=W-10;
+    const px=i=>L+i/(N-1)*(R0-L), py=v=>B-v/mx*(B-16);
+    const path=k=>sts.map((x,i)=>x?(i&&sts[i-1]?'L':'M')+px(i).toFixed(1)+','+py(Math.abs(x[k])).toFixed(1):'').join(' ');
+    $('axChart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Torque a lo largo del recorrido"><line x1="'+L+'" x2="'+R0+'" y1="'+B+'" y2="'+B+'" style="stroke:var(--line)"/><path d="'+path('Tsh')+'" fill="none" style="stroke:var(--accent)" stroke-width="2.5"/><path d="'+path('Tel')+'" fill="none" style="stroke:var(--accent2)" stroke-width="2.5"/><line x1="'+px(pos)+'" x2="'+px(pos)+'" y1="14" y2="'+B+'" style="stroke:var(--muted)" stroke-dasharray="3 3"/><text x="'+L+'" y="11" font-size="11" style="fill:var(--muted)">N·m · hombro (azul) y codo · ida del recorrido</text><text x="'+(L-6)+'" y="'+(py(mx)+4)+'" font-size="10" text-anchor="end" style="fill:var(--muted)">'+fmt(mx,0)+'</text><text x="'+L+'" y="'+(B+16)+'" font-size="10" style="fill:var(--muted)">codo 0°</text><text x="'+R0+'" y="'+(B+16)+'" font-size="10" text-anchor="end" style="fill:var(--muted)">codo '+fmt(eUse,0)+'°</text></svg>';
+  } else $('axChart').innerHTML='';
+  const int1t=(mSh+mEl)/Tte, c=int1t*tsec;
+  const rows=[
+    ['Torque medio · hombro / codo',fmt(mSh)+' / '+fmt(mEl)+' N·m'],
+    ['Peso en las manos',ok[0].Rhand!=null?fmt(ok[0].Rhand/ok[0].W*100,0)+' % (el resto en los pies)':'100 %'],
+    ['INT1 · hombro + codo ÷ full de '+d.sk,isFinite(int1t)?fmt(int1t,3):'—'],
+    [d.move?'LAD por repetición':'LAD del hold',isFinite(c)?fmt(c,2)+' LAD':'—']
+  ];
+  if(ok[0].TshFront) rows.splice(1,0,['Parte frontal del hombro (manos abiertas)',fmt(ok[0].TshFront)+' N·m']);
+  $('axTbl').tBodies[0].innerHTML=rows.map(r=>'<tr><td>'+r[0]+'</td><td class="n">'+r[1]+'</td></tr>').join('');
+}
+['axEx'].forEach(id=>$(id).addEventListener('change',()=>{axSetupUI(true);renderAux();save();}));
+['axGrip','axLean','axE','axT','axPos'].forEach(id=>$(id).addEventListener('input',()=>{renderAux();save();}));
+axSetupUI(false);
+
+window.renderAuxReady=true;
+window.LADsim={cfg,
+  int2(){const cf=cfg(),Pp=LAD.params(cf),o=getOpt(),out={};
+    ['plancha','front'].forEach(f=>{const op=Object.assign({},o,{front:f==='front'}),h=LAD.hold(Pp,op.base,op.tilt);out[f]={};if(!h)return;const den=Math.abs(h.Tsh)+Math.abs(h.Tel);
+      ['press','neg','flex'].forEach(m=>{const c=LAD.sweep(Pp,m,op,61);out[f][m]=Math.round((LAD.meanAbs(c,'Tsh')+LAD.meanAbs(c,'Tel'))/den*100)/100;});});
+    return out;},
+  refreshTables(){renderTable();renderHip();renderInt1();}
+};
+renderPop();update();
+})();
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById('c_'+id);
+const fmt=(v,d=2)=>isFinite(v)?v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const POS={plancha:LAD.PROG.map(p=>({id:p.id,name:p.name})).concat([{id:'maltese',name:'Maltese'}]),
+           front:LAD.PROG.map(p=>({id:p.id,name:p.name})).concat([{id:'fltouch',name:'Front lever touch'},{id:'sat',name:'SAT'}])};
+const MVN={plancha:{hold:'Hold / deadstop',press:'Press',neg:'Negativa',flex:'Flexión',low:'Poco torque (pino)',aux:'Auxiliar (INT1 a mano)'},
+           front:{hold:'Hold / deadstop',press:'Press',neg:'Negativa',flex:'Pull-up',low:'Poco torque (colgado)',aux:'Auxiliar (INT1 a mano)'}};
+const MOVES=['press','neg','flex'];
+['tP','tF'].forEach((id,i)=>{LAD.PROG.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$(id).append(o)});});
+
+function example(){
+  const h=(pos,secs,band)=>({mv:'hold',pos,band:band||0,secs,part:false,smax:'',i1:0.5});
+  const m=(mv,pos,secs,band)=>({mv,pos,band:band||0,secs,part:false,smax:'',i1:0.5});
+  const S=(fam,rest,efs,end)=>({fam,rest,ring:false,fan:1,end:end||'na',res:'',efs});
+  return {H:168,M:65,tP:'full',tF:'full',sP:4,sF:6,nP:7.8,nF:7.8,tau:60,w:0,k:22.5,ch:0.4,rir:false,own:false,example:true,
+    i2mod:{on:false,plancha:{},front:{}},
+    series:[S('front',0,[h('full',2.4)]),S('plancha',180,[h('full',1.4)]),S('front',180,[h('full',2.4)]),S('plancha',180,[h('full',2)]),
+      S('front',480,[h('full',4.5,5)]),S('plancha',60,[h('full',4.25,5)]),S('plancha',120,[h('full',4.25,5)]),S('front',240,[h('full',3,5)]),
+      S('front',240,[h('full',0.5,5),m('flex','full',0.75,5),h('full',0.5,5),m('flex','full',0.75,5),h('full',1,5),m('press','full',1.5,5),m('neg','full',1.5,5),h('full',0.5,5)]),
+      S('plancha',420,[h('half',1),m('flex','half',2),m('press','half',2.25),{mv:'low',pos:'full',band:0,secs:0.75,part:false,smax:'',i1:0.5}])],
+    weights:[{name:'Dominadas lastradas (deadstop 1″)',series:3,reps:2,kg:30,bw:true,rm:42.5,hold:1,rir:''},
+      {name:'Dominadas lastradas',series:2,reps:2,kg:30,bw:true,rm:42.5,hold:0,rir:''},
+      {name:'Fondos lastrados',series:5,reps:3,kg:37.5,bw:true,rm:55,hold:0,rir:''},
+      {name:'Inv cross (por brazo)',series:2,reps:3,kg:10,bw:false,rm:12,hold:2.67,rir:''}]};
+}
+let state=example();
+try{const s=JSON.parse(localStorage.getItem('lad-calc-v2')||'null');if(s&&s.series)state=Object.assign(example(),s);}catch(e){}
+if(!state.i2mod)state.i2mod={on:false,plancha:{},front:{}};
+function save(){try{localStorage.setItem('lad-calc-v2',JSON.stringify(state))}catch(e){}}
+const NUMS=['H','M','sP','sF','nP','nF','tau','w','ch'];
+function syncInputs(){NUMS.forEach(k=>$(k).value=state[k]);$('tP').value=state.tP;$('tF').value=state.tF;$('own').checked=!!state.own;$('rir').checked=!!state.rir;}
+syncInputs();
+
+let cache={};
+function P(bandKg){const H=+state.H||170,M=+state.M||70;const own=state.own&&window.LADsim;const base=own?window.LADsim.cfg():{H,M,seg:LAD.defaultSeg(H)};const k=JSON.stringify(base)+'|'+bandKg;if(!cache[k])cache[k]=LAD.params(Object.assign({},base,{bandKg,bandAt:'com'}));return cache[k];}
+function torque(Pp,pos){const s=pos==='maltese'?LAD.maltese(Pp,0):pos==='fltouch'?LAD.flTouch(Pp,70):pos==='sat'?LAD.satGrip(Pp,Pp.H*23+2*(Pp.L.uarm+Pp.L.farm)*100*Math.sin(35*Math.PI/180),Pp.H*23,'full',0):LAD.hold(Pp,pos,0);return s?Math.abs(s.Tsh)+Math.abs(s.Tel):NaN;}
+let INT2={};
+function calcINT2(){
+  const Pp=LAD.params({H:170,M:70,seg:LAD.defaultSeg(170)}), opt={base:'full',tilt:0,hipP:0,hipN:0,fdepth:100,tiltb:0}, h=LAD.hold(Pp,'full',0), den=Math.abs(h.Tsh)+Math.abs(h.Tel);
+  MOVES.forEach(m=>{const c=LAD.sweep(Pp,m,opt,61);INT2[m]=(LAD.meanAbs(c,'Tsh')+LAD.meanAbs(c,'Tel'))/den;});
+  INT2.hold=1;
+}
+const I2N={press:'Press',neg:'Negativa',flex:'Flexión (plancha) · pull-up (front)'};
+function i2For(fam,mv){if(!MOVES.includes(mv))return {v:1,mod:false};const v=state.i2mod.on?+state.i2mod[fam][mv]:NaN;return isFinite(v)&&v>0?{v,mod:true}:{v:INT2[mv],mod:false};}
+function renderI2(){
+  $('i2on').checked=!!state.i2mod.on;
+  let h='<tr><td>Hold</td><td class="n">1,00</td><td class="n">1,00</td><td class="n">1,00</td></tr>';
+  MOVES.forEach(m=>{h+='<tr><td>'+I2N[m]+'</td><td class="n">'+fmt(INT2[m])+'</td>'+['plancha','front'].map(f=>{const v=state.i2mod[f][m];return '<td><input data-f="'+f+'" data-m="'+m+'" type="number" min="0" step="0.01" placeholder="'+fmt(INT2[m])+'" value="'+(v!=null&&v!==''?v:'')+'" aria-label="'+I2N[m]+' '+f+': tu INT2"></td>'}).join('')+'</tr>'});
+  $('i2Rows').innerHTML=h; label($('i2Rows'));
+  $('i2msg').textContent=state.i2mod.on?'Usando tu INT2 donde lo has puesto; en las casillas vacías, el estándar.':'Usando el INT2 estándar.';
+}
+function label(tb){const ths=[...tb.parentNode.querySelectorAll('th')].map(t=>t.textContent.trim());tb.querySelectorAll('tr').forEach(tr=>[...tr.children].forEach((td,i)=>{td.dataset.l=ths[i]||''}));}
+function opts(list,val){return list.map(([v,t])=>'<option value="'+v+'"'+(String(v)===String(val)?' selected':'')+'>'+t+'</option>').join('');}
+const BANDS=[[0,'Sin goma'],[5,'5 (G5)'],[10,'10 (G10)'],[15,'15'],[20,'20'],[25,'25']];
+
+function renderSeries(){
+  $('series').innerHTML=state.series.map((s,i)=>{
+    const rows=s.efs.map((e,j)=>{
+      const aux=e.mv==='aux', low=e.mv==='low';
+      return '<tr data-j="'+j+'">'+
+        '<td><select data-k="mv" aria-label="Esfuerzo">'+opts(Object.entries(MVN[s.fam]),e.mv)+'</select></td>'+
+        (aux?'<td><input data-k="i1" type="number" step="0.01" min="0" value="'+e.i1+'" aria-label="INT1 del auxiliar (hombro + codo ÷ full)"></td>':
+          '<td><select data-k="pos" aria-label="Postura"'+(low?' disabled':'')+'>'+opts(POS[s.fam].map(p=>[p.id,p.name]),e.pos)+'</select></td>')+
+        '<td><select data-k="band" aria-label="Goma (kg)"'+(aux||low?' disabled':'')+'>'+opts(BANDS,e.band)+'</select></td>'+
+        '<td><input data-k="secs" type="number" min="0" step="0.25" value="'+e.secs+'" aria-label="Segundos" placeholder="'+(MOVES.includes(e.mv)?'1,5':'')+'"></td>'+
+        '<td><label class="chk"><input data-k="part" type="checkbox" aria-label="Parcial"'+(e.part?' checked':'')+(low?' disabled':'')+'></label></td>'+
+        '<td><input data-k="smax" type="number" min="0" step="0.25" value="'+e.smax+'" aria-label="Tu máximo en esta postura (s), opcional" placeholder="curva"'+(low?' disabled':'')+'></td>'+
+        '<td class="n" data-o="i1"></td><td class="n" data-o="c"></td><td class="n" data-o="x"></td><td class="n" data-o="A"></td><td class="load" data-o="l"></td>'+
+        '<td><button class="x" data-edel="'+j+'" type="button" aria-label="Borrar esfuerzo">✕</button></td></tr>';
+    }).join('');
+    return '<div class="serie" data-i="'+i+'">'+
+      '<div class="shead"><b>Serie '+(i+1)+'</b>'+
+      '<label>Skill <select data-s="fam">'+opts([['plancha','Plancha · empuje'],['front','Front lever · tirón']],s.fam)+'</select></label>'+
+      '<label>Descanso antes (s) <input data-s="rest" type="number" min="0" step="15" value="'+s.rest+'"></label>'+
+      '<label>Cómo acabó <select data-s="end">'+opts([['na','Sin anotar'],['fallo','Caída (fallo)'],['paro','Paré yo']],s.end)+'</select></label>'+
+      '<label>Reserva (s) <input data-s="res" type="number" min="0" step="0.25" value="'+s.res+'"'+(s.end==='paro'?'':' disabled')+'></label>'+
+      '<label class="chk"><input data-s="ring" type="checkbox"'+(s.ring?' checked':'')+'> Anillas</label>'+
+      '<label>F anillas <input data-s="fan" type="number" min="1" step="0.05" value="'+s.fan+'"'+(s.ring?'':' disabled')+'></label>'+
+      '<span class="sp"></span><button type="button" data-sdup="'+i+'">Duplicar</button><button class="x" type="button" data-sdel="'+i+'" aria-label="Borrar serie">✕</button></div>'+
+      '<div class="tablewrap"><table><thead><tr><th>Esfuerzo</th><th>Postura</th><th>Goma (kg)</th><th>Segundos</th><th>Parcial</th><th>Tu máx. (s)</th><th>INT1</th><th>c (LAD)</th><th>x</th><th>A antes</th><th>Carga</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="sfoot"><button type="button" data-eadd="'+i+'">Añadir esfuerzo</button><span data-o="sum"></span></div></div>';
+  }).join('')||'<p class="notes">Sin series. Pulsa «Añadir serie».</p>';
+  $('series').querySelectorAll('tbody').forEach(label);
+}
+function renderWeights(){
+  $('wRows').innerHTML=state.weights.map((r,i)=>'<tr data-i="'+i+'">'+
+   '<td><input data-k="name" value="'+esc(r.name)+'" aria-label="Ejercicio"></td>'+
+   '<td><input data-k="series" type="number" min="0" step="1" value="'+r.series+'"></td>'+
+   '<td><input data-k="reps" type="number" min="0" step="1" value="'+r.reps+'"></td>'+
+   '<td><input data-k="kg" type="number" min="0" step="0.5" value="'+r.kg+'"></td>'+
+   '<td><label class="chk"><input data-k="bw" type="checkbox"'+(r.bw?' checked':'')+' aria-label="Con mi peso"></label></td>'+
+   '<td><input data-k="rm" type="number" min="0" step="0.5" value="'+r.rm+'"></td>'+
+   '<td><input data-k="hold" type="number" min="0" step="0.25" value="'+r.hold+'"></td>'+
+   '<td><input data-k="rir" type="number" min="0" step="1" value="'+r.rir+'" placeholder="—"></td>'+
+   '<td class="n" data-o="p"></td><td class="load" data-o="l"></td><td class="n" data-o="c"></td>'+
+   '<td><button class="x" data-wdel="'+i+'" type="button" aria-label="Borrar fila">✕</button></td></tr>').join('');
+  label($('wRows'));
+}
+function bOf(r){return r<=0.6?0.25:r>=0.8?0.165:0.25+(r-0.6)/0.2*(0.165-0.25);}
+function compute(){
+  const tau=Math.max(1,+state.tau||60), w=Math.max(0,+state.w||0), Tfull=torque(P(0),'full');
+  const fam={plancha:{A:0,t:null},front:{A:0,t:null}};
+  let clock=0, tB=0, tL=0, fallos=0, cerca=0, estim=0;
+  state.series.forEach((s,i)=>{
+    const card=$('series').querySelector('.serie[data-i="'+i+'"]'); if(!card) return;
+    const f=s.fam, o=f==='plancha'?'front':'plancha';
+    const Ttecho=torque(P(0),f==='plancha'?state.tP:state.tF), sref=+(f==='plancha'?state.sP:state.sF)||NaN, n=+(f==='plancha'?state.nP:state.nF)||7.8;
+    const Fan=s.ring?Math.max(1,+s.fan||1):1;
+    clock+=Math.max(0,+s.rest||0);
+    const carry=st=>st.t==null?0:st.A*Math.exp(-(clock-st.t)/tau);
+    const A0=carry(fam[f])+w*carry(fam[o]);
+    let A=A0, base=0, load=0, cer=0, dur=0, last=null;
+    s.efs.forEach((e,j)=>{
+      const tr=card.querySelector('tr[data-j="'+j+'"]'); const out=k=>tr.querySelector('[data-o='+k+']');
+      const secs=+e.secs>0?+e.secs:(MOVES.includes(e.mv)?1.5:0); dur+=secs;
+      if(e.mv==='low'){const a0=A;A*=Math.exp(-secs/tau);['i1','c','x'].forEach(k=>out(k).textContent='—');out('A').textContent=fmt(a0);out('l').textContent='0 · A → '+fmt(A);last=null;return;}
+      const T=e.mv==='aux'?(+e.i1||0)*Tfull:torque(P(+e.band||0),e.pos), i1=T/Tfull, I2=i2For(f,e.mv), part=e.part?0.5:1;
+      const c=i1*I2.v*secs*part*Fan;
+      const smax=+e.smax>0?+e.smax:sref*Math.pow(T/Ttecho,-n), x=I2.v*secs*part/smax, b=bOf(T/Ttecho);
+      const l=c*(1+b*A);
+      out('i1').textContent=isFinite(i1)?fmt(i1,3):'—';
+      out('c').textContent=fmt(c)+(I2.mod?' *':''); out('x').textContent=fmt(x); out('A').textContent=fmt(A); out('l').textContent=fmt(l);
+      if(isFinite(l)){base+=c;load+=l;}
+      last={mv:e.mv,secs,smax,b,A};
+      if(isFinite(x)){cer+=x*(1+b*A);A+=x;}
+    });
+    clock+=dur; fam[f]={A,t:clock};
+    let cerc, near=false, note='';
+    if(s.end==='fallo'){cerc=1;near=true;fallos++;note='fallo';}
+    else if(s.end==='paro'&&+s.res>=0&&s.res!==''&&last){cerc=last.secs/(last.secs+(+s.res));near=+s.res<=1;note='anotada';}
+    else {cerc=Math.min(1,cer);note='estimada';if(last&&(last.mv==='hold'||last.mv==='aux')){const rem=last.smax*(1-last.b*last.A)-last.secs;near=rem<=1;}if(near)estim++;}
+    if(near)cerca++;
+    tB+=base; tL+=load;
+    card.querySelector('[data-o=sum]').textContent='Serie: base '+fmt(base)+' · con fatiga '+fmt(load)+' LAD · A al empezar '+fmt(A0)+' · cercanía '+fmt(cerc)+' ('+note+')'+(near?' · cerca del fallo':'');
+  });
+  let tI=0, wNear=0, wFail=0;
+  state.weights.forEach((r,i)=>{
+    const tr=$('wRows').querySelector('tr[data-i="'+i+'"]'); if(!tr) return;
+    const M=+state.M||0, num=(+r.kg||0)+(r.bw?M:0), den=(+r.rm||0)+(r.bw?M:0);
+    const pct=den>0?Math.min(99,num/den*100):NaN;
+    const inol=(+r.series||0)*(+r.reps||0)*(1+(+state.ch||0)*(+r.hold||0))/(100-pct);
+    let cerc, near, fail;
+    if(state.rir&&r.rir!==''&&isFinite(+r.rir)){cerc=r.reps/(r.reps+(+r.rir));near=+r.rir<=1;fail=+r.rir===0;}
+    else{const rmax=30*(100/pct-1);cerc=Math.min(1,r.reps/rmax);near=rmax-r.reps<=1;fail=r.reps>=rmax;}
+    tr.querySelector('[data-o=p]').textContent=isFinite(pct)?fmt(pct,1)+' %':'—';
+    tr.querySelector('[data-o=l]').textContent=fmt(inol);
+    tr.querySelector('[data-o=c]').textContent=fmt(cerc)+(near?' · cerca':'');
+    if(isFinite(inol)) tI+=inol; if(near) wNear+=(+r.series||0); if(fail) wFail+=(+r.series||0);
+  });
+  $('tB').textContent=fmt(tB);$('tF2').textContent=fmt(tL-tB);$('tS').textContent=fmt(tL);$('tI').textContent=fmt(tI);
+  $('eff').innerHTML='<b>Esfuerzo:</b> '+fallos+' fallo'+(fallos===1?'':'s')+' anotado'+(fallos===1?'':'s')+' en skills · '+cerca+' serie'+(cerca===1?'':'s')+' de skills cerca del fallo (reserva ≤ 1″'+(estim?', '+estim+' estimada'+(estim===1?'':'s'):'')+') · pesas: '+wNear+' serie'+(wNear===1?'':'s')+' cerca del fallo (reserva ≤ 1 rep)'+(wFail?', '+wFail+' al fallo':'')+(state.rir?'':' según Epley')+'.';
+  $('exTag').hidden=!state.example;
+  return {tB,tL,tI,fallos,cerca,wNear,wFail};
+}
+function all(){renderSeries();renderWeights();compute();save();}
+function touched(){state.example=false;}
+$('series').addEventListener('input',e=>{
+  const card=e.target.closest('.serie'); if(!card) return; const s=state.series[+card.dataset.i];
+  const sk=e.target.dataset.s, k=e.target.dataset.k;
+  if(sk){s[sk]=sk==='ring'?e.target.checked:(sk==='fam'||sk==='end')?e.target.value:e.target.value===''?'':+e.target.value;touched();
+    if(sk==='fam'){s.efs.forEach(x=>{if(!POS[s.fam].some(p=>p.id===x.pos))x.pos='full';});}
+    if(['fam','end','ring'].includes(sk)){renderSeries();}
+    compute();save();return;}
+  if(k){const tr=e.target.closest('tr');const ef=s.efs[+tr.dataset.j];
+    ef[k]=k==='part'?e.target.checked:(k==='mv'||k==='pos')?e.target.value:e.target.value===''?'':+e.target.value;touched();
+    if(k==='mv'){renderSeries();}
+    compute();save();}
+});
+$('series').addEventListener('click',e=>{
+  const t=e.target.dataset; if(t.sdel!=null){state.series.splice(+t.sdel,1);touched();all();return;}
+  if(t.sdup!=null){state.series.splice(+t.sdup+1,0,JSON.parse(JSON.stringify(state.series[+t.sdup])));touched();all();return;}
+  if(t.eadd!=null){const s=state.series[+t.eadd];const last=s.efs[s.efs.length-1]||{mv:'hold',pos:'full',band:0,secs:2,part:false,smax:'',i1:0.5};s.efs.push(Object.assign({},last));touched();all();return;}
+  if(t.edel!=null){const card=e.target.closest('.serie');state.series[+card.dataset.i].efs.splice(+t.edel,1);touched();all();}
+});
+$('addS').addEventListener('click',()=>{const last=state.series[state.series.length-1];state.series.push(last?Object.assign(JSON.parse(JSON.stringify(last)),{end:'na',res:''}):{fam:'plancha',rest:180,ring:false,fan:1,end:'na',res:'',efs:[{mv:'hold',pos:'full',band:0,secs:3,part:false,smax:'',i1:0.5}]});touched();all();});
+$('wRows').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;const r=state.weights[+e.target.closest('tr').dataset.i];r[k]=k==='name'?e.target.value:k==='bw'?e.target.checked:e.target.value===''?'':+e.target.value;touched();compute();save();});
+$('wRows').addEventListener('click',e=>{const d=e.target.dataset.wdel;if(d==null)return;state.weights.splice(+d,1);touched();all();});
+$('addW').addEventListener('click',()=>{state.weights.push({name:'Ejercicio',series:3,reps:3,kg:20,bw:true,rm:40,hold:0,rir:''});touched();all();});
+NUMS.forEach(id=>$(id).addEventListener('input',()=>{state[id]=+$(id).value;touched();if(id==='H'||id==='M')cache={};compute();save();}));
+['tP','tF'].forEach(id=>$(id).addEventListener('change',()=>{state[id]=$(id).value;touched();compute();save();}));
+$('own').addEventListener('change',()=>{state.own=$('own').checked;cache={};compute();save();});
+$('rir').addEventListener('change',()=>{state.rir=$('rir').checked;compute();save();});
+$('clear').addEventListener('click',()=>{state.series=[];state.weights=[];touched();all();$('msg').textContent='Sesión vaciada.';});
+$('ex').addEventListener('click',()=>{state=example();cache={};syncInputs();renderI2();all();$('msg').textContent='Ejemplo cargado.';});
+$('copy').addEventListener('click',()=>{
+  const t=compute(); const lines=['Sesión LAD · '+new Date().toLocaleDateString('es-ES')];
+  state.series.forEach((s,i)=>lines.push('Serie '+(i+1)+' ('+(s.fam==='plancha'?'plancha':'front')+(s.ring?', anillas':'')+', descanso '+s.rest+' s): '+s.efs.map(e=>MVN[s.fam][e.mv]+(e.mv==='aux'?' INT1 '+e.i1:e.mv==='low'?'':' '+((POS[s.fam].find(p=>p.id===e.pos)||{}).name||e.pos)+(+e.band?' G'+e.band:''))+' '+(e.secs||1.5)+'″'+(e.part?' parcial':'')).join(' → ')+(s.end==='fallo'?' · caída':s.end==='paro'?' · paré':'')));
+  state.weights.forEach(r=>lines.push(r.name+' '+r.series+'×'+r.reps+' @'+r.kg+' kg'+(r.hold?' (aguante '+r.hold+'″)':'')+(r.rir!==''?' RIR '+r.rir:'')));
+  lines.push('LAD-Au '+fmt(t.tL)+' LAD (base '+fmt(t.tB)+') · INOL de pesas '+fmt(t.tI)+' (cifras separadas, sin sumar)');
+  lines.push($('eff').textContent);
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>$('msg').textContent='Resumen copiado.').catch(()=>{$('msg').textContent='No se pudo copiar automáticamente.';});
+});
+$('i2Rows').addEventListener('input',e=>{const f=e.target.dataset.f,m=e.target.dataset.m;if(!f)return;state.i2mod[f][m]=e.target.value===''?'':+e.target.value;if(e.target.value!==''&&!state.i2mod.on){state.i2mod.on=true;$('i2on').checked=true;}$('i2msg').textContent=state.i2mod.on?'Usando tu INT2 donde lo has puesto; en las casillas vacías, el estándar.':'Usando el INT2 estándar.';compute();save();});
+$('i2on').addEventListener('change',()=>{state.i2mod.on=$('i2on').checked;renderI2();compute();save();});
+$('i2reset').addEventListener('click',()=>{state.i2mod={on:false,plancha:{},front:{}};renderI2();compute();save();});
+$('i2sim').addEventListener('click',()=>{if(!window.LADsim)return;const v=window.LADsim.int2();state.i2mod={on:true,plancha:v.plancha||{},front:v.front||{}};renderI2();compute();save();$('i2msg').textContent='Copiado del simulador (tus medidas y tu técnica): plancha press '+fmt(v.plancha.press)+' · negativa '+fmt(v.plancha.neg)+' · flexión '+fmt(v.plancha.flex)+'; front press '+fmt(v.front.press)+' · negativa '+fmt(v.front.neg)+' · pull-up '+fmt(v.front.flex)+'.';});
+window.LADcalc={refresh(){cache={};compute();},
+  snapshot(){const t=compute();return Object.assign({state:JSON.parse(JSON.stringify(state))},t);},
+  load(sess){const p=sess.profile||{};['H','M','sP','sF'].forEach(k=>{if(p[k]!=null)state[k]=p[k];});if(p.tP)state.tP=p.tP;if(p.tF)state.tF=p.tF;
+    state.series=JSON.parse(JSON.stringify(sess.series||[]));state.weights=JSON.parse(JSON.stringify(sess.weights||[]));state.example=false;cache={};syncInputs();all();
+    $('msg').textContent='Cargada la sesión del '+sess.date+'. Si la cambias, guárdala de nuevo (se añade como sesión nueva; borra la antigua si quieres).';}};
+calcINT2();renderI2();all();
+})();
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const fmt=(v,d=1)=>isFinite(v)?v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const pct=v=>isFinite(v)?(v>=0?'+':'−')+fmt(Math.abs(v),1)+' %':'—';
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const todayISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);};
+const D=s=>new Date(s+'T00:00:00Z');
+const iso=d=>d.toISOString().slice(0,10);
+const addDays=(s,n)=>iso(new Date(D(s).getTime()+n*86400000));
+const monday=s=>{const d=D(s);const wd=(d.getUTCDay()+6)%7;return addDays(s,-wd);};
+const shortDate=s=>{const d=D(s);return d.getUTCDate()+'/'+(d.getUTCMonth()+1);};
+const longDate=s=>D(s).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+
+/* ---------- almacenamiento: db de Claude por usuario, o este navegador ---------- */
+const LKEY='lad-registro-v1';
+let sessions=[], mode='none', col=null;
+function setStore(t){$('r_store').textContent=t;}
+function localLoad(){try{return JSON.parse(localStorage.getItem(LKEY)||'[]')||[]}catch(e){return []}}
+function localSave(){try{localStorage.setItem(LKEY,JSON.stringify(sessions));return true}catch(e){return false}}
+async function initStore(){
+  sessions=localLoad(); mode='local';
+  setStore('Guardado en este navegador · haz copias con «Exportar»');
+  renderAll();
+  if(!(window.claude&&window.claude.use)) return;
+  try{
+    const db=await window.claude.use('db'); const user=await window.claude.use('user');
+    const id=user?await user.id():null;
+    if(!db||!id) return;
+    col=db.collection('data/users/'+id);
+    let settled=false; const timer=setTimeout(()=>{if(!settled)setStore('Conectando con tu cuenta… de momento, en este navegador');},10000);
+    col.onSnapshot(snap=>{
+      settled=true; clearTimeout(timer);
+      const remote=snap.docs.filter(d=>d.exists&&d.id.startsWith('s_')).map(d=>Object.assign({},d.data(),{id:d.id}));
+      // primera vez con cuenta: sube lo que hubiera en este navegador
+      if(mode!=='db'){mode='db';const local=localLoad().filter(l=>!remote.some(r=>r.id===l.id));local.forEach(l=>col.doc(l.id).set(clean(l)).catch(()=>{}));if(local.length)remote.push(...local);}
+      sessions=remote; setStore('Guardado en tu cuenta de Claude · privado: solo lo ves tú');
+      renderAll();
+    },err=>{settled=true;clearTimeout(timer);mode='local';col=null;setStore('No se pudo usar tu cuenta: guardado en este navegador');});
+  }catch(e){}
+}
+function clean(s){const o=Object.assign({},s);delete o.id;return JSON.parse(JSON.stringify(o));}
+async function putSession(s){
+  if(mode==='db'&&col){try{await col.doc(s.id).set(clean(s));return true}catch(e){
+    if(e&&e.code==='quota_exceeded'){$('r_msg').textContent='El registro está lleno: borra sesiones antiguas o exporta una copia.';return false;}
+    mode='local';col=null;setStore('No se pudo guardar en tu cuenta: guardado en este navegador');}}
+  const i=sessions.findIndex(x=>x.id===s.id); if(i>=0)sessions[i]=s; else sessions.push(s);
+  const ok=localSave(); renderAll(); return ok;
+}
+async function delSession(id){
+  if(mode==='db'&&col){try{await col.doc(id).delete();return}catch(e){}}
+  sessions=sessions.filter(s=>s.id!==id); localSave(); renderAll();
+}
+
+/* ---------- de la calculadora a una sesión guardada ---------- */
+function posName(fam,pos){const p=(LAD.PROG.find(x=>x.id===pos)||{}).name;return p?p.replace(/ \(.*\)$/,''):pos==='maltese'?'Maltese':pos==='fltouch'?'FL touch':pos==='sat'?'SAT':pos;}
+function progKey(fam,e){return posName(fam,e.pos)+(+e.band?' G'+e.band:' RAW');}
+const PMN={plancha:{press:'press',neg:'negativa',flex:'flexión'},front:{press:'press',neg:'negativa',flex:'pull-up'}};
+// Seguimiento de la progresión (guía LAD, 20–22 nov): holds sueltos, powermoves sueltos y combos
+function progOf(series){
+  const P={};
+  const get=(fam,k)=>{const key=fam+'|'+k;return P[key]||(P[key]={fam,prog:k,hold:0,n:0,best:0,pm:{},cmb:{n:0,s:0,pm:0}});};
+  (series||[]).forEach(s=>{
+    const real=s.efs.filter(e=>e.mv!=='low'&&e.mv!=='aux'); if(!real.length)return;
+    const types=[...new Set(real.map(e=>e.mv))];
+    const secs=e=>+e.secs>0?+e.secs:(e.mv==='hold'?0:1.5);
+    if(types.length===1&&types[0]==='hold'){real.forEach(e=>{const g=get(s.fam,progKey(s.fam,e));g.hold+=secs(e);g.n++;g.best=Math.max(g.best,secs(e));});}
+    else if(!types.includes('hold')&&types.length===1){real.forEach(e=>{const g=get(s.fam,progKey(s.fam,e));const nm=PMN[s.fam][e.mv];g.pm[nm]=(g.pm[nm]||0)+(e.part?0.5:1);});}
+    else{const cnt={};real.forEach(e=>{const k=progKey(s.fam,e);cnt[k]=(cnt[k]||0)+1;});
+      const main=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0], g=get(s.fam,main); g.cmb.n++;
+      real.forEach(e=>{if(e.mv==='hold')g.cmb.s+=secs(e);else g.cmb.pm+=e.part?0.5:1;});}
+  });
+  return Object.values(P);
+}
+function fromCalc(){
+  if(!window.LADcalc||!window.LADcalc.snapshot) return null;
+  const snap=window.LADcalc.snapshot(); const st=snap.state;
+  return {v:1,date:$('r_date').value||todayISO(),note:$('r_note').value.trim(),srpe:$('r_srpe').value===''?null:+$('r_srpe').value,
+    ladau:snap.tL,base:snap.tB,inol:snap.tI,fallos:snap.fallos,cerca:snap.cerca,wNear:snap.wNear,nSeries:st.series.length,
+    profile:{H:st.H,M:st.M,tP:st.tP,tF:st.tF,sP:st.sP,sF:st.sF},
+    series:st.series,weights:st.weights,prog:progOf(st.series),saved:new Date().toISOString()};
+}
+function preview(){
+  const s=fromCalc(); if(!s){$('r_preview').textContent='';return;}
+  $('r_preview').innerHTML='<div><b>'+fmt(s.ladau,1)+'</b><span>LAD-Au</span></div><div><b>'+fmt(s.inol,2)+'</b><span>INOL</span></div><div><b>'+s.nSeries+'</b><span>series de skills</span></div><div><b>'+(s.weights||[]).length+'</b><span>ejercicios de pesas</span></div>';
+}
+$('r_save').addEventListener('click',async()=>{
+  const s=fromCalc(); if(!s){$('r_msg').textContent='La calculadora no está lista.';return;}
+  if(!s.nSeries&&!(s.weights||[]).length){$('r_msg').textContent='La calculadora está vacía: añade series o pesas antes de guardar.';return;}
+  s.id='s_'+s.date.replace(/-/g,'')+'_'+Date.now().toString(36);
+  $('r_save').disabled=true; const ok=await putSession(s); $('r_save').disabled=false;
+  $('r_msg').textContent=ok?'Guardada: '+longDate(s.date)+' · '+fmt(s.ladau,1)+' LAD-Au.':'No se pudo guardar.';
+  $('r_note').value='';$('r_srpe').value='';
+});
+
+/* ---------- lista ---------- */
+function renderList(){
+  const rows=[...sessions].sort((a,b)=>b.date.localeCompare(a.date)||String(b.saved).localeCompare(String(a.saved)));
+  $('r_count').textContent=rows.length+' sesi'+(rows.length===1?'ón':'ones');
+  $('r_empty').hidden=rows.length>0;
+  $('r_rows').innerHTML=rows.map(s=>'<tr><td>'+esc(longDate(s.date))+'</td><td>'+esc(s.note||'—')+'</td><td class="n"><b>'+fmt(s.ladau,1)+'</b></td><td class="n">'+fmt(s.base,1)+'</td><td class="n">'+fmt(s.inol,2)+'</td><td class="n">'+(s.nSeries||0)+'</td><td class="n">'+(s.fallos||0)+'</td><td class="n">'+(s.cerca||0)+'</td><td class="n">'+(s.srpe==null?'—':s.srpe)+'</td>'+
+    '<td class="acts"><button type="button" data-load="'+esc(s.id)+'">A la calculadora</button><button type="button" class="x" data-del="'+esc(s.id)+'" aria-label="Borrar sesión">✕</button></td></tr>').join('');
+  const th=[...document.querySelectorAll('.rtable th')].map(t=>t.textContent);
+  $('r_rows').querySelectorAll('tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.l=th[i]||''));
+}
+$('r_rows').addEventListener('click',e=>{
+  const d=e.target.dataset;
+  if(d.del){const s=sessions.find(x=>x.id===d.del); if(s&&confirmDel(e.target)) delSession(d.del);}
+  if(d.load){const s=sessions.find(x=>x.id===d.load); if(s&&window.LADcalc&&window.LADcalc.load){window.LADcalc.load(s);window.LADtab('calc');}}
+});
+// borrado en dos pulsaciones (sin ventanas del navegador)
+function confirmDel(btn){if(btn.dataset.armed){return true;}btn.dataset.armed='1';btn.textContent='¿Borrar?';setTimeout(()=>{if(btn.isConnected){delete btn.dataset.armed;btn.textContent='✕';}},3000);return false;}
+
+/* ---------- exportar / importar ---------- */
+$('r_export').addEventListener('click',async()=>{
+  const data=JSON.stringify({app:'LAD',v:1,exported:new Date().toISOString(),sessions},null,1), name='registro-LAD-'+todayISO()+'.json';
+  try{const dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null;
+    if(dl){await dl.save({filename:name,data});$('r_iomsg').textContent='Copia exportada.';return;}}catch(e){if(e&&e.code==='declined'){$('r_iomsg').textContent='Exportación cancelada.';return;}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();a.remove();
+  $('r_iomsg').textContent='Copia exportada.';
+});
+$('r_import').addEventListener('change',async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{const j=JSON.parse(await f.text()); const list=(j.sessions||[]).filter(s=>s&&s.id&&s.date&&isFinite(s.ladau));
+    let n=0; for(const s of list){if(!sessions.some(x=>x.id===s.id)){await putSession(s);n++;}}
+    $('r_iomsg').textContent=n+' sesi'+(n===1?'ón importada':'ones importadas')+(list.length-n?' · '+(list.length-n)+' ya estaban':'')+'.';
+  }catch(err){$('r_iomsg').textContent='El archivo no es una copia del registro LAD.';}
+  e.target.value='';
+});
+
+/* ---------- evolución ---------- */
+let per='4', skill='plancha'; const charts={};
+try{per=localStorage.getItem('lad-evo-per')||'4'}catch(e){}
+function range(){
+  const dates=sessions.map(s=>s.date).sort(); const last=todayISO();
+  if(per==='custom'){const f=$('e_from').value||dates[0]||last, t=$('e_to').value||last;return [monday(f),addDays(monday(t),6)];}
+  if(per==='all'){return [monday(dates[0]||last),addDays(monday(last),6)];}
+  const end=addDays(monday(last),6); return [addDays(monday(last),-7*(+per-1)),end];
+}
+function dailyMap(){const m={};sessions.forEach(s=>{m[s.date]=(m[s.date]||0)+(+s.ladau||0);});return m;}
+function acwrAt(day,m,first){
+  let a=0,c=0;for(let i=0;i<28;i++){const d=addDays(day,-i);const v=m[d]||0;if(i<7)a+=v;c+=v;}
+  const span=Math.min(28,Math.round((D(day)-D(first))/86400000)+1); if(span<7||c<=0) return null;
+  return (a/7)/(c/span);
+}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+/* ---------- gráficas en SVG (sin librerías) ---------- */
+function svgChart(id,o){
+  const box=$(id); if(!box) return; const W=Math.max(280,box.clientWidth||600), H=W<520?240:300;
+  const m={l:44,r:o.lines&&o.lines.some(l=>l.axis==='y1')?44:12,t:o.title?26:10,b:28}, iw=W-m.l-m.r, ih=H-m.t-m.b, n=o.labels.length||1;
+  const ink=css('--muted'),line=css('--line'),txt=css('--ink');
+  const bars=o.bars||[], lines=o.lines||[];
+  let ymax=0; if(o.stacked){for(let i=0;i<n;i++){let s=0;bars.forEach(b=>s+=+b.data[i]||0);ymax=Math.max(ymax,s);}}else bars.forEach(b=>b.data.forEach(v=>ymax=Math.max(ymax,+v||0)));
+  lines.filter(l=>l.axis!=='y1').forEach(l=>l.data.forEach(v=>{if(v!=null)ymax=Math.max(ymax,+v)}));
+  const nice=v=>{if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const f=v/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p;};
+  const stp=nice(Math.max(ymax,0.001)*1.08/4), yTop=stp*4, y1d=Math.max(0.5,...lines.filter(l=>l.axis==='y1').flatMap(l=>l.data.filter(v=>v!=null)))*1.1, y1Top=Math.max(o.y1max||0,Math.ceil(y1d/(y1d>2?1:0.4))*(y1d>2?1:0.4));
+  const X=i=>m.l+iw*(i+0.5)/n, Y=v=>m.t+ih*(1-v/yTop), Y1=v=>m.t+ih*(1-v/y1Top);
+  let g='';
+  for(let k=0;k<=4;k++){const v=yTop*k/4,y=Y(v);g+='<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y+'" y2="'+y+'" stroke="'+line+'"/><text x="'+(m.l-6)+'" y="'+(y+4)+'" text-anchor="end" fill="'+ink+'" font-size="11">'+fmt(v,v%1?(v*10%1?2:1):0)+'</text>';
+    if(m.r>12){const v1=y1Top*k/4;g+='<text x="'+(W-m.r+6)+'" y="'+(y+4)+'" fill="'+(o.y1color||ink)+'" font-size="11">'+fmt(v1,2)+'</text>';}}
+  const step=Math.ceil(n/Math.max(1,Math.floor(iw/46)));
+  o.labels.forEach((l,i)=>{if(i%step===0)g+='<text x="'+X(i)+'" y="'+(H-8)+'" text-anchor="middle" fill="'+ink+'" font-size="11">'+esc(l)+'</text>';});
+  const bw=Math.min(46,iw/n*0.7), each=o.stacked?bw:bw/Math.max(1,bars.length);
+  for(let i=0;i<n;i++){let acc=0;bars.forEach((b,j)=>{const v=+b.data[i]||0;if(!v)return;const x=o.stacked?X(i)-bw/2:X(i)-bw/2+j*each;const y0=o.stacked?Y(acc):Y(0);const y1=o.stacked?Y(acc+v):Y(v);
+      g+='<rect x="'+x+'" y="'+y1+'" width="'+Math.max(1,each-1)+'" height="'+Math.max(0,y0-y1)+'" fill="'+b.color+'" rx="2"><title>'+esc(o.labels[i]+' · '+b.label+': '+fmt(v,b.dec==null?1:b.dec))+'</title></rect>';if(o.stacked)acc+=v;});}
+  lines.forEach(l=>{const F=l.axis==='y1'?Y1:Y;let d='',pen=false;l.data.forEach((v,i)=>{if(v==null){pen=l.span?pen:false;return;}d+=(pen?'L':'M')+X(i)+' '+F(v)+' ';pen=true;});
+    g+='<path d="'+d+'" fill="none" stroke="'+l.color+'" stroke-width="'+(l.dash?1.2:2)+'"'+(l.dash?' stroke-dasharray="4 4"':'')+'/>';
+    if(!l.dash)l.data.forEach((v,i)=>{if(v!=null)g+='<circle cx="'+X(i)+'" cy="'+F(v)+'" r="'+(n>40?1.6:3)+'" fill="'+l.color+'"><title>'+esc(o.labels[i]+' · '+l.label+': '+fmt(v,l.dec==null?2:l.dec))+'</title></circle>';});});
+  if(o.title)g+='<text x="'+m.l+'" y="16" fill="'+txt+'" font-size="13" font-weight="600">'+esc(o.title)+'</text>';
+  const leg=bars.map(b=>[b.label,b.color,0]).concat(lines.filter(l=>l.label).map(l=>[l.label,l.color,1]));
+  box.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" role="img" aria-label="'+esc(box.getAttribute('aria-label')||'')+'">'+g+'</svg>'+
+    '<div class="legend">'+leg.map(([t,c,ln])=>'<span><i style="background:'+c+(ln?';height:3px':'')+'"></i>'+esc(t)+'</span>').join('')+'</div>';
+}
+
+const PAL=['#1f5fd6','#c2410c','#15803d','#7c3aed','#b45309','#0e7490','#be123c','#4d7c0f'];
+function renderEvo(){
+  document.querySelectorAll('#tab-evo .seg [data-w]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.w===per?'true':'false'));
+  document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sk===skill?'true':'false'));
+  $('e_custom').hidden=per!=='custom';
+  const [from,to]=range(); $('e_range').textContent=shortDate(from)+' – '+shortDate(to)+'/'+D(to).getUTCFullYear();
+  const inP=sessions.filter(s=>s.date>=from&&s.date<=to);
+  $('e_none').hidden=inP.length>0;
+  const weeks=[];for(let w=from;w<=to;w=addDays(w,7))weeks.push(w);
+  const m=dailyMap(), first=(sessions.map(s=>s.date).sort()[0])||from;
+  const W=weeks.map(w=>{const ss=sessions.filter(s=>s.date>=w&&s.date<=addDays(w,6));return {w,n:ss.length,lad:ss.reduce((a,s)=>a+(+s.ladau||0),0),inol:ss.reduce((a,s)=>a+(+s.inol||0),0),fallos:ss.reduce((a,s)=>a+(s.fallos||0),0),cerca:ss.reduce((a,s)=>a+(s.cerca||0),0),acwr:acwrAt(addDays(w,6),m,first)};});
+  // semana anterior al periodo, para el primer cambio
+  const prevW=addDays(from,-7), prevS=sessions.filter(s=>s.date>=prevW&&s.date<=addDays(prevW,6));
+  const prev={lad:prevS.reduce((a,s)=>a+(+s.ladau||0),0),inol:prevS.reduce((a,s)=>a+(+s.inol||0),0)};
+  W.forEach((x,i)=>{const p=i?W[i-1]:prev;x.dl=p.lad>0?(x.lad/p.lad-1)*100:NaN;x.di=p.inol>0?(x.inol/p.inol-1)*100:NaN;});
+  const totL=W.reduce((a,x)=>a+x.lad,0), totI=W.reduce((a,x)=>a+x.inol,0), today=todayISO(), acNow=acwrAt(today,m,first);
+  const doneW=W.filter(x=>x.w<=monday(today));
+  $('e_tiles').innerHTML=[['LAD-Au del periodo',fmt(totL,1)],['Media por semana',fmt(totL/Math.max(1,doneW.length),1)],['INOL del periodo',fmt(totI,2)],['Sesiones',String(inP.length)],
+    ['ACWR de skills hoy',acNow==null?'—':fmt(acNow,2)],['Última semana frente a la anterior',doneW.length?pct(doneW[doneW.length-1].dl):'—']]
+    .map(([l,v])=>'<div><b>'+v+'</b><span>'+l+'</span></div>').join('');
+  $('e_wrows').innerHTML=W.map(x=>'<tr><td>'+shortDate(x.w)+'–'+shortDate(addDays(x.w,6))+'</td><td class="n">'+x.n+'</td><td class="n"><b>'+fmt(x.lad,1)+'</b></td><td class="n">'+pct(x.dl)+'</td><td class="n">'+fmt(x.inol,2)+'</td><td class="n">'+pct(x.di)+'</td><td class="n">'+x.fallos+'</td><td class="n">'+x.cerca+'</td><td class="n">'+(x.acwr==null?'—':fmt(x.acwr,2))+'</td></tr>').join('');
+  label('e_wrows');
+  const acc=css('--accent'),acc2=css('--accent2'),ok=css('--ok');
+  svgChart('e_cw',{labels:W.map(x=>shortDate(x.w)),bars:[{label:'LAD-Au',data:W.map(x=>x.lad),color:acc}],lines:[{label:'INOL (eje derecho)',data:W.map(x=>x.inol),color:acc2,axis:'y1'}],y1color:acc2});
+  const days=[];for(let d=from;d<=to;d=addDays(d,1))days.push(d);
+  const ac=days.map(d=>acwrAt(d,m,first));
+  svgChart('e_cd',{labels:days.map(shortDate),bars:[{label:'LAD-Au del día',data:days.map(d=>m[d]||0),color:acc}],
+    lines:[{label:'ACWR (eje derecho)',data:ac,color:acc2,axis:'y1',span:true},{label:'Franja 0,8–1,3',data:days.map(()=>1.3),color:ok,axis:'y1',dash:true},{label:'',data:days.map(()=>0.8),color:ok,axis:'y1',dash:true}],y1max:1.6,y1color:acc2});
+  // progresión
+  const PR={};
+  inP.forEach(s=>(s.prog||[]).filter(p=>p.fam===skill).forEach(p=>{const w=monday(s.date);const k=p.prog;const r=(PR[k]=PR[k]||{});const x=(r[w]=r[w]||{hold:0,n:0,best:0,pm:{},cmb:{n:0,s:0,pm:0}});
+    x.hold+=p.hold;x.n+=p.n;x.best=Math.max(x.best,p.best);Object.entries(p.pm||{}).forEach(([a,b])=>x.pm[a]=(x.pm[a]||0)+b);x.cmb.n+=p.cmb.n;x.cmb.s+=p.cmb.s;x.cmb.pm+=p.cmb.pm;}));
+  const progs=Object.keys(PR).sort();
+  svgChart('e_cp',{title:'Segundos de hold sueltos',labels:W.map(x=>shortDate(x.w)),stacked:true,bars:progs.map((k,i)=>({label:k,data:W.map(x=>(PR[k][x.w]||{}).hold||0),color:PAL[i%PAL.length]}))});
+  svgChart('e_cb',{title:'Mejor hold suelto de la semana (s)',labels:W.map(x=>shortDate(x.w)),lines:progs.map((k,i)=>({label:k,data:W.map(x=>{const v=(PR[k][x.w]||{}).best;return v||null;}),color:PAL[i%PAL.length],span:true}))});
+  $('e_prows').innerHTML=progs.map(k=>W.filter(x=>PR[k][x.w]).map((x,j)=>{const r=PR[k][x.w];const pm=Object.entries(r.pm).map(([a,b])=>fmt(b,b%1?1:0)+' '+a).join(' · ')||'—';
+    return '<tr><td>'+(j?'':'<b>'+esc(k)+'</b>')+'</td><td>'+shortDate(x.w)+'</td><td class="n">'+(r.n?fmt(r.hold,1)+'″':'—')+'</td><td class="n">'+(r.n||'—')+'</td><td class="n">'+(r.best?fmt(r.best,2)+'″':'—')+'</td><td>'+pm+'</td><td>'+(r.cmb.n?r.cmb.n+' · '+fmt(r.cmb.s,1)+'″ · '+fmt(r.cmb.pm,r.cmb.pm%1?1:0):'—')+'</td></tr>';}).join('')).join('')||'<tr><td colspan="7">Sin series de '+(skill==='plancha'?'plancha':'front lever')+' en este periodo.</td></tr>';
+  label('e_prows');
+}
+function label(id){const tb=$(id);const th=[...tb.parentNode.querySelectorAll('th')].map(t=>t.textContent);tb.querySelectorAll('tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.l=th[i]||''));}
+document.querySelectorAll('#tab-evo .seg [data-w]').forEach(b=>b.addEventListener('click',()=>{per=b.dataset.w;try{localStorage.setItem('lad-evo-per',per)}catch(e){}renderEvo();}));
+document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.addEventListener('click',()=>{skill=b.dataset.sk;renderEvo();}));
+['e_from','e_to'].forEach(id=>$(id).addEventListener('change',renderEvo));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(!$('tab-evo').hidden)renderEvo();});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(!$('tab-evo').hidden)renderEvo();},200);});
+
+function renderAll(){renderList();if(!$('tab-evo').hidden)renderEvo();}
+window.LADreg={show(t){if(t==='reg')preview();if(t==='evo')renderEvo();},refresh:renderAll};
+$('r_date').value=todayISO();
+initStore();
+})();
+</script>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const tabs=['sim','calc','reg','evo','tab','how'];
+  function show(t){
+    tabs.forEach(x=>{$('tab-'+x).hidden=x!==t;$('t-'+x).setAttribute('aria-selected',x===t?'true':'false');});
+    try{localStorage.setItem('lad-tab',t)}catch(e){}
+    if(t==='tab'&&window.LADsim) window.LADsim.refreshTables();
+    if(t==='calc'&&window.LADcalc) window.LADcalc.refresh();
+    if((t==='reg'||t==='evo')&&window.LADreg) window.LADreg.show(t);
+  }
+  window.LADtab=t=>{show(t);window.scrollTo({top:0});};
+  tabs.forEach(x=>$('t-'+x).addEventListener('click',()=>show(x)));
+  document.querySelector('.tabbar').addEventListener('keydown',e=>{const i=tabs.findIndex(x=>$('t-'+x).getAttribute('aria-selected')==='true');if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];show(n);$('t-'+n).focus();}});
+  // perfil común: altura, peso y techo
+  const pairs=[['H','c_H','input'],['M','c_M','input'],['techoP','c_tP','change'],['techoF','c_tF','change']];
+  let busy=false;
+  function copy(from,to,ev){if(busy)return;const a=$(from),b=$(to);if(!a||!b||a.value===b.value)return;busy=true;b.value=a.value;b.dispatchEvent(new Event(ev,{bubbles:true}));busy=false;}
+  pairs.forEach(([s,c,ev])=>{$(s).addEventListener(ev,()=>copy(s,c,ev));$(c).addEventListener(ev,()=>copy(c,s,ev));});
+  pairs.forEach(([s,c,ev])=>copy(s,c,ev));
+  // si la calculadora usa tus medidas, se recalcula al cambiarlas en el simulador
+  const med=document.querySelector('[aria-labelledby="h-medidas"]');
+  if(med) med.addEventListener('input',()=>{if($('c_own').checked&&window.LADcalc)window.LADcalc.refresh();});
+  let t='sim';try{t=localStorage.getItem('lad-tab')||'sim'}catch(e){}
+  show(tabs.includes(t)?t:'sim');
+})();
+</script>
+
+</body>
+</html>
