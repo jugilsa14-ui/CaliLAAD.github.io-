@@ -405,6 +405,32 @@ dl.syms dt{font-weight:700;font-family:var(--display);white-space:nowrap}
 dl.syms dd{margin:0;color:var(--ink)}
 @media (max-width:640px){dl.syms{grid-template-columns:minmax(0,1fr)}dl.syms dt{white-space:normal;margin-top:6px}}
 .refs td:first-child{min-width:240px}.refs td:nth-child(3){text-align:center;font-weight:700}
+.brow output.fixed{display:block;padding:7px 10px;border:1px dashed var(--line);border-radius:8px;min-width:82px;color:var(--muted);font-weight:600}
+/* tu cuenta */
+.cuenta .chead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.cuenta .chead h2{margin:0}
+.cuenta .plan{font-family:var(--display);font-weight:700;color:var(--accent)}
+.cbar{height:6px;border-radius:999px;background:var(--soft);border:1px solid var(--line);overflow:hidden;margin:10px 0 6px}
+.cbar i{display:block;height:100%;background:var(--accent);width:0}
+.cpay{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.cpay[hidden]{display:none}
+.cpay .gcons,.cmore .gcons{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.4}
+.cpay button{align-self:flex-start}
+.cmore summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:10px}
+.foot{max-width:1180px;margin:28px auto 90px;padding:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.foot a{color:var(--muted)}
+/* skills: plancha en naranja, front lever en azul */
+:root{--plancha:#D9731A;--plancha-ink:#8A4208;--front:#2563C9;--front-ink:#173F86}
+.bcard.fam-plancha{border-left:4px solid var(--plancha)}
+.bcard.fam-front{border-left:4px solid var(--front)}
+.bcard.fam-plancha .bhead b{color:var(--plancha-ink)}
+.bcard.fam-front .bhead b{color:var(--front-ink)}
+button.primary.sk-plancha{background:var(--plancha);border-color:var(--plancha);color:#fff}
+button.primary.sk-front{background:var(--front);border-color:var(--front);color:#fff}
+#tab-evo [data-sk="plancha"][aria-pressed="true"],[data-fam="plancha"][aria-pressed="true"]{background:var(--plancha)!important;border-color:var(--plancha)!important;color:#fff!important}
+#tab-evo [data-sk="front"][aria-pressed="true"],[data-fam="front"][aria-pressed="true"]{background:var(--front)!important;border-color:var(--front)!important;color:#fff!important}
+#h_best .fam-plancha{border-left-color:var(--plancha)!important}#h_best .fam-plancha b{color:var(--plancha-ink)}
+#h_best .fam-front{border-left-color:var(--front)!important}#h_best .fam-front b{color:var(--front-ink)}
 </style>
 
 <div class="wrap">
@@ -420,7 +446,7 @@ dl.syms dd{margin:0;color:var(--ink)}
     <form id="g_form" novalidate>
       <label>Correo electrónico <input id="g_email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
       <label id="g_pwl">Contraseña <input id="g_pw" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres"></label>
-      <label class="chk gcons" id="g_consl"><input id="g_cons" type="checkbox"> Acepto que CALI.LAAD guarde mi correo y mis sesiones para darme el servicio. Puedo borrarlos cuando quiera.</label>
+      <label class="chk gcons" id="g_consl"><input id="g_cons" type="checkbox"> Acepto que CALI.LAAD guarde mi correo y mis sesiones para darme el servicio, según la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Tengo 14 años o más. Puedo borrarlo todo cuando quiera.</label>
       <label class="chk gcons" id="g_statl"><input id="g_stat" type="checkbox"> Opcional: dejo que mis sesiones se usen, sin mi correo ni mi nombre, para estadísticas de la comunidad e investigación sobre la carga en calistenia.</label>
       <button class="primary btnbig" id="g_go" type="submit">Crear cuenta</button>
       <button type="button" class="linkb" id="g_forgot">He olvidado mi contraseña</button>
@@ -733,6 +759,22 @@ dl.syms dd{margin:0;color:var(--ink)}
 
   </div>
   <div class="tabpanel" id="tab-reg" role="tabpanel" aria-labelledby="t-reg" hidden>
+  <section class="panel cuenta" id="r_cuenta" aria-labelledby="r_h-cuenta" hidden>
+    <div class="chead"><h2 id="r_h-cuenta">Tu cuenta</h2><span class="plan" id="c_plan"></span></div>
+    <div class="cbar" aria-hidden="true"><i id="c_bar"></i></div>
+    <p class="notes" id="c_txt"></p>
+    <div class="cpay" id="c_pay">
+      <label class="chk gcons"><input type="checkbox" id="c_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de venta</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
+      <label class="chk gcons"><input type="checkbox" id="c_ok2"> Quiero el acceso completo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label>
+      <button type="button" class="primary btnbig" id="c_buy" disabled>Desbloquear CALI.LAAD · 5 € (pago único)</button>
+      <p class="notes" id="c_buymsg" role="status"></p>
+    </div>
+    <details class="cmore"><summary>Privacidad y datos de tu cuenta</summary>
+      <label class="chk gcons"><input type="checkbox" id="c_stat"> Dejo que mis sesiones se usen, sin mi correo ni mi nombre, para estadísticas de la comunidad e investigación. Puedo quitarlo cuando quiera.</label>
+      <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" id="c_export">Descargar todos mis datos</button><button type="button" class="x" id="c_del">Borrar mi cuenta</button></div>
+      <p class="notes" id="c_delmsg" role="status"></p>
+    </details>
+  </section>
   <section class="panel nb" aria-labelledby="r_h-save">
     <div class="head"><h2 id="r_h-save">Nueva sesión</h2><span id="r_store" class="tag"></span></div>
     <div class="rform">
@@ -749,12 +791,12 @@ dl.syms dd{margin:0;color:var(--ink)}
     </details>
 
     <div id="r_preview" class="rprev"></div>
-    <div class="sticky-head"><h3>Series de skills</h3><span class="notes">Una serie es una fila o varias: para un combo, añade más filas a la misma serie.</span></div>
+    <div class="sticky-head"><h3>Series de skills</h3><span class="notes">Una serie es una fila o varias: para un combo, añade más filas a la misma serie. El <b>agarre</b> se anota por serie (por ahora no cambia la carga). Un <b>deadstop</b> es un hold de 0,5″: su duración está fija y no se puede cambiar; si aguantas más, anótalo como hold.</span></div>
     <div id="b_series" class="bseries"></div>
     <p class="notes" id="b_empty">Todavía no hay series. Añade la primera.</p>
     <div class="row addbtns">
-      <button class="primary" type="button" data-addser="plancha">+ Serie de plancha</button>
-      <button class="primary" type="button" data-addser="front">+ Serie de front lever</button>
+      <button class="primary sk-plancha" type="button" data-addser="plancha">+ Serie de plancha</button>
+      <button class="primary sk-front" type="button" data-addser="front">+ Serie de front lever</button>
     </div>
     <h3 style="margin-top:6px">Pesas</h3>
     <div class="tablewrap"><table class="wtable"><thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg</th><th>Con mi peso</th><th>1RM (kg)</th><th>Aguante por rep (s)</th><th>INOL</th><th></th></tr></thead><tbody id="b_wrows"></tbody></table></div>
@@ -879,6 +921,7 @@ dl.syms dd{margin:0;color:var(--ink)}
       <dt>INT1</dt><dd>Intensidad de la postura: torque de hombro + codo de la postura ÷ el de la full. Full = 1.</dd>
       <dt>INT2</dt><dd>Intensidad del powermove: su impulso angular ÷ el del hold de la misma duración. Hold = 1.</dd>
       <dt>Hold</dt><dd>Mantener la postura quieta un tiempo (en segundos, ″).</dd>
+      <dt>Deadstop</dt><dd>Un hold de 0,5″, siempre. Es una parada breve en la postura, por ejemplo entre dos powermoves. En el registro su duración está fija: si aguantas más, es un hold y se anota con sus segundos. Deadstop + powermove en la misma serie = combo.</dd>
       <dt>Powermove</dt><dd>Movimiento dentro de la skill: press, negativa, flexión (plancha) o pull-up (front lever).</dd>
     </dl>
 
@@ -898,6 +941,7 @@ dl.syms dd{margin:0;color:var(--ink)}
         <tr><td>F_goma</td><td>Fuerza de la goma = kg de asistencia × g</td><td>N</td></tr>
         <tr><td>φ, e, θ</td><td>Ángulo del antebrazo, flexión del codo e inclinación del tronco</td><td>°</td></tr>
         <tr><td>s, s_máx</td><td>Segundos de un hold y tu máximo en esa postura</td><td>s</td></tr>
+        <tr><td>Deadstop</td><td>Hold de 0,5″ fijo; deadstop + powermove = combo</td><td>s</td></tr>
         <tr><td>INT1, INT2</td><td>Intensidad de la postura y del powermove</td><td>sin unidad</td></tr>
         <tr><td>RPE-P</td><td>Esfuerzo relativo a tu progresión: 10 × torque de la postura ÷ torque de tu techo (apartado 9)</td><td>0–10 (puede pasar de 10)</td></tr>
         <tr><td>Techo</td><td>La progresión más difícil que mantienes 2″ o más, sin goma</td><td>—</td></tr>
@@ -1094,9 +1138,17 @@ dl.syms dd{margin:0;color:var(--ink)}
 
     <h3 id="how-11">11. Carga LAD de la sesión (calculadora)</h3>
     <ul>
-      <li><b>Esfuerzo de skill o auxiliar:</b> c = INT1 × INT2 × segundos (powermove sin vídeo: 1,5″; parcial: la mitad; anillas: × F_anillas, el RPE percibido en anillas ÷ en paralelas).</li>
+      <li><b>Esfuerzo de skill o auxiliar:</b> c = INT1 × INT2 × segundos (deadstop: hold de 0,5″, INT2 = 1, así que vale INT1 × 0,5; powermove sin vídeo: 1,5″; parcial: la mitad; anillas: × F_anillas, el RPE percibido en anillas ÷ en paralelas).</li>
       <li><b>Fatiga:</b> carga = c × (1 + b × A). El fallo se entiende como fallo de tarea: no poder sostener la posición (Enoka y Duchateau, 2008). A suma la fracción de máximo de cada esfuerzo, x = INT2 × s ÷ s_máx, dentro de la serie (intraserie) y arrastra lo que queda de la serie anterior de su familia, × e^(−descanso ÷ τ) (interserie). b = 0,25 hasta el 60 % del torque de tu techo (RPE-P 6) y 0,165 desde el 80 % (RPE-P 8), lineal entre medias (rango de García-Ramos et al., 2018, y Ciccone et al., 2017); τ = 60 s, entre la fase rápida de recuperación de la fosfocreatina de Harris et al. (1976) y la de Bogdanis et al. (1995), ambas recogidas por McMahon y Jenkins (2002); w = 0 entre empuje y tirón, porque fatigar un grupo muscular apenas cambia la fuerza de otro (Behm et al., 2021; Halperin et al., 2015). En poco torque (pino, colgado invertido) no hay carga y A baja con e^(−t ÷ τ).</li>
-      <li><b>s_máx:</b> el récord del bloque en tu techo; en otras posturas, tu máximo si lo pones o la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n), con n = 7,8 estándar. La forma potencia es la que mejor ajusta el tiempo límite isométrico (Frey Law y Avin, 2010); el valor 7,8 sale de la half frente a la full del autor (F). Sin tu máximo en el techo, la calculadora no puede estimar la fatiga ni la cercanía al fallo: pon tu récord en «Tú».</li>
+      <li><b>s_máx:</b> el récord del bloque en tu techo; en otras posturas, tu máximo si lo pones o la curva s_máx = máximo del techo × (torque ÷ torque del techo)^(−n), con n = 7,8 estándar.</li>
+      <li><b>Qué es n, el exponente de la curva.</b> Dice cuánto más aguantas al bajar de palanca. Una postura con menos torque que tu techo se aguanta más tiempo, pero no en proporción: el tiempo crece mucho más deprisa de lo que baja el torque. n mide esa rapidez. Con n = 7,8 y un máximo de 4″ en la full:
+        <div class="tablewrap"><table class="def"><thead><tr><th>Postura (torque ÷ techo)</th><th>Cálculo</th><th>s_máx estimado</th></tr></thead><tbody>
+        <tr><td>Full (1,00)</td><td>4 × 1,00^(−7,8)</td><td>4,0″</td></tr>
+        <tr><td>Half (0,93)</td><td>4 × 0,93^(−7,8) = 4 × 1,76</td><td>≈ 7,0″</td></tr>
+        <tr><td>Straddle half (0,86)</td><td>4 × 0,86^(−7,8) = 4 × 3,24</td><td>≈ 13″</td></tr>
+        <tr><td>ADV90 (0,77)</td><td>4 × 0,77^(−7,8) = 4 × 7,7</td><td>≈ 31″</td></tr>
+        </tbody></table></div>
+        Un n más alto quiere decir que, al quitar un poco de palanca, el máximo se dispara; uno más bajo, que crece poco. La forma potencia es la que mejor ajusta el tiempo límite de las contracciones isométricas (Frey Law y Avin, 2010). El valor 7,8 sale de comparar los máximos del autor en half y en full (F). <b>Tu propio n</b>: mide tu máximo en dos posturas (s₁ con torque T₁ y s₂ con torque T₂, por ejemplo full y half) y calcula n = ln(s₂ ÷ s₁) ÷ ln(T₁ ÷ T₂). Ejemplo: full 4″ y half 7″, con la half al 0,93 del torque: n = ln(7 ÷ 4) ÷ ln(1 ÷ 0,93) = 0,56 ÷ 0,073 ≈ 7,7. Sin tu máximo en el techo, la calculadora no puede estimar la fatiga ni la cercanía al fallo: pon tu récord en «Tú».</li>
       <li><b>Pesas:</b> INOL = series × reps × (1 + c_h × segundos de aguante) ÷ (100 − % 1RM), con masa total en lastrados y tope en el 99 %; c_h = 0,4 provisional. Sin fatiga acumulada. INOL de Hristov (2005).</li>
       <li><b>Dos cifras, sin sumar</b> (criterio del autor, 19 nov 2026): LAD-Au e INOL se siguen por separado, como tendencias conjuntas. El ACWR solo usa la LAD-Au, y con él se decide si programar más carga. La franja 0,8–1,3 viene de deportes de equipo (Gabbett, 2016), no está validada en calistenia y el método tiene críticas (Impellizzeri et al., 2020).</li>
       <li><b>Esfuerzo:</b> número de fallos anotados y de series cerca del fallo (reserva ≤ 1″ o ≤ 1 rep; estimada por el modelo si no se anota). En pesas, cercanía por RIR (Zourdos et al., 2016) si estás entrenado en RIR; si no, por la fórmula de Epley. La sRPE del registro sigue a Foster et al. (2001).</li>
@@ -1104,7 +1156,7 @@ dl.syms dd{margin:0;color:var(--ink)}
     <dl class="syms" aria-label="Símbolos del apartado 11">
       <dt>c</dt><dd>Carga base de un esfuerzo, sin fatiga (LAD).</dd>
       <dt>INT1, INT2</dt><dd>Intensidad de la postura (apartado 9) y del powermove (apartado 8).</dd>
-      <dt>s</dt><dd>Segundos del hold o del powermove.</dd>
+      <dt>s</dt><dd>Segundos del hold o del powermove. Un deadstop son siempre 0,5″.</dd>
       <dt>s_máx</dt><dd>Lo máximo que aguantarías en esa postura, fresco (s).</dd>
       <dt>x</dt><dd>Fracción de tu máximo que gasta un esfuerzo: 2″ de un máximo de 4″ = 0,5.</dd>
       <dt>A</dt><dd>Fatiga acumulada: suma de las x anteriores, rebajada por el descanso. A = 1 ≈ una serie al fallo.</dd>
@@ -1112,7 +1164,8 @@ dl.syms dd{margin:0;color:var(--ink)}
       <dt>e^(−t ÷ τ)</dt><dd>Recuperación exponencial: la parte de la fatiga que queda tras t segundos de descanso. e ≈ 2,718.</dd>
       <dt>τ (tau)</dt><dd>Tiempo de recuperación: tras τ segundos queda ≈ 37 % de la fatiga. Estándar 60 s.</dd>
       <dt>w</dt><dd>Arrastre de la fatiga entre familias (empuje ↔ tirón). 0 = no se arrastra.</dd>
-      <dt>n</dt><dd>Exponente de la curva de s_máx: cuánto crece el máximo al bajar el torque. Estándar 7,8.</dd>
+      <dt>n</dt><dd>Exponente de la curva de s_máx: cuánto crece tu máximo al bajar el torque. Estándar 7,8. Con 4″ en la full, da ≈ 7″ en half y ≈ 31″ en ADV90.</dd>
+      <dt>ln</dt><dd>Logaritmo natural: sirve para despejar n a partir de dos máximos medidos.</dd>
       <dt>F_anillas</dt><dd>Factor de anillas: RPE en anillas ÷ RPE en paralelas (≥ 1).</dd>
       <dt>INOL</dt><dd>Índice de carga de pesas: repeticiones ÷ (100 − % 1RM). Más cerca del máximo, más vale cada repetición.</dd>
       <dt>% 1RM</dt><dd>Porcentaje de tu repetición máxima (el máximo peso para 1 repetición), contando tu peso en lastrados.</dd>
@@ -1182,10 +1235,9 @@ dl.syms dd{margin:0;color:var(--ink)}
       <thead><tr><th>Fuente</th><th>Para qué se usa</th><th>Nivel</th><th>Por qué ese nivel</th></tr></thead>
       <tbody>
         <tr><td>Behm, D. G., et al. (2021). Non-local muscle fatigue effects on muscle strength, power, and endurance in healthy individuals: a systematic review with meta-analysis. <i>Sports Medicine, 51</i>(9), 1893–1907. doi:10.1007/s40279-021-01456-3</td><td>w = 0: la fatiga de empuje no pasa al tirón</td><td>A</td><td>Revisión sistemática con metaanálisis. En personas sanas, no en calistenia: se extrapola.</td></tr>
-        <tr><td>Frey Law, L. A., y Avin, K. G. (2010). Endurance time is joint-specific: a modelling and meta-analysis investigation. <i>Ergonomics, 53</i>(1), 109–129</td><td>Forma potencia de la curva de s_máx</td><td>A</td><td>Metaanálisis del tiempo de aguante isométrico por articulación. Leído solo el resumen.</td></tr>
-        <tr><td>Grgic, J., et al. (2018). <i>Sports Medicine, 48</i>, 137–151</td><td>Descansos: en entrenados, más de 2′ para la fuerza máxima</td><td>A</td><td>Revisión sistemática. Leído solo el resumen.</td></tr>
+        <tr><td>Frey Law, L. A., y Avin, K. G. (2010). Endurance time is joint-specific: a modelling and meta-analysis investigation. <i>Ergonomics, 53</i>(1), 109–129</td><td>Forma potencia de la curva de s_máx</td><td>A</td><td>Metaanálisis del tiempo de aguante isométrico por articulación.</td></tr>
+        <tr><td>Grgic, J., et al. (2018). <i>Sports Medicine, 48</i>, 137–151</td><td>Descansos: en entrenados, más de 2′ para la fuerza máxima</td><td>A</td><td>Revisión sistemática.</td></tr>
         <tr><td>Halperin, I., Chapman, D. W., y Behm, D. G. (2015). Non-local muscle fatigue: effects and possible mechanisms. <i>European Journal of Applied Physiology, 115</i>(10), 2031–2048. doi:10.1007/s00421-015-3249-y</td><td>w = 0 (en tren superior el efecto cruzado aparece en un 32 % de las medidas)</td><td>A</td><td>Revisión sistemática. Ejercicios distintos de las skills: se extrapola.</td></tr>
-        <tr><td>Đorđević et al. (2023)</td><td>Consultada durante el desarrollo del modelo</td><td>A</td><td>Revisión aportada por el autor. Datos bibliográficos incompletos: por completar.</td></tr>
         <tr><td>Bogdanis, G. C., et al. (1995). Recuperación de fosfocreatina tras un sprint de 30 s</td><td>τ: recuperación lenta (t½ ≈ 56 s)</td><td>B</td><td>Estudio revisado por pares, pero citado a través de McMahon y Jenkins (2002) y en sprint, no en isometría.</td></tr>
         <tr><td>Calatayud, J., et al. (2014). Muscle activation during push-ups with different suspension training systems. <i>Journal of Sports Science and Medicine, 13</i>(3), 502–510</td><td>Anillas y auxiliares: la suspensión sube la actividad del tríceps y del abdomen, no la del deltoides anterior</td><td>B</td><td>Estudio revisado por pares; indirecto (flexiones, no skills), por eso no da un factor que se pueda trasladar.</td></tr>
         <tr><td>Ciccone, A. B., et al. (2017). <i>The Open Sports Sciences Journal, 10</i>, 37–51. doi:10.2174/1875399X01710010037</td><td>Rango de b (0,20–0,35)</td><td>B</td><td>Estudio revisado por pares; la traducción a b es una inferencia del autor (F).</td></tr>
@@ -1206,7 +1258,6 @@ dl.syms dd{margin:0;color:var(--ink)}
         <tr><td>Calintellect (web) · Rise with Marcus (web)</td><td>Referencias prácticas de progresiones de calistenia</td><td>E</td><td>Webs de entrenadores, sin revisión.</td></tr>
         <tr><td>Epley, B. (años 80). Fórmula de estimación del 1RM, manual de entrenamiento de la Universidad de Nebraska</td><td>1RM sin test y reps posibles a un % del 1RM</td><td>E</td><td>Fórmula de entrenador muy extendida, sin publicación revisada original.</td></tr>
         <tr><td>Hristov, H. (2005). INOL</td><td>Carga de las pesas (INOL) y sus rangos orientativos</td><td>E</td><td>Propuesta de entrenador, sin validar experimentalmente.</td></tr>
-        <tr><td>Physics Stack Exchange, pregunta 617326</td><td>Consultada sobre torques en palancas</td><td>E</td><td>Foro. Sin leer a fondo; no se usa ningún dato suyo.</td></tr>
         <tr><td>Criterios del autor (14–22 nov 2026)</td><td>INT1 respecto a la full; techo = progresión mantenida 2″ o más; gomas en kg; INT2 = impulso angular resultante sobre el hold, técnica perfecta y solo torque; anillas como factor aparte; RPE-P (γ = 1); b = 0,25 y 0,165; τ = 60 s; n = 7,8; c_h = 0,4; powermove sin vídeo 1,5″; LAD-Au e INOL sin sumar</td><td>F</td><td>Decisiones razonadas con las fuentes de arriba, pendientes de contraste con tests propios.</td></tr>
         <tr><td>Estimaciones propias del modelo</td><td>Tronco 0,288 × H, anchura de hombros 0,23 × H, geometría de maltese, SAT y FL touch, flexión por bajada del centro de masas</td><td>F</td><td>Cálculos del autor, ajustados para coincidir con la validación; sin medidas reales.</td></tr>
       </tbody>
@@ -2066,6 +2117,9 @@ const longDate=s=>D(s).toLocaleDateString('es-ES',{weekday:'short',day:'numeric'
 const LKEY='lad-registro-v1';
 // Cuentas de CALI.LAAD (Supabase). Rellenar con la Project URL y la clave pública (anon / publishable). Nunca la secreta.
 const SB_CONF={url:'',key:''};
+// Pago único (5 €). Enlace de pago de Lemon Squeezy (checkout) o de Stripe (Payment Link). Vacío = venta aún no activa.
+const PAY_CONF={url:''};
+let estado={pagado:false,usadas:0,gratis:5};
 const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
 let sessions=[], mode='none', col=null, sb=null, sbUser=null, openDet=null;
 const inClaude=!!(window.claude&&window.claude.use);
@@ -2117,9 +2171,10 @@ async function useAccount(user){
   const local=localLoad().filter(l=>!remote.some(r=>r.id===l.id));
   for(const l of local){await sb.from('sesiones').upsert({id:l.id,fecha:l.date,datos:clean(l)});remote.push(l);}
   if(local.length){try{localStorage.removeItem(LKEY)}catch(e){}}
-  mode='sb'; sessions=remote; renderAll();
+  mode='sb'; sessions=remote; renderAll(); refreshEstado();
+  if(/[?&]pagado=1/.test(location.search)){let n=0;const iv=setInterval(async()=>{await refreshEstado();if(estado.pagado||++n>10)clearInterval(iv);},3000);}
 }
-function signedOut(){sbUser=null;mode='local';sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
+function signedOut(){sbUser=null;$('r_cuenta').hidden=true;mode='local';sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
 window.CALIauth={
   async signUp(email,pw,stat){const {error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+location.pathname,data:{estadistica:!!stat,consentimiento:new Date().toISOString(),version_condiciones:'2026-11-22'}}});return error?error.message:null;},
   async signIn(email,pw){const {error}=await sb.auth.signInWithPassword({email,password:pw});return error?error.message:null;},
@@ -2132,8 +2187,10 @@ window.CALIauth={
 function clean(s){const o=Object.assign({},s);delete o.id;return JSON.parse(JSON.stringify(o));}
 async function putSession(s){
   if(mode==='sb'&&sb){const {error}=await sb.from('sesiones').upsert({id:s.id,fecha:s.date,datos:clean(s)});
-    if(error){$('r_msg').textContent='No se pudo guardar en tu cuenta: '+error.message;return false;}
-    const i=sessions.findIndex(x=>x.id===s.id); if(i>=0)sessions[i]=s; else sessions.push(s); renderAll(); return true;}
+    if(error){const lim=error.code==='42501'||/row-level security/i.test(error.message);
+      $('r_msg').textContent=lim?'Has usado tus '+estado.gratis+' sesiones gratis. Desbloquea CALI.LAAD por 5 € (pago único) para guardar sin límite: lo tienes arriba, en «Tu cuenta».':'No se pudo guardar en tu cuenta: '+error.message;
+      if(lim){refreshEstado();$('r_cuenta').scrollIntoView({block:'start'});}return false;}
+    const i=sessions.findIndex(x=>x.id===s.id); if(i>=0)sessions[i]=s; else {sessions.push(s);estado.usadas++;} renderAll(); renderCuenta(); return true;}
   if(mode==='db'&&col){try{await col.doc(s.id).set(clean(s));return true}catch(e){
     if(e&&e.code==='quota_exceeded'){$('r_msg').textContent='El registro está lleno: borra sesiones antiguas o exporta una copia.';return false;}
     mode='local';col=null;setStore('No se pudo guardar en tu cuenta: guardado en este navegador');}}
@@ -2145,6 +2202,29 @@ async function delSession(id){
   if(mode==='db'&&col){try{await col.doc(id).delete();return}catch(e){}}
   sessions=sessions.filter(s=>s.id!==id); localSave(); renderAll();
 }
+
+/* ---------- cuenta: plan gratuito (5 sesiones) o pago único ---------- */
+async function refreshEstado(){if(mode!=='sb'||!sb)return;const {data,error}=await sb.rpc('mi_estado');if(!error&&data)estado=data;renderCuenta();}
+function payUrl(){if(!PAY_CONF.url||!sbUser)return '';const e=encodeURIComponent(sbUser.email),id=encodeURIComponent(sbUser.id),q=PAY_CONF.url.includes('?')?'&':'?';
+  return /lemonsqueezy/.test(PAY_CONF.url)?PAY_CONF.url+q+'checkout[email]='+e+'&checkout[custom][user_id]='+id:PAY_CONF.url+q+'prefilled_email='+e+'&client_reference_id='+id;}
+function renderCuenta(){const box=$('r_cuenta');if(!box)return;if(mode!=='sb'||!sbUser){box.hidden=true;return;}box.hidden=false;
+  const left=Math.max(0,estado.gratis-estado.usadas);
+  $('c_plan').textContent=estado.pagado?'Acceso completo':'Plan gratuito';
+  $('c_bar').style.width=estado.pagado?'100%':Math.min(100,estado.usadas/estado.gratis*100)+'%';
+  $('c_txt').textContent=estado.pagado?'Puedes guardar todas las sesiones que quieras. Gracias por apoyar CALI.LAAD.':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Simulador, calculadora, tablas y método son siempre gratis.';
+  $('c_pay').hidden=!!estado.pagado; $('c_buy').disabled=!($('c_ok1').checked&&$('c_ok2').checked);
+  if(!PAY_CONF.url)$('c_buymsg').textContent='La venta se activa en cuanto el autor conecte el pago.';
+  $('c_stat').checked=!!(sbUser.user_metadata&&sbUser.user_metadata.estadistica);}
+['c_ok1','c_ok2'].forEach(id=>$(id).addEventListener('change',renderCuenta));
+$('c_buy').addEventListener('click',()=>{const u=payUrl();if(!u){$('c_buymsg').textContent='La venta aún no está activa.';return;}
+  sb.auth.updateUser({data:{desistimiento_renuncia:new Date().toISOString(),condiciones_aceptadas:'2026-11-22'}}).finally(()=>{location.href=u;});});
+$('c_stat').addEventListener('change',async e=>{const {data,error}=await sb.auth.updateUser({data:{estadistica:e.target.checked}});if(!error&&data&&data.user)sbUser=data.user;});
+$('c_export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({cuenta:sbUser&&sbUser.email,estado,sesiones:sessions},null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='calilaad-mis-datos.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
+let delArmed=false;
+$('c_del').addEventListener('click',async()=>{if(!delArmed){delArmed=true;$('c_del').textContent='Pulsa otra vez para borrarlo todo';$('c_delmsg').textContent='Se borrarán tu cuenta y todas tus sesiones. No se puede deshacer.';setTimeout(()=>{delArmed=false;$('c_del').textContent='Borrar mi cuenta';},8000);return;}
+  const {error}=await sb.rpc('borrar_mi_cuenta');if(error){$('c_delmsg').textContent='No se pudo borrar: '+error.message;return;}
+  $('c_delmsg').textContent='Cuenta borrada.';await sb.auth.signOut();});
 
 /* ---------- de la calculadora a una sesión guardada ---------- */
 function posName(fam,pos){const p=(LAD.PROG.find(x=>x.id===pos)||{}).name;return p?p.replace(/ \(.*\)$/,''):pos==='maltese'?'Maltese':pos==='fltouch'?'FL touch':pos==='sat'?'SAT':pos;}
@@ -2278,6 +2358,8 @@ function svgChart(id,o){
 }
 
 const PAL=['#17783F','#8F5A0E','#1F6E45','#8E2F45','#3F4650','#1F6B62','#6B5F12','#2F5A8C'];
+// Plancha siempre en naranjas y front lever siempre en azules (decisión del autor, 22 nov 2026)
+const SKPAL={plancha:['#D9731A','#A8520C','#F2A65A','#7A3A06','#F6C795','#C2611A'],front:['#2563C9','#173F86','#6E9BE6','#0E2A5C','#A9C3F0','#3F7FD9']};
 function renderEvo(){
   document.querySelectorAll('#tab-evo .seg [data-w]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.w===per?'true':'false'));
   document.querySelectorAll('#tab-evo .seg [data-sk]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sk===skill?'true':'false'));
@@ -2310,8 +2392,8 @@ function renderEvo(){
   inP.forEach(s=>(s.prog||[]).filter(p=>p.fam===skill).forEach(p=>{const w=monday(s.date);const k=p.prog;const r=(PR[k]=PR[k]||{});const x=(r[w]=r[w]||{hold:0,n:0,best:0,pm:{},cmb:{n:0,s:0,pm:0}});
     x.hold+=p.hold;x.n+=p.n;x.best=Math.max(x.best,p.best);Object.entries(p.pm||{}).forEach(([a,b])=>x.pm[a]=(x.pm[a]||0)+b);x.cmb.n+=p.cmb.n;x.cmb.s+=p.cmb.s;x.cmb.pm+=p.cmb.pm;}));
   const progs=Object.keys(PR).sort();
-  svgChart('e_cp',{title:'Segundos de hold sueltos',labels:W.map(x=>shortDate(x.w)),stacked:true,bars:progs.map((k,i)=>({label:k,data:W.map(x=>(PR[k][x.w]||{}).hold||0),color:PAL[i%PAL.length]}))});
-  svgChart('e_cb',{title:'Mejor hold suelto de la semana (s)',labels:W.map(x=>shortDate(x.w)),lines:progs.map((k,i)=>({label:k,data:W.map(x=>{const v=(PR[k][x.w]||{}).best;return v||null;}),color:PAL[i%PAL.length],span:true}))});
+  svgChart('e_cp',{title:'Segundos de hold sueltos',labels:W.map(x=>shortDate(x.w)),stacked:true,bars:progs.map((k,i)=>({label:k,data:W.map(x=>(PR[k][x.w]||{}).hold||0),color:SKPAL[skill][i%6]}))});
+  svgChart('e_cb',{title:'Mejor hold suelto de la semana (s)',labels:W.map(x=>shortDate(x.w)),lines:progs.map((k,i)=>({label:k,data:W.map(x=>{const v=(PR[k][x.w]||{}).best;return v||null;}),color:SKPAL[skill][i%6],span:true}))});
   $('e_prows').innerHTML=progs.map(k=>W.filter(x=>PR[k][x.w]).map((x,j)=>{const r=PR[k][x.w];const pm=Object.entries(r.pm).map(([a,b])=>fmt(b,b%1?1:0)+' '+a).join(' · ')||'—';
     return '<tr><td>'+(j?'':'<b>'+esc(k)+'</b>')+'</td><td>'+shortDate(x.w)+'</td><td class="n">'+(r.n?fmt(r.hold,1)+'″':'—')+'</td><td class="n">'+(r.n||'—')+'</td><td class="n">'+(r.best?fmt(r.best,2)+'″':'—')+'</td><td>'+pm+'</td><td>'+(r.cmb.n?r.cmb.n+' · '+fmt(r.cmb.s,1)+'″ · '+fmt(r.cmb.pm,r.cmb.pm%1?1:0):'—')+'</td></tr>';}).join('')).join('')||'<tr><td colspan="7">Sin series de '+(skill==='plancha'?'plancha':'front lever')+' en este periodo.</td></tr>';
   label('e_prows');
@@ -2337,9 +2419,9 @@ function renderHome(){
     .map(([v,l])=>'<div><b>'+v+'</b><span>'+l+'</span></div>').join('');
   const dn=['L','M','X','J','V','S','D'], vals=dn.map((_,i)=>m[addDays(w0,i)]||0), mx=Math.max(1,...vals);
   $('h_bars').innerHTML=vals.map((v,i)=>'<div class="'+(addDays(w0,i)===today?'today':'')+'" title="'+esc(longDate(addDays(w0,i))+': '+fmt(v,1)+' LAD-Au')+'"><small>'+(v?fmt(v,0):'')+'</small><i class="'+(v?'':'zero')+'" style="height:'+(v?Math.max(6,v/mx*80):3)+'px"></i><span>'+dn[i]+'</span></div>').join('');
-  const best={};inW.forEach(s=>(s.prog||[]).forEach(p=>{if(!p.best)return;const k=(p.fam==='plancha'?'Plancha ':'Front ')+p.prog.charAt(0).toLowerCase()+p.prog.slice(1);if(!best[k]||p.best>best[k].v)best[k]={v:p.best,d:s.date};}));
+  const best={};inW.forEach(s=>(s.prog||[]).forEach(p=>{if(!p.best)return;const k=(p.fam==='plancha'?'Plancha ':'Front ')+p.prog.charAt(0).toLowerCase()+p.prog.slice(1);if(!best[k]||p.best>best[k].v)best[k]={v:p.best,d:s.date,f:p.fam};}));
   const bk=Object.keys(best).sort((a,b)=>best[b].v-best[a].v).slice(0,6);
-  $('h_best').innerHTML=bk.length?bk.map(k=>'<div><b>'+fmt(best[k].v,2).replace(/,?0+$/,'')+'″</b><span>'+esc(k)+' · '+shortDate(best[k].d)+'</span></div>').join(''):'<p class="notes" style="margin:0">Esta semana aún no hay holds sueltos guardados.</p>';
+  $('h_best').innerHTML=bk.length?bk.map(k=>'<div class="fam-'+best[k].f+'"><b>'+fmt(best[k].v,2).replace(/,?0+$/,'')+'″</b><span>'+esc(k)+' · '+shortDate(best[k].d)+'</span></div>').join(''):'<p class="notes" style="margin:0">Esta semana aún no hay holds sueltos guardados.</p>';
   const last=[...sessions].sort((a,b)=>b.date.localeCompare(a.date)||String(b.saved).localeCompare(String(a.saved)))[0];
   $('h_lastbox').innerHTML=last?'<div class="lastbox"><b>'+fmt(last.ladau,1)+' LAD-Au</b><span>'+esc(longDate(last.date))+'</span><span>'+esc(last.title||last.note||'Sin título')+'</span><span>INOL '+fmt(last.inol,2)+'</span><span>'+(last.nSeries||0)+' series</span></div>'
     :'<p class="notes" style="margin:0">Todavía no has guardado ninguna sesión. Pulsa «Nueva sesión», monta tus series en la calculadora y guárdala en el registro.</p>';
@@ -2361,19 +2443,20 @@ const opts=(list,val)=>list.map(([v,t])=>'<option value="'+v+'"'+(String(v)===St
 const PROG=[['full','Full'],['half','Half'],['sthalf','Straddle half'],['st45','Straddle 45°'],['st60','Straddle 60°'],['adv90','ADV90'],['tuck','Tuck']];
 const PROGX={plancha:PROG.concat([['maltese','Maltese']]),front:PROG.concat([['fltouch','FL touch'],['sat','SAT']])};
 const BAND=[[0,'RAW'],[5,'G5'],[10,'G10'],[15,'G15'],[20,'G20']];
-const EL={plancha:[['hold','Hold'],['dead','Deadstop'],['press','Press'],['neg','Negativa'],['flex','Flexión'],['low','Pino (descanso)']],
-          front:[['hold','Hold'],['dead','Deadstop'],['press','Press'],['neg','Negativa'],['flex','Pull-up'],['low','Colgado (descanso)']]};
+const EL={plancha:[['hold','Hold'],['dead','Deadstop (hold 0,5″)'],['press','Press'],['neg','Negativa'],['flex','Flexión'],['low','Pino (descanso)']],
+          front:[['hold','Hold'],['dead','Deadstop (hold 0,5″)'],['press','Press'],['neg','Negativa'],['flex','Pull-up'],['low','Colgado (descanso)']]};
 const REST=[[0,'—'],[30,'30″'],[60,'1′'],[90,'1′30'],[120,'2′'],[150,'2′30'],[180,'3′'],[240,'4′'],[300,'5′'],[420,'7′'],[600,'10′']];
+const GRIP=[['','—'],['prono','Prono'],['neutro','Neutro'],['supino','Supino'],['anillas','Anillas'],['suelo','Suelo'],['dedos','Dedos']];
 const END=[['na','Sin anotar'],['paro','He parado yo'],['fallo','Caída (fallo)']];
 const PM=['press','neg','flex'];
 /* filas <-> esfuerzos de la calculadora: los powermoves iguales seguidos se agrupan en una fila con reps */
 function toRows(efs){const rows=[];(efs||[]).forEach(e=>{
-  const last=rows[rows.length-1], kind=e.mv==='hold'&&+e.secs===1?'dead':e.mv;
+  const last=rows[rows.length-1], kind=e.mv==='hold'&&+e.secs===0.5?'dead':e.mv;
   if(PM.includes(e.mv)&&last&&last.el===e.mv&&last.pos===e.pos&&+last.band===+e.band&&!!last.part===!!e.part){last.reps++;return;}
   rows.push({el:kind,pos:e.pos||'full',band:+e.band||0,secs:e.mv==='hold'||e.mv==='low'?(+e.secs||0):'',reps:PM.includes(e.mv)?1:'',part:!!e.part});});return rows;}
 function toEfs(rows){const out=[];rows.forEach(r=>{const base={pos:r.pos,band:+r.band||0,part:!!r.part,smax:'',i1:0.5};
   if(r.el==='hold')out.push(Object.assign({mv:'hold',secs:+r.secs||0},base));
-  else if(r.el==='dead')out.push(Object.assign({mv:'hold',secs:+r.secs||1},base));
+  else if(r.el==='dead')out.push(Object.assign({mv:'hold',secs:0.5},base));
   else if(r.el==='low')out.push(Object.assign({mv:'low',secs:+r.secs||1},base));
   else for(let i=0;i<Math.max(1,Math.round(+r.reps||1));i++)out.push(Object.assign({mv:r.el,secs:''},base));});return out;}
 let st=null;
@@ -2387,6 +2470,7 @@ function rowHtml(s,i,r,j){
     '<label><span>Goma</span><select data-k="band"'+(r.el==='low'?' disabled':'')+'>'+opts(BAND,r.band)+'</select></label>'+
     (pm?'<label><span>Reps</span><input data-k="reps" type="number" min="1" step="1" inputmode="numeric" value="'+r.reps+'"></label>'+
         '<label class="chk"><input data-k="part" type="checkbox"'+(r.part?' checked':'')+'><span>Parcial</span></label>'
+       :r.el==='dead'?'<label><span>Segundos</span><output class="fixed" title="Un deadstop es un hold de 0,5″">0,5″</output></label><span class="sp"></span>'
        :'<label><span>Segundos</span><input data-k="secs" type="number" min="0" step="0.25" inputmode="decimal" value="'+r.secs+'"></label><span class="sp"></span>')+
     '<button type="button" class="x" data-rdel aria-label="Quitar esta fila">✕</button></div>';
 }
@@ -2394,13 +2478,14 @@ function render(){
   if(!window.LADcalc||!window.LADcalc.snapshot) return;
   const snap=window.LADcalc.snapshot(); st=snap.state;
   $('b_series').innerHTML=st.series.map((s,i)=>{const rows=toRows(s.efs),r=snap.perS[i]||{};
-    return '<div class="bcard" data-i="'+i+'"><div class="bhead"><b>Serie '+(i+1)+'</b>'+
+    return '<div class="bcard fam-'+s.fam+'" data-i="'+i+'"><div class="bhead"><b>Serie '+(i+1)+'</b>'+
       '<label><span>Skill</span><select data-s="fam">'+opts([['plancha','Plancha'],['front','Front lever']],s.fam)+'</select></label>'+
+      '<label><span>Agarre</span><select data-s="grip">'+opts(GRIP,s.grip||'')+'</select></label>'+
       '<label><span>Descanso antes</span><select data-s="rest">'+opts(REST,REST.some(x=>x[0]===+s.rest)?+s.rest:s.rest)+(REST.some(x=>x[0]===+s.rest)?'':'<option selected value="'+s.rest+'">'+s.rest+' s</option>')+'</select></label>'+
       '<label><span>Cómo acabó</span><select data-s="end">'+opts(END,s.end||'na')+'</select></label>'+
       '<span class="bload"><b>'+fmt(r.load,1)+'</b> LAD</span></div>'+
       rows.map((rw,j)=>rowHtml(s,i,rw,j)).join('')+
-      '<div class="bfoot"><button type="button" data-radd>+ Añadir al combo</button><button type="button" data-sdup>Repetir serie</button><button type="button" class="x" data-sdel>Quitar serie</button>'+(rows.length>1?'<span class="tag">Combo de '+rows.length+' elementos</span>':'')+'</div></div>';}).join('');
+      '<div class="bfoot"><button type="button" data-radd>+ Añadir al combo</button><button type="button" data-sdup>Repetir serie</button><button type="button" class="x" data-sdel>Quitar serie</button>'+(rows.length>1?'<span class="tag">'+(rows.some(r=>PM.includes(r.el))&&rows.some(r=>!PM.includes(r.el)||r.el!==rows[0].el)?'Combo de ':'Serie de ')+rows.length+' elementos</span>':'')+'</div></div>';}).join('');
   $('b_empty').hidden=st.series.length>0;
   $('b_wrows').innerHTML=st.weights.map((w,i)=>{const r=snap.perW[i]||{};return '<tr data-w="'+i+'">'+
     '<td><input data-wk="name" type="text" value="'+esc(w.name)+'" aria-label="Ejercicio"></td>'+
@@ -2420,7 +2505,7 @@ box.addEventListener('change',e=>{
     if(t.dataset.s){const k=t.dataset.s;s[k]=k==='rest'?+t.value:t.value;
       if(k==='fam'){s.efs.forEach(x=>{if(!PROGX[s.fam].some(p=>p[0]===x.pos))x.pos='full';});}}
     else{const row=t.closest('.brow'); if(!row)return; const rows=toRows(s.efs), r=rows[+row.dataset.j], k=t.dataset.k;
-      if(k==='part')r.part=t.checked; else if(k==='el'){r.el=t.value;if(PM.includes(r.el)){r.reps=r.reps||1;r.secs='';}else{r.secs=r.el==='dead'?1:(+r.secs||3);r.reps='';}}
+      if(k==='part')r.part=t.checked; else if(k==='el'){r.el=t.value;if(PM.includes(r.el)){r.reps=r.reps||1;r.secs='';}else{r.secs=r.el==='dead'?0.5:(+r.secs||3);r.reps='';}}
       else if(k==='band')r.band=+t.value; else r[k]=t.value;
       s.efs=toEfs(rows);}
     commit();return;}
@@ -2432,7 +2517,7 @@ box.addEventListener('click',e=>{
     st.series.push(last?Object.assign(JSON.parse(JSON.stringify(last)),{end:'na',res:''}):{fam:d.addser,rest:st.series.length?180:0,ring:false,fan:1,end:'na',res:'',efs:[{mv:'hold',pos:'full',band:0,secs:3,part:false,smax:'',i1:0.5}]});
     commit();const cards=document.querySelectorAll('.bcard');cards[cards.length-1]&&cards[cards.length-1].scrollIntoView({block:'nearest'});return;}
   if(card&&d.radd!=null){load();const s=st.series[+card.dataset.i];const rows=toRows(s.efs);const last=rows[rows.length-1]||{pos:'full',band:0};
-    rows.push({el:'dead',pos:last.pos,band:last.band,secs:1,reps:'',part:false});s.efs=toEfs(rows);commit();return;}
+    rows.push({el:'dead',pos:last.pos,band:last.band,secs:0.5,reps:'',part:false});s.efs=toEfs(rows);commit();return;}
   if(card&&d.sdup!=null){load();const i=+card.dataset.i;st.series.splice(i+1,0,JSON.parse(JSON.stringify(st.series[i])));commit();return;}
   if(card&&d.sdel!=null){load();st.series.splice(+card.dataset.i,1);commit();return;}
   if(card&&d.rdel!=null){load();const s=st.series[+card.dataset.i];const rows=toRows(s.efs);rows.splice(+t.closest('.brow').dataset.j,1);
@@ -2474,6 +2559,8 @@ render();
   show(tabs.includes(t)?t:'home');
 })();
 </script>
+
+<footer class="foot"><span>CALI.LAAD · método LAD, del autor</span><a href="aviso-legal.html">Aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><a href="condiciones.html">Condiciones de venta</a></footer>
 
 </body>
 </html>

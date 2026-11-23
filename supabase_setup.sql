@@ -60,3 +60,75 @@ create or replace view public.datos_investigacion as
   from public.sesiones x join auth.users u on u.id = x.user_id
   where coalesce((u.raw_user_meta_data->>'estadistica')::boolean, false);
 revoke all on public.datos_investigacion from anon, authenticated;
+
+-- ============================================================
+-- PARTE 2 · Pago único de 5 € y permisos (22 nov 2026)
+-- Pégala también en el SQL Editor y pulsa Run. Se puede repetir sin romper nada.
+-- ============================================================
+
+-- Perfil de cada cuenta: si ha pagado o no.
+create table if not exists public.perfiles (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  pagado     boolean not null default false,
+  pagado_en  timestamptz,
+  plataforma text,          -- 'lemonsqueezy' o 'stripe'
+  pedido     text,          -- número de pedido de la plataforma
+  creado     timestamptz not null default now()
+);
+alter table public.perfiles enable row level security;
+
+-- Cada persona puede LEER su perfil. Nadie puede crearlo, cambiarlo ni borrarlo desde la web:
+-- solo la función de pagos del servidor (con la clave secreta, que nunca sale de Supabase).
+drop policy if exists "ver mi perfil" on public.perfiles;
+create policy "ver mi perfil" on public.perfiles for select using (auth.uid() = user_id);
+revoke insert, update, delete on public.perfiles from anon, authenticated;
+
+-- Al crear una cuenta se crea su perfil (sin pagar).
+create or replace function public.crear_perfil() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.perfiles (user_id) values (new.id) on conflict do nothing;
+  return new;
+end $$;
+drop trigger if exists al_crear_cuenta on auth.users;
+create trigger al_crear_cuenta after insert on auth.users
+  for each row execute function public.crear_perfil();
+insert into public.perfiles (user_id) select id from auth.users on conflict do nothing;
+
+-- Límite gratuito: 5 sesiones guardadas. Con el pago, sin límite.
+create or replace function public.puede_guardar() returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce((select pagado from public.perfiles where user_id = auth.uid()), false)
+      or (select count(*) from public.sesiones where user_id = auth.uid()) < 5;
+$$;
+revoke all on function public.puede_guardar() from public;
+grant execute on function public.puede_guardar() to authenticated;
+
+-- Crear una sesión nueva exige que sea tuya Y que te quede hueco (cambiar una que ya existe, siempre se puede).
+drop policy if exists "crear mis sesiones" on public.sesiones;
+create policy "crear mis sesiones" on public.sesiones for insert
+  with check (auth.uid() = user_id and public.puede_guardar());
+
+-- Estado de mi cuenta para la web: pagado y sesiones usadas.
+create or replace function public.mi_estado() returns json
+language sql stable security definer set search_path = public as $$
+  select json_build_object(
+    'pagado', coalesce((select pagado from public.perfiles where user_id = auth.uid()), false),
+    'usadas', (select count(*) from public.sesiones where user_id = auth.uid()),
+    'gratis', 5);
+$$;
+revoke all on function public.mi_estado() from public;
+grant execute on function public.mi_estado() to authenticated;
+
+-- Derecho de supresión (RGPD, art. 17): cada persona puede borrar su cuenta y todo lo suyo.
+-- Borra el usuario; sesiones y perfil se borran en cascada. Las facturas quedan en la plataforma de pago.
+create or replace function public.borrar_mi_cuenta() returns void
+language sql security definer set search_path = public, auth as $$
+  delete from auth.users where id = auth.uid();
+$$;
+revoke all on function public.borrar_mi_cuenta() from public;
+grant execute on function public.borrar_mi_cuenta() to authenticated;
+
+-- Nadie sin cuenta puede leer ni escribir nada.
+revoke all on public.sesiones from anon;
+revoke all on public.perfiles from anon;
