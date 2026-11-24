@@ -155,3 +155,52 @@ revoke all on public.ajustes from anon;
 -- Para el autor: marcar tu propia cuenta como pagada (cambia el correo por el tuyo y pulsa Run).
 -- update public.perfiles set pagado = true, pagado_en = now(), plataforma = 'autor'
 --   where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com');
+
+-- ============================================================
+-- PARTE 4 · Deportistas de pago en el modo entrenador (24 nov 2026)
+-- Acceso vitalicio: 4,99 € (pago único). Cada deportista: 3,99 € (pago único y vitalicio).
+-- Durante la prueba gratis (5 sesiones) se pueden probar deportistas sin pagar.
+-- Pégala también en el SQL Editor y pulsa Run. Se puede repetir sin romper nada.
+-- ============================================================
+create table if not exists public.atletas_pagados (
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  ath_id     text not null,                 -- id del deportista en la web
+  pagado_en  timestamptz not null default now(),
+  plataforma text,
+  pedido     text,
+  primary key (user_id, ath_id)
+);
+alter table public.atletas_pagados enable row level security;
+drop policy if exists "ver mis deportistas pagados" on public.atletas_pagados;
+create policy "ver mis deportistas pagados" on public.atletas_pagados for select using (auth.uid() = user_id);
+revoke insert, update, delete on public.atletas_pagados from anon, authenticated;
+revoke all on public.atletas_pagados from anon;
+
+-- Una sesión nueva se puede guardar si queda hueco gratis o hay acceso pagado, y,
+-- si es de un deportista (no «yo»), ese deportista está pagado (salvo durante la prueba gratis).
+create or replace function public.puede_guardar_sesion(ath text) returns boolean
+language sql stable security definer set search_path = public as $$
+  select public.puede_guardar() and (
+    coalesce(nullif(ath, ''), 'yo') = 'yo'
+    or not coalesce((select pagado from public.perfiles where user_id = auth.uid()), false)
+    or exists (select 1 from public.atletas_pagados a where a.user_id = auth.uid() and a.ath_id = ath)
+  );
+$$;
+revoke all on function public.puede_guardar_sesion(text) from public;
+grant execute on function public.puede_guardar_sesion(text) to authenticated;
+
+drop policy if exists "crear mis sesiones" on public.sesiones;
+create policy "crear mis sesiones" on public.sesiones for insert
+  with check (auth.uid() = user_id and public.puede_guardar_sesion(datos->>'ath'));
+
+-- Estado de mi cuenta para la web: pagado, sesiones usadas y deportistas desbloqueados.
+create or replace function public.mi_estado() returns json
+language sql stable security definer set search_path = public as $$
+  select json_build_object(
+    'pagado',  coalesce((select pagado from public.perfiles where user_id = auth.uid()), false),
+    'usadas',  (select count(*) from public.sesiones where user_id = auth.uid()),
+    'gratis',  5,
+    'atletas', coalesce((select json_agg(ath_id) from public.atletas_pagados where user_id = auth.uid()), '[]'::json));
+$$;
+revoke all on function public.mi_estado() from public;
+grant execute on function public.mi_estado() to authenticated;

@@ -1,5 +1,8 @@
 // CALI.LAAD · función de pagos (Supabase Edge Function «pago»)
-// Recibe el aviso de la plataforma de cobro cuando alguien paga y marca su cuenta como pagada.
+// Recibe el aviso de la plataforma de cobro cuando alguien paga y desbloquea lo comprado:
+//   - acceso vitalicio (4,99 €): marca la cuenta como pagada;
+//   - un deportista del modo entrenador (3,99 €): lo apunta en atletas_pagados.
+// Stripe: client_reference_id = <cuenta> o <cuenta>__<deportista>. Lemon Squeezy: custom user_id y ath_id.
 // Funciona con Lemon Squeezy o con Stripe; solo hay que poner el secreto de la que uses.
 // Secretos (Supabase → Edge Functions → Secrets), NUNCA en la web ni en el chat:
 //   LEMONSQUEEZY_WEBHOOK_SECRET  (si cobras con Lemon Squeezy)
@@ -22,7 +25,7 @@ function same(a: string, b: string) {
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Solo POST", { status: 405 });
   const raw = await req.text();
-  let userId = "", pedido = "", plataforma = "", pagado = false;
+  let userId = "", pedido = "", plataforma = "", pagado = false, athId = "";
 
   const ls = req.headers.get("x-signature");
   const st = req.headers.get("stripe-signature");
@@ -32,7 +35,7 @@ Deno.serve(async (req) => {
     const ev = JSON.parse(raw);
     plataforma = "lemonsqueezy";
     if (ev?.meta?.event_name === "order_created" && ev?.data?.attributes?.status === "paid") {
-      userId = ev?.meta?.custom_data?.user_id ?? ""; pedido = String(ev?.data?.id ?? ""); pagado = true;
+      userId = ev?.meta?.custom_data?.user_id ?? ""; athId = ev?.meta?.custom_data?.ath_id ?? ""; pedido = String(ev?.data?.id ?? ""); pagado = true;
     }
     if (ev?.meta?.event_name === "order_refunded") { userId = ev?.meta?.custom_data?.user_id ?? ""; pedido = String(ev?.data?.id ?? ""); pagado = false; }
   } else if (st) {
@@ -44,7 +47,7 @@ Deno.serve(async (req) => {
     const ev = JSON.parse(raw);
     plataforma = "stripe";
     if (ev.type === "checkout.session.completed" && ev.data?.object?.payment_status === "paid") {
-      userId = ev.data.object.client_reference_id ?? ""; pedido = ev.data.object.id ?? ""; pagado = true;
+      const ref = String(ev.data.object.client_reference_id ?? ""); [userId, athId = ""] = ref.split("__"); pedido = ev.data.object.id ?? ""; pagado = true;
     }
     if (ev.type === "charge.refunded") { userId = ev.data?.object?.metadata?.user_id ?? ""; pedido = ev.data?.object?.id ?? ""; pagado = false; }
   } else {
@@ -53,6 +56,14 @@ Deno.serve(async (req) => {
 
   if (!/^[0-9a-f-]{36}$/i.test(userId)) return new Response("Sin cuenta asociada: revisar a mano", { status: 200 });
   const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  if (athId) { // compra de un deportista
+    if (!/^[a-z0-9]{1,40}$/i.test(athId)) return new Response("Deportista no válido: revisar a mano", { status: 200 });
+    const r = pagado
+      ? await db.from("atletas_pagados").upsert({ user_id: userId, ath_id: athId, plataforma, pedido })
+      : await db.from("atletas_pagados").delete().eq("user_id", userId).eq("ath_id", athId);
+    if (r.error) return new Response("Error al guardar: " + r.error.message, { status: 500 });
+    return new Response("ok", { status: 200 });
+  }
   const { error } = await db.from("perfiles").upsert({
     user_id: userId, pagado, pagado_en: pagado ? new Date().toISOString() : null, plataforma, pedido,
   });

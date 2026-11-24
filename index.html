@@ -599,6 +599,11 @@ label.gcons input,.gbox label.gcons input{position:absolute;left:0;top:2px;margi
 .pwprice{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:10px;background:var(--soft)}
 .pwprice b{font-family:var(--display);font-size:30px;font-weight:800}
 .pwprice span{color:var(--muted);font-size:13px}
+.athcard .lockm{color:var(--warn)}
+.athcard .ulk{font-size:12px;color:var(--muted)}
+.athcard label.gcons input{width:16px;height:16px;padding:0;border:0;position:absolute;left:0;top:2px}
+.infnote{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.infnote textarea{font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
 /* volumen por progresión */
 .dlt{font-size:11px;font-weight:600;margin-left:5px;color:var(--muted);white-space:nowrap}
 .dlt.up{color:var(--accent)}.dlt.down{color:var(--warn)}
@@ -685,7 +690,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
   <div class="gbox">
     <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
     <h2 id="g_title">Crea tu cuenta</h2>
-    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes. Las 5 primeras sesiones son gratis; después, 4,99 € en un pago único.</p>
+    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes. Las 5 primeras sesiones son gratis; después, 4,99 € en un pago único y vitalicio.</p>
     <div class="seg gtabs" role="tablist" aria-label="Acceso">
       <button type="button" role="tab" id="g_tup" aria-selected="true">Crear cuenta</button>
       <button type="button" role="tab" id="g_tin" aria-selected="false">Entrar</button>
@@ -711,7 +716,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
     <h2 id="pw_title">Has usado tus 5 sesiones gratis</h2>
     <p class="gsub" id="pw_sub">Para seguir usando CALI.LAAD (plan, registro, evolución, calculadora y todo lo demás), desbloquea el acceso completo con un pago único. Tus datos siguen guardados en tu cuenta.</p>
-    <div class="pwprice"><b>4,99 €</b><span>pago único · sin suscripción</span></div>
+    <div class="pwprice"><b>4,99 €</b><span>pago único y vitalicio · sin suscripción</span></div>
     <label class="chk gcons"><input type="checkbox" id="pw_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de venta</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
     <label class="chk gcons"><input type="checkbox" id="pw_ok2"> Quiero el acceso completo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label>
     <button type="button" class="primary btnbig" id="pw_buy" disabled>Desbloquear CALI.LAAD · 4,99 €</button>
@@ -1154,7 +1159,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <div class="cpay" id="c_pay">
       <label class="chk gcons"><input type="checkbox" id="c_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de venta</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
       <label class="chk gcons"><input type="checkbox" id="c_ok2"> Quiero el acceso completo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label>
-      <button type="button" class="primary btnbig" id="c_buy" disabled>Desbloquear CALI.LAAD · 4,99 € (pago único)</button>
+      <button type="button" class="primary btnbig" id="c_buy" disabled>Desbloquear CALI.LAAD · 4,99 € (pago único y vitalicio)</button>
       <p class="notes" id="c_buymsg" role="status"></p>
     </div>
     <details class="cmore"><summary>Privacidad y datos de tu cuenta</summary>
@@ -1226,6 +1231,12 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <div class="tiles" id="e_tiles"></div>
     <p class="notes" id="e_none" hidden>No hay sesiones en este periodo.</p>
     <div id="e_regnote"></div>
+  </section>
+  <section class="panel" aria-labelledby="e_h-inf">
+    <div class="weekhead"><h2 id="e_h-inf">Informe<span class="athname" data-athname></span></h2><span class="tag" id="inf_range"></span></div>
+    <p class="notes" style="margin:0">Un resumen del periodo para descargar o enviar: carga, plan, volumen por progresión, combos y sesiones. Si eres entrenador, entrégaselo a tu deportista; si entrenas por tu cuenta, guárdalo fuera de la web.</p>
+    <label class="infnote">Nota para el informe (opcional)<textarea id="inf_note" rows="2" maxlength="1500" placeholder="p. ej. Buen bloque: sube la half. La semana que viene, test de máximos."></textarea></label>
+    <div class="btnrow"><button type="button" class="primary" id="inf_pdf">Descargar PDF</button><button type="button" id="inf_html">Descargar archivo</button><button type="button" id="inf_share" hidden>Enviar…</button><span class="tag" id="inf_msg" role="status"></span></div>
   </section>
   <section class="panel" aria-labelledby="e_h-w">
     <h2 id="e_h-w">Carga por semana</h2>
@@ -2517,9 +2528,10 @@ const longDate=s=>D(s).toLocaleDateString('es-ES',{weekday:'short',day:'numeric'
 const LKEY='lad-registro-v1';
 // Cuentas de CALI.LAAD (Supabase). Rellenar con la Project URL y la clave pública (anon / publishable). Nunca la secreta.
 const SB_CONF={url:'',key:''};
-// Pago único (4,99 €). Enlace de pago de Lemon Squeezy (checkout) o de Stripe (Payment Link). Vacío = venta aún no activa.
-const PAY_CONF={url:''};
-let estado={pagado:false,usadas:0,gratis:5};
+// Acceso vitalicio (4,99 €, pago único) y cada deportista del modo entrenador (3,99 €, pago único).
+// Enlaces de pago de Stripe (Payment Link) o Lemon Squeezy (checkout): url = acceso, athUrl = deportista. Vacío = venta aún no activa.
+const PAY_CONF={url:'',athUrl:''};
+let estado={pagado:false,usadas:0,gratis:5,atletas:[]};
 const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
 let sessions=[], allS=[], mode='none', col=null, sb=null, sbUser=null, openDet=null;
 // cada sesión es de un deportista (ath); sin ath = «yo». La vista solo muestra las del deportista activo.
@@ -2578,7 +2590,7 @@ async function useAccount(user){
   if(local.length){try{localStorage.removeItem(LKEY)}catch(e){}}
   mode='sb'; allS=remote; refilter(); renderAll(); refreshEstado();
   window.CALIapp&&window.CALIapp.sbLoad&&window.CALIapp.sbLoad(sb,user.id);
-  if(/[?&]pagado=1/.test(location.search)){let n=0;const iv=setInterval(async()=>{await refreshEstado();if(estado.pagado||++n>10)clearInterval(iv);},3000);}
+  if(/[?&]pagado=1/.test(location.search)){let n=0,a0=(estado.atletas||[]).length;const iv=setInterval(async()=>{await refreshEstado();window.CALIapp&&window.CALIapp.render();if((estado.pagado&&(estado.atletas||[]).length>=a0)&&++n>2||++n>10)clearInterval(iv);},3000);}
 }
 function signedOut(){estado={pagado:false,usadas:0,gratis:5};const pw=$('paywall');if(pw)pw.hidden=true;
   window.CALIapp&&window.CALIapp.sbOut&&window.CALIapp.sbOut();sbUser=null;$('r_cuenta').hidden=true;mode='local';allS=[];sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
@@ -2597,8 +2609,8 @@ async function putSession(s){
   putMsg=null; if(!s.ath)s.ath=curAth();
   if(mode==='sb'&&sb){const {error}=await sb.from('sesiones').upsert({id:s.id,fecha:s.date,datos:clean(s)});
     if(error){const lim=error.code==='42501'||/row-level security/i.test(error.message);
-      putMsg=$('r_msg').textContent=lim?'Has usado tus '+estado.gratis+' sesiones gratis. Para seguir usando CALI.LAAD, desbloquéala por 4,99 € (pago único).':'No se pudo guardar en tu cuenta: '+error.message;
-      if(lim){estado.usadas=Math.max(estado.usadas,estado.gratis);refreshEstado();paywall();}return false;}
+      putMsg=$('r_msg').textContent=lim?(athLocked(s.ath)?'Este deportista aún no está desbloqueado. Desbloquéalo por 3,99 € (pago único y vitalicio) en su tarjeta de la carpeta de deportistas.':'Has usado tus '+estado.gratis+' sesiones gratis. Para seguir usando CALI.LAAD, desbloquéala por 4,99 € (pago único y vitalicio).'):'No se pudo guardar en tu cuenta: '+error.message;
+      if(lim&&!athLocked(s.ath)){estado.usadas=Math.max(estado.usadas,estado.gratis);refreshEstado();paywall();}return false;}
     const i=allS.findIndex(x=>x.id===s.id); if(i>=0)allS[i]=s; else {allS.push(s);estado.usadas++;} refilter(); renderAll(); renderCuenta(); return true;}
   if(mode==='db'&&col){try{await col.doc(s.id).set(clean(s));return true}catch(e){
     if(e&&e.code==='quota_exceeded'){putMsg=$('r_msg').textContent='El registro está lleno: borra sesiones antiguas o exporta una copia.';return false;}
@@ -2613,9 +2625,12 @@ async function delSession(id){
 }
 
 /* ---------- cuenta: plan gratuito (5 sesiones) o pago único ---------- */
-async function refreshEstado(){if(mode!=='sb'||!sb)return;const {data,error}=await sb.rpc('mi_estado');if(!error&&data)estado=data;renderCuenta();}
-function payUrl(){if(!PAY_CONF.url||!sbUser)return '';const e=encodeURIComponent(sbUser.email),id=encodeURIComponent(sbUser.id),q=PAY_CONF.url.includes('?')?'&':'?';
-  return /lemonsqueezy/.test(PAY_CONF.url)?PAY_CONF.url+q+'checkout[email]='+e+'&checkout[custom][user_id]='+id:PAY_CONF.url+q+'prefilled_email='+e+'&client_reference_id='+id;}
+async function refreshEstado(){if(mode!=='sb'||!sb)return;const {data,error}=await sb.rpc('mi_estado');if(!error&&data){estado=Object.assign({atletas:[]},data);}renderCuenta();window.CALIapp&&window.CALIapp.render&&window.CALIapp.render();}
+// ath: id del deportista que se desbloquea (3,99 €); sin ath, el acceso vitalicio (4,99 €).
+// Stripe: client_reference_id = <cuenta> o <cuenta>__<deportista>; Lemon Squeezy: custom user_id y ath_id.
+function payUrl(ath){const base=ath?PAY_CONF.athUrl:PAY_CONF.url;if(!base||!sbUser)return '';const e=encodeURIComponent(sbUser.email),id=encodeURIComponent(sbUser.id),q=base.includes('?')?'&':'?';
+  return /lemonsqueezy/.test(base)?base+q+'checkout[email]='+e+'&checkout[custom][user_id]='+id+(ath?'&checkout[custom][ath_id]='+encodeURIComponent(ath):''):base+q+'prefilled_email='+e+'&client_reference_id='+id+(ath?'__'+encodeURIComponent(ath):'');}
+function athLocked(a){return mode==='sb'&&!!sbUser&&!!estado.pagado&&!!a&&a!=='yo'&&!(estado.atletas||[]).includes(a);}
 function paywall(){const lock=mode==='sb'&&!!sbUser&&!estado.pagado&&estado.usadas>=estado.gratis;const pw=$('paywall');if(!pw)return;
   if(lock&&pw.hidden){pw.hidden=false;document.body.classList.add('gated');}
   if(!lock&&!pw.hidden){pw.hidden=true;document.body.classList.remove('gated');}
@@ -2624,7 +2639,7 @@ function renderCuenta(){paywall();const box=$('r_cuenta');if(!box)return;if(mode
   const left=Math.max(0,estado.gratis-estado.usadas);
   $('c_plan').textContent=estado.pagado?'Acceso completo':'Plan gratuito';
   $('c_bar').style.width=estado.pagado?'100%':Math.min(100,estado.usadas/estado.gratis*100)+'%';
-  $('c_txt').textContent=estado.pagado?'Puedes guardar todas las sesiones que quieras. Gracias por apoyar CALI.LAAD.':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Después de las '+estado.gratis+' sesiones gratis, seguir usando CALI.LAAD cuesta 4,99 € (pago único).';
+  $('c_txt').textContent=estado.pagado?'Acceso completo y vitalicio. Gracias por apoyar CALI.LAAD.'+((estado.atletas||[]).length?' Deportistas desbloqueados: '+estado.atletas.length+'.':'')+' Cada deportista del modo entrenador se desbloquea por 3,99 € (pago único y vitalicio).':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Después de las '+estado.gratis+' sesiones gratis, seguir usando CALI.LAAD cuesta 4,99 € (pago único).';
   $('c_pay').hidden=!!estado.pagado; $('c_buy').disabled=!($('c_ok1').checked&&$('c_ok2').checked);
   if(!PAY_CONF.url)$('c_buymsg').textContent='La venta se activa en cuanto el autor conecte el pago.';
   $('c_stat').checked=!!(sbUser.user_metadata&&sbUser.user_metadata.estadistica);}
@@ -2852,6 +2867,8 @@ function renderAll(){renderList();renderHome();if(!$('tab-evo').hidden)renderEvo
 window.LADreg={preview,show(t){if(t==='reg'){preview();window.CALIbuilder&&window.CALIbuilder.render();}if(t==='evo')renderEvo();if(t==='home')renderHome();},
   refresh(){refilter();renderAll();},
   all:()=>allS,
+  athLocked:a=>athLocked(a),
+  payAth(a){const u=payUrl(a);if(!u)return false;sb.auth.updateUser({data:{desistimiento_renuncia:new Date().toISOString(),condiciones_aceptadas:'2026-11-24'}}).finally(()=>{location.href=u;});return true;},
   sbConfigured:()=>!!(SB_CONF.url&&SB_CONF.key),
   chart:(id,o)=>svgChart(id,o),
   prefill(date,title){if(date)$('r_date').value=date;if(title&&!$('r_note').value.trim())$('r_note').value=title;},
@@ -3177,7 +3194,7 @@ function renderPlanVol(plan,W){
 }
 $('p_volwk').addEventListener('click',e=>{const b=e.target.closest('[data-pvw]');if(!b)return;pVolWk=+b.dataset.pvw;renderPlan();});
 function evoVol(from,to){
-  if(from) evoRange=[from,to]; if(!evoRange) return; [from,to]=evoRange;
+  if(from) evoRange=[from,to]; if(!evoRange) return; [from,to]=evoRange; renderInf();
   $('e_vsk').innerHTML=['plancha','front'].map(f=>'<button type="button" data-vsk="'+f+'" aria-pressed="'+(f===vSk)+'">'+SKN[f]+'</button>').join('');
   $('e_vm').innerHTML=MET.map(m=>'<button type="button" data-vm="'+m+'" aria-pressed="'+(m===vM)+'">'+metName(m,vSk)+'</button>').join('');
   const ss=sessOf(active()), weeks=[]; for(let w=from;w<=to;w=addDays(w,7)) weeks.push(w);
@@ -3194,6 +3211,112 @@ function evoVol(from,to){
 $('e_vsk').addEventListener('click',e=>{const b=e.target.closest('[data-vsk]');if(!b)return;vSk=b.dataset.vsk;evoVol();});
 $('e_vm').addEventListener('click',e=>{const b=e.target.closest('[data-vm]');if(!b)return;vM=b.dataset.vm;evoVol();});
 
+/* ---------- informes: descargar o enviar un resumen del periodo ----------
+   Un documento HTML autónomo (se abre en cualquier navegador y se guarda en PDF al imprimir):
+   resumen, plan, carga por semana, volumen por progresión, combos y sesiones. */
+const IND_TXT='La carga es individual (intraatleta): sirve para comparar a cada persona consigo misma, nunca con otra. Los combos más largos y las progresiones más difíciles cuestan más, así que la misma cifra no significa lo mismo para dos personas.';
+const rf=(v,d)=>isFinite(v)?(+v).toLocaleString('es-ES',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}):'—';
+const rdl=(c,p,u)=>{if(p==null||!isFinite(p))return '';const d=c-p;if(Math.abs(d)<1e-9)return '';if(!p)return ' <span class="up">nuevo</span>';return ' <span class="'+(d>0?'up':'down')+'">'+(d>0?'+':'−')+fmtN(Math.abs(d))+(u||'')+'</span>';};
+function reportRange(){
+  if(evoRange) return evoRange.slice();
+  const t=todayISO(), w=monday(t); return [addDays(w,-21),addDays(w,6)];
+}
+function buildReport(ath,from,to,note){
+  const all=sessOf(ath), ss=ssIn(all,from,to).sort((a,b)=>a.date.localeCompare(b.date)), plan=planOf(ath), c=cfg();
+  const name=c.coach||ath!=='yo'?athName(ath):'';
+  const weeks=[]; for(let w=monday(from);w<=to;w=addDays(w,7)) weeks.push(w);
+  const W=weeks.map(w=>{const x=ssIn(all,w,addDays(w,6));return {w,n:x.length,lad:x.reduce((a,s)=>a+(+s.ladau||0),0),inol:x.reduce((a,s)=>a+(+s.inol||0),0),v:volOf(x)};});
+  const pw=addDays(monday(from),-7), prevLad=ladIn(all,pw,addDays(pw,6));
+  const totL=ss.reduce((a,s)=>a+(+s.ladau||0),0), totI=ss.reduce((a,s)=>a+(+s.inol||0),0), sr=ss.filter(s=>s.srpe!=null);
+  const rg=regularity(ath), V=volOf(ss);
+  const RG={none:'Sin sesiones',few:'Pocos datos todavía',ok:'Entrenamiento constante',warn:'Entrenamiento irregular'};
+  let h='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Informe CALI.LAAD'+(name?' · '+esc(name):'')+'</title><style>'+
+  'body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#15181B;background:#fff;margin:0 auto;padding:28px 22px;max-width:920px;font-size:13px;line-height:1.45}'+
+  '.brand{font-weight:800;font-size:26px;letter-spacing:.01em;margin:0}.brand i{font-style:normal;color:#17783F}'+
+  'h1{font-size:20px;margin:4px 0 2px}.meta{color:#535A62;margin:0}h2{font-size:16px;margin:24px 0 8px;border-bottom:2px solid #17783F;padding-bottom:4px}'+
+  'h3{font-size:14px;margin:14px 0 4px}h3.plancha{color:#A32424}h3.front{color:#173F86}'+
+  'table{border-collapse:collapse;width:100%;font-size:12px;margin:4px 0 8px}th,td{border-bottom:1px solid #D9DDE1;padding:5px 6px;text-align:left;vertical-align:top}'+
+  'th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#535A62}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}tr.tot td{font-weight:700;border-top:2px solid #D9DDE1}'+
+  '.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.tiles div{background:#F2F4F5;border-radius:8px;padding:8px 10px}.tiles b{display:block;font-size:20px}.tiles span{color:#535A62;font-size:11px}'+
+  '.box{background:#F2F4F5;border-left:3px solid #17783F;padding:8px 10px;border-radius:0 6px 6px 0;white-space:pre-wrap;margin:8px 0}.box.warn{border-left-color:#9A4108}'+
+  '.up{color:#17783F;font-weight:600}.down{color:#9A4108;font-weight:600}.muted{color:#535A62}ul{margin:4px 0;padding-left:18px}'+
+  '.foot{margin-top:26px;color:#535A62;font-size:11px;border-top:1px solid #D9DDE1;padding-top:8px}svg{max-width:100%;height:auto}'+
+  '@media (max-width:600px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}body{padding:18px 12px}table{font-size:11px}}'+
+  '@media print{body{padding:0;max-width:none}h2,h3{break-after:avoid}tr{break-inside:avoid}@page{margin:14mm}}'+
+  '</style></head><body>';
+  h+='<p class="brand">CALI<i>.</i>LAAD</p><h1>Informe de entrenamiento'+(name?' · '+esc(name):'')+'</h1>'+
+     '<p class="meta">Del '+esc(longDate(from))+' al '+esc(longDate([to,todayISO()].sort()[0]))+' · emitido el '+esc(longDate(todayISO()))+'</p>';
+  if(note) h+='<div class="box">'+esc(note)+'</div>';
+  // resumen
+  h+='<h2>Resumen</h2><div class="tiles">'+
+     '<div><b>'+ss.length+'</b><span>sesiones</span></div>'+
+     '<div><b>'+rf(totL,1)+'</b><span>LAD-Au del periodo</span></div>'+
+     '<div><b>'+rf(totL/Math.max(1,W.filter(x=>x.w<=todayISO()).length),1)+'</b><span>LAD-Au de media por semana</span></div>'+
+     '<div><b>'+rf(totI,2)+'</b><span>INOL de pesas (aparte, no se suma)</span></div>'+
+     '<div><b>'+(sr.length?rf(sr.reduce((a,s)=>a+(+s.srpe),0)/sr.length,1):'—')+'</b><span>dureza media (sRPE 0–5)</span></div>'+
+     '<div><b>'+esc(RG[rg.lvl]||'—')+'</b><span>regularidad actual'+(rg.adh!=null?' · '+rf(rg.adh*100)+' % de días del plan':'')+'</span></div></div>';
+  if(rg.lvl==='warn') h+='<div class="box warn">'+rg.reasons.map(esc).join('\n')+'\nUn entrenamiento discontinuo o desorganizado no muestra resultados ni evolución.</div>';
+  // plan
+  if(plan){
+    const PW=weeksOf(plan,ath).filter(w=>w.b>=monday(from)&&w.a<=to);
+    if(PW.length){
+      h+='<h2>Plan</h2><p class="muted">'+(goalTxt(plan.goal)?'Objetivo: '+esc(goalTxt(plan.goal))+' · ':'')+'mesociclo de '+plan.weeks.length+' semanas desde el '+esc(longDate(plan.start))+'.</p>'+
+        '<table><thead><tr><th>Semana</th><th>Fechas</th><th>Tipo</th><th class="n">Objetivo</th><th class="n">Real</th><th class="n">Cumplido</th><th class="n">Días</th><th>Nota</th></tr></thead><tbody>'+
+        PW.map(w=>'<tr><td>'+(w.i+1)+'</td><td>'+shortDate(w.a)+'–'+shortDate(w.b)+'</td><td>'+esc(TYPE[w.type]||w.type)+'</td><td class="n">'+(w.target?rf(w.target):'—')+'</td><td class="n">'+rf(w.real,1)+'</td><td class="n">'+(w.target?rf(w.real/w.target*100)+' %':'—')+'</td><td class="n">'+w.doneP+'/'+w.nP+'</td><td>'+esc(w.note||'')+'</td></tr>').join('')+'</tbody></table>';
+    }
+  }
+  // carga por semana + gráfica
+  const mx=Math.max(1,...W.map(x=>x.lad)), bw=Math.min(60,820/Math.max(1,W.length));
+  h+='<h2>Carga por semana</h2><svg viewBox="0 0 860 190" role="img" aria-label="LAD-Au por semana">'+
+     W.map((x,i)=>{const bh=x.lad/mx*130, xx=30+i*(820/W.length)+(820/W.length-bw*0.7)/2;return '<rect x="'+xx.toFixed(1)+'" y="'+(150-bh).toFixed(1)+'" width="'+(bw*0.7).toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="3" fill="#17783F"/><text x="'+(xx+bw*0.35).toFixed(1)+'" y="'+(144-bh).toFixed(1)+'" font-size="11" text-anchor="middle" fill="#15181B">'+(x.lad?rf(x.lad):'')+'</text><text x="'+(xx+bw*0.35).toFixed(1)+'" y="170" font-size="11" text-anchor="middle" fill="#535A62">'+shortDate(x.w)+'</text>';}).join('')+
+     '<line x1="30" x2="850" y1="150" y2="150" stroke="#D9DDE1"/></svg>'+
+     '<table><thead><tr><th>Semana</th><th class="n">Sesiones</th><th class="n">LAD-Au</th><th class="n">INOL</th></tr></thead><tbody>'+
+     W.map((x,i)=>'<tr><td>'+shortDate(x.w)+'–'+shortDate(addDays(x.w,6))+'</td><td class="n">'+x.n+'</td><td class="n">'+rf(x.lad,1)+rdl(x.lad,i?W[i-1].lad:prevLad)+'</td><td class="n">'+rf(x.inol,2)+'</td></tr>').join('')+'</tbody></table>';
+  // volumen por progresión
+  h+='<h2>Volumen por progresión</h2><p class="muted">Hold (s) incluye los holds hechos dentro de combos, pero no los deadstops (0,5″). Los powermoves de los combos cuentan en su columna.</p>';
+  let anyV=false;
+  ['plancha','front'].forEach(fam=>{
+    const keys=Object.keys(V.V[fam]).sort(pcmp); if(!keys.length) return; anyV=true; const t=vtotal(V.V[fam]);
+    h+='<h3 class="'+fam+'">'+SKN[fam]+'</h3><table><thead><tr><th>Progresión</th>'+MET.map(m=>'<th class="n">'+metName(m,fam)+'</th>').join('')+'</tr></thead><tbody>'+
+      keys.map(k=>'<tr><td>'+esc(pname(k))+'</td>'+MET.map(m=>'<td class="n">'+(V.V[fam][k][m]?fmtN(V.V[fam][k][m])+(m==='hold'?'″':''):'0')+'</td>').join('')+'</tr>').join('')+
+      '<tr class="tot"><td>Total</td>'+MET.map(m=>'<td class="n">'+fmtN(t[m])+(m==='hold'?'″':'')+'</td>').join('')+'</tr></tbody></table>'+
+      '<table><thead><tr><th>Semana</th>'+MET.map(m=>'<th class="n">'+metName(m,fam)+'</th>').join('')+'</tr></thead><tbody>'+
+      W.map((x,i)=>{const c=vtotal(x.v.V[fam]), p=i?vtotal(W[i-1].v.V[fam]):null;return '<tr><td>'+shortDate(x.w)+'</td>'+MET.map(m=>'<td class="n">'+fmtN(c[m])+(m==='hold'?'″':'')+(p?rdl(c[m],p[m],m==='hold'?'″':''):'')+'</td>').join('')+'</tr>';}).join('')+'</tbody></table>';
+    if(V.C[fam].length) h+='<p class="muted">Combos de '+SKN[fam].toLowerCase()+' ('+V.C[fam].length+'):</p><ul>'+V.C[fam].sort((a,b)=>a.date.localeCompare(b.date)).map(x=>'<li>'+shortDate(x.date)+' · '+esc(x.desc)+'</li>').join('')+'</ul>';
+  });
+  if(!anyV) h+='<p class="muted">Sin series de skills en este periodo.</p>';
+  // sesiones
+  h+='<h2>Sesiones</h2>'+(ss.length?'<table><thead><tr><th>Fecha</th><th>Título</th><th class="n">LAD-Au</th><th class="n">INOL</th><th class="n">Series</th><th class="n">sRPE</th><th>Notas</th></tr></thead><tbody>'+
+     ss.map(s=>'<tr><td>'+shortDate(s.date)+'</td><td>'+esc(s.title||s.note||'—')+'</td><td class="n">'+rf(+s.ladau,1)+'</td><td class="n">'+rf(+s.inol,2)+'</td><td class="n">'+(s.nSeries||0)+'</td><td class="n">'+(s.srpe==null?'—':rf(+s.srpe,+s.srpe%1?1:0))+'</td><td>'+esc([s.goals,s.method,s.desc].filter(Boolean).join(' · '))+'</td></tr>').join('')+'</tbody></table>':'<p class="muted">Sin sesiones en este periodo.</p>');
+  h+='<p class="foot">'+esc(IND_TXT)+'<br>Generado con CALI.LAAD · método LAD.</p></body></html>';
+  return {html:h,name};
+}
+function reportFile(){
+  const [from,to]=reportRange(), r=buildReport(active(),from,to,$('inf_note').value.trim());
+  const slug=(r.name||'informe').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'informe';
+  return {html:r.html,filename:'calilaad-'+slug+'-'+from+'_'+to+'.html'};
+}
+$('inf_pdf').addEventListener('click',()=>{
+  const f=reportFile(), old=$('inf_frame'); if(old) old.remove();
+  const fr=document.createElement('iframe');fr.id='inf_frame';fr.title='Informe para imprimir';fr.style.cssText='position:fixed;width:0;height:0;border:0;right:0;bottom:0';
+  fr.onload=()=>{try{fr.contentWindow.focus();fr.contentWindow.print();$('inf_msg').textContent='En la ventana de impresión, elige «Guardar como PDF».';}catch(e){$('inf_msg').textContent='Este navegador no deja imprimir desde aquí: usa «Descargar archivo» y guárdalo en PDF al abrirlo.';}};
+  fr.srcdoc=f.html; document.body.appendChild(fr);
+});
+$('inf_html').addEventListener('click',async()=>{
+  const f=reportFile();
+  try{const dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null;
+    if(dl){await dl.save({filename:f.filename,data:f.html});$('inf_msg').textContent='Informe descargado.';return;}}catch(e){if(e&&e.code==='declined'){$('inf_msg').textContent='Descarga cancelada.';return;}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f.html],{type:'text/html'}));a.download=f.filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  $('inf_msg').textContent='Informe descargado: ábrelo en cualquier navegador; desde ahí también se guarda en PDF.';
+});
+(function(){try{const t=new File(['x'],'x.html',{type:'text/html'});if(navigator.canShare&&navigator.canShare({files:[t]}))$('inf_share').hidden=false;}catch(e){}})();
+$('inf_share').addEventListener('click',async()=>{
+  const f=reportFile();
+  try{await navigator.share({files:[new File([f.html],f.filename,{type:'text/html'})],title:'Informe CALI.LAAD'});$('inf_msg').textContent='Informe enviado.';}
+  catch(e){if(e&&e.name!=='AbortError')$('inf_msg').textContent='No se pudo enviar desde aquí: descárgalo y envíalo como archivo.';}
+});
+function renderInf(){const [from,to]=reportRange();$('inf_range').textContent='Periodo: '+shortDate(from)+' – '+shortDate(to)+'/'+D(to).getUTCFullYear()+' (el que eliges arriba).';}
+
 /* ---------- pintar ---------- */
 function bar(v,t){const p=t>0?Math.min(100,v/t*100):0;return '<div class="progress" role="img" aria-label="'+fmt(p)+' % del objetivo"><i style="width:'+p.toFixed(1)+'%"></i></div>';}
 function renderAthBits(){
@@ -3205,22 +3328,25 @@ function renderAthBits(){
   const list=athletes();
   $('ath_sel').innerHTML=list.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===a?' selected':'')+'>'+esc(x.name)+'</option>').join('');
   const p=planOf(a), today=todayISO(), w=p?weeksOf(p,a).find(x=>x.cur):null;
-  $('ath_info').textContent=(w?'Semana '+(w.i+1)+' de '+p.weeks.length+' del plan · ':p?'':'Sin plan · ');const nW=sessOf(a).filter(s=>s.date>=monday(today)&&s.date<=today).length;$('ath_info').textContent+=nW+(nW===1?' sesión':' sesiones')+' esta semana';
+  const lkA=window.LADreg&&window.LADreg.athLocked&&window.LADreg.athLocked(a);
+  $('ath_info').textContent=(lkA?'Bloqueado (3,99 €) · ':'')+(w?'Semana '+(w.i+1)+' de '+p.weeks.length+' del plan · ':p?'':'Sin plan · ');const nW=sessOf(a).filter(s=>s.date>=monday(today)&&s.date<=today).length;$('ath_info').textContent+=nW+(nW===1?' sesión':' sesiones')+' esta semana';
   $('h_coachn').textContent=(list.length-1)+' deportista'+(list.length===2?'':'s');
   $('h_athgrid').innerHTML=list.map(x=>{
     const ss=sessOf(x.id), pl=planOf(x.id), wk=pl?weeksOf(pl,x.id).find(y=>y.cur):null, rg=regularity(x.id);
     const lad=ladIn(ss,monday(today),addDays(monday(today),6)), last=ss.map(s=>s.date).sort().pop();
     const badge=rg.lvl==='ok'?'<span class="badge ok">Constante</span>':rg.lvl==='warn'?'<span class="badge warn">Irregular</span>':'<span class="badge">'+(rg.lvl==='none'?'Sin sesiones':'Pocos datos')+'</span>';
-    const ren=renaming===x.id;
+    const ren=renaming===x.id, lk=window.LADreg&&window.LADreg.athLocked&&window.LADreg.athLocked(x.id), unl=unlocking===x.id;
     return '<div class="athcard'+(x.id===a?' cur':'')+'" data-ath="'+esc(x.id)+'"><div class="ah">'+(ren?'<input data-rn value="'+esc(x.name)+'" maxlength="60" aria-label="Nuevo nombre">':'<h3>'+esc(x.name)+'</h3>')+badge+'</div>'+
       '<span class="am">Esta semana: <b>'+fmt(lad,1)+'</b> LAD-Au'+(wk&&wk.target?' de '+fmt(wk.target)+' objetivo':'')+'</span>'+
       '<span class="am">'+(pl?(wk?'Plan: semana '+(wk.i+1)+' de '+pl.weeks.length:'Plan fuera de fechas'):'Sin plan')+' · '+(last?'última sesión '+shortDate(last):'sin sesiones')+'</span>'+
-      '<div class="ab">'+(ren?'<button type="button" class="primary" data-rnok>Guardar</button><button type="button" data-rnno>Cancelar</button>':
-        (x.id===a?'<button type="button" class="primary" data-go="plan">Ver su plan</button>':'<button type="button" class="primary" data-open>Abrir</button>')+
+      (lk?'<span class="am lockm">Bloqueado: para registrar sus sesiones, desbloquéalo por <b>3,99 €</b> (pago único y vitalicio).</span>':'')+
+      (lk&&unl?'<label class="chk gcons ulk"><input type="checkbox" data-ulkok> Quiero desbloquearlo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label><div class="ab"><button type="button" class="primary" data-ulkgo disabled>Pagar 3,99 €</button><button type="button" data-ulkno>Cancelar</button></div><span class="am ulkmsg"></span>':'')+
+      '<div class="ab">'+(lk&&!unl?'<button type="button" class="primary" data-ulk>Desbloquear · 3,99 €</button>':'')+(ren?'<button type="button" class="primary" data-rnok>Guardar</button><button type="button" data-rnno>Cancelar</button>':
+        (x.id===a?'<button type="button" class="primary" data-go="plan">Ver su plan</button>':'<button type="button" class="primary" data-open>Abrir</button>')+'<button type="button" data-inf>Informe</button>'+
         (x.id==='yo'?'':'<button type="button" data-rename>Renombrar</button><button type="button" class="x" data-rm>Quitar</button>'))+'</div></div>';
   }).join('');
 }
-let renaming=null;
+let renaming=null, unlocking=null;
 function renderToday(){
   const a=active(), plan=planOf(a), today=todayISO(), wd=wday(today);
   $('h_todayd').textContent=longDate(today);
@@ -3432,6 +3558,10 @@ let rmArmed=null;
 $('h_athgrid').addEventListener('click',async e=>{
   const card=e.target.closest('[data-ath]'); if(!card) return; const id=card.dataset.ath, d=e.target.dataset;
   if(d.open!=null){switchAth(id);return;}
+  if(d.inf!=null){switchAth(id);window.LADtab('evo');setTimeout(()=>$('e_h-inf').scrollIntoView({block:'start'}),60);return;}
+  if(d.ulk!=null){unlocking=id;render();return;}
+  if(d.ulkno!=null){unlocking=null;render();return;}
+  if(d.ulkgo!=null){if(!(window.LADreg&&window.LADreg.payAth(id))){const m=card.querySelector('.ulkmsg');if(m)m.textContent='La venta se activa en cuanto el autor conecte el pago.';}return;}
   if(d.rename!=null){renaming=id;render();const i=card.parentNode.querySelector('[data-ath="'+CSS.escape(id)+'"] input');i&&i.focus();return;}
   if(d.rnno!=null){renaming=null;render();return;}
   if(d.rnok!=null){const v=card.querySelector('input[data-rn]').value.trim();if(v)put('a_'+id,Object.assign({},docs['a_'+id],{name:v.slice(0,60)}));renaming=null;render();return;}
@@ -3441,6 +3571,7 @@ $('h_athgrid').addEventListener('click',async e=>{
     if(window.LADreg&&window.LADreg.delAth) await window.LADreg.delAth(id);
     drop('p_'+id); drop('a_'+id); render();}
 });
+$('h_athgrid').addEventListener('change',e=>{if(e.target.dataset.ulkok==null)return;const b=e.target.closest('[data-ath]').querySelector('[data-ulkgo]');if(b)b.disabled=!e.target.checked;});
 $('h_athgrid').addEventListener('keydown',e=>{if(e.target.dataset.rn!=null&&e.key==='Enter'){const b=e.target.closest('[data-ath]').querySelector('[data-rnok]');b&&b.click();}});
 
 /* ---------- botones comunes: ir al plan, registrar un día ---------- */
