@@ -1,7 +1,7 @@
 /* CALI.LAAD · service worker: abre la app aunque no haya conexión.
    La página se pide primero a la red (así siempre llega la última versión) y, sin red, sale de la copia guardada.
    Las sesiones se guardan en la cuenta (Supabase): sin conexión no se pueden guardar. Cambia V al publicar una versión nueva. */
-const V = 'calilaad-v2';
+const V = 'calilaad-v3';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'favicon-32.png',
   'privacidad.html', 'condiciones.html', 'aviso-legal.html'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });

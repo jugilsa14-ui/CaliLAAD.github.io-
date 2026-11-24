@@ -204,3 +204,57 @@ language sql stable security definer set search_path = public as $$
 $$;
 revoke all on function public.mi_estado() from public;
 grant execute on function public.mi_estado() to authenticated;
+
+-- ============================================================
+-- PARTE 5 · Suscripción anual (24 nov 2026)
+-- Acceso: 19,99 € al año. Cada deportista del modo entrenador: 4,99 € al año.
+-- El acceso vale mientras pagado_hasta esté en el futuro. La función de pago lo alarga
+-- con cada renovación cobrada y lo corta si la suscripción se cancela o no se paga.
+-- «pagado» queda para accesos dados a mano (por ejemplo, la cuenta del autor).
+-- Pégala también en el SQL Editor y pulsa Run. Se puede repetir sin romper nada.
+-- ============================================================
+alter table public.perfiles        add column if not exists pagado_hasta    timestamptz;
+alter table public.perfiles        add column if not exists stripe_customer text;
+alter table public.perfiles        add column if not exists stripe_sub      text;
+alter table public.atletas_pagados add column if not exists pagado_hasta    timestamptz;
+alter table public.atletas_pagados add column if not exists stripe_sub      text;
+create index if not exists perfiles_stripe_sub on public.perfiles (stripe_sub);
+create index if not exists atletas_stripe_sub  on public.atletas_pagados (stripe_sub);
+
+-- ¿Tiene ahora mismo acceso pagado?
+create or replace function public.acceso_activo() returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce((select pagado or coalesce(pagado_hasta > now(), false)
+                   from public.perfiles where user_id = auth.uid()), false);
+$$;
+revoke all on function public.acceso_activo() from public;
+grant execute on function public.acceso_activo() to authenticated;
+
+create or replace function public.puede_guardar() returns boolean
+language sql stable security definer set search_path = public as $$
+  select public.acceso_activo()
+      or ((select count(*) from public.sesiones where user_id = auth.uid()) < 5
+          and coalesce((select pagado_hasta from public.perfiles where user_id = auth.uid()) is null, true));
+$$;
+
+create or replace function public.puede_guardar_sesion(ath text) returns boolean
+language sql stable security definer set search_path = public as $$
+  select public.puede_guardar() and (
+    coalesce(nullif(ath, ''), 'yo') = 'yo'
+    or not public.acceso_activo()
+    or exists (select 1 from public.atletas_pagados a where a.user_id = auth.uid() and a.ath_id = ath
+               and (a.pagado_hasta is null or a.pagado_hasta > now()))
+  );
+$$;
+
+create or replace function public.mi_estado() returns json
+language sql stable security definer set search_path = public as $$
+  select json_build_object(
+    'pagado',   public.acceso_activo(),
+    'hasta',    (select pagado_hasta from public.perfiles where user_id = auth.uid()),
+    'caducado', not public.acceso_activo() and (select pagado_hasta from public.perfiles where user_id = auth.uid()) is not null,
+    'usadas',   (select count(*) from public.sesiones where user_id = auth.uid()),
+    'gratis',   5,
+    'atletas',  coalesce((select json_agg(ath_id) from public.atletas_pagados
+                          where user_id = auth.uid() and (pagado_hasta is null or pagado_hasta > now())), '[]'::json));
+$$;

@@ -597,10 +597,11 @@ label.gcons input,.gbox label.gcons input{position:absolute;left:0;top:2px;margi
 .gbox a,.cuenta a,.foot a{color:var(--accent)}
 .gate.pay{z-index:55}
 .pwprice{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:10px;background:var(--soft)}
-.pwprice b{font-family:var(--display);font-size:30px;font-weight:800}
+.pwprice b{font-family:var(--display);font-size:30px;font-weight:800;white-space:nowrap}
 .pwprice span{color:var(--muted);font-size:13px}
 .athcard .lockm{color:var(--warn)}
 .athcard .ulk{font-size:12px;color:var(--muted)}
+.athok{font-size:12px;color:var(--muted);max-width:80ch}
 .athcard label.gcons input{width:16px;height:16px;padding:0;border:0;position:absolute;left:0;top:2px}
 .infnote{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
 .infnote textarea{font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
@@ -690,7 +691,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
   <div class="gbox">
     <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
     <h2 id="g_title">Crea tu cuenta</h2>
-    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes. Las 5 primeras sesiones son gratis; después, 4,99 € en un pago único y vitalicio.</p>
+    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes. Las 5 primeras sesiones son gratis; después, 19,99 € al año (puedes cancelar cuando quieras).</p>
     <div class="seg gtabs" role="tablist" aria-label="Acceso">
       <button type="button" role="tab" id="g_tup" aria-selected="true">Crear cuenta</button>
       <button type="button" role="tab" id="g_tin" aria-selected="false">Entrar</button>
@@ -698,7 +699,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <form id="g_form" novalidate>
       <label>Correo electrónico <input id="g_email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
       <label id="g_pwl">Contraseña <input id="g_pw" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres"></label>
-      <label class="chk gcons" id="g_consl"><input id="g_cons" type="checkbox"> Acepto que CALI.LAAD guarde mi correo y mis sesiones para darme el servicio, según la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Tengo 14 años o más. Puedo borrarlo todo cuando quiera.</label>
+      <label class="chk gcons" id="g_consl"><input id="g_cons" type="checkbox"> Acepto las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de uso y contratación</a> (incluido el aviso de salud) y que CALI.LAAD guarde mi correo y mis sesiones para darme el servicio, según la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Tengo 14 años o más. Puedo borrarlo todo cuando quiera.</label>
       <label class="chk gcons" id="g_statl"><input id="g_stat" type="checkbox"> Opcional: dejo que mis sesiones se usen, sin mi correo ni mi nombre, para estadísticas de la comunidad e investigación sobre la carga en calistenia.</label>
       <button class="primary btnbig" id="g_go" type="submit">Crear cuenta</button>
       <button type="button" class="linkb" id="g_forgot">He olvidado mi contraseña</button>
@@ -715,11 +716,11 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
   <div class="gbox">
     <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
     <h2 id="pw_title">Has usado tus 5 sesiones gratis</h2>
-    <p class="gsub" id="pw_sub">Para seguir usando CALI.LAAD (plan, registro, evolución, calculadora y todo lo demás), desbloquea el acceso completo con un pago único. Tus datos siguen guardados en tu cuenta.</p>
-    <div class="pwprice"><b>4,99 €</b><span>pago único y vitalicio · sin suscripción</span></div>
-    <label class="chk gcons"><input type="checkbox" id="pw_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de venta</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
-    <label class="chk gcons"><input type="checkbox" id="pw_ok2"> Quiero el acceso completo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label>
-    <button type="button" class="primary btnbig" id="pw_buy" disabled>Desbloquear CALI.LAAD · 4,99 €</button>
+    <p class="gsub" id="pw_sub">Para seguir usando CALI.LAAD (plan, registro, evolución, calculadora y todo lo demás), suscríbete. Tus datos siguen guardados en tu cuenta.</p>
+    <div class="pwprice"><b>19,99 €</b><span>al año · se renueva sola · cancela cuando quieras</span></div>
+    <label class="chk gcons"><input type="checkbox" id="pw_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de uso y contratación</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
+    <label class="chk gcons"><input type="checkbox" id="pw_ok2"> Quiero el acceso ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días. La suscripción se renueva sola cada año hasta que la cancele.</label>
+    <button type="button" class="primary btnbig" id="pw_buy" disabled>Suscribirme · 19,99 € al año</button>
     <p class="gmsg" id="pw_msg" role="status"></p>
     <div class="gtry"><p>Tus datos son tuyos aunque no pagues: puedes descargarlos o borrar la cuenta.</p>
       <div class="btnrow"><button type="button" id="pw_export">Descargar mis datos</button><button type="button" id="pw_out">Salir</button><button type="button" class="x" id="pw_del">Borrar mi cuenta</button></div></div>
@@ -765,6 +766,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <p class="notes" style="margin:0">Cada deportista tiene su perfil, su plan y sus sesiones por separado: nada se mezcla. Elige uno para ver y registrar sus datos.</p>
     <p class="indiv"><b>No compares la carga entre deportistas.</b> La carga es individual (intraatleta): sirve para comparar a cada persona consigo misma, nunca con otra. Los combos más largos y las progresiones más difíciles cuestan más, así que la misma cifra no significa lo mismo para dos personas.</p>
     <div class="athgrid" id="h_athgrid"></div>
+    <label class="chk gcons athok"><input type="checkbox" id="ath_ok"> Tengo el permiso de esta persona (o de sus padres o tutores, si es menor) para guardar sus datos de entrenamiento en CALI.LAAD.</label>
     <div class="athadd"><input id="ath_new" type="text" maxlength="60" placeholder="Nombre del deportista" aria-label="Nombre del nuevo deportista"><button type="button" class="primary" id="ath_add">Añadir deportista</button><span class="tag" id="ath_msg" role="status"></span></div>
   </section>
   <section class="panel today" aria-labelledby="h_todayh">
@@ -1157,11 +1159,12 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <div class="cbar" aria-hidden="true"><i id="c_bar"></i></div>
     <p class="notes" id="c_txt"></p>
     <div class="cpay" id="c_pay">
-      <label class="chk gcons"><input type="checkbox" id="c_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de venta</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
-      <label class="chk gcons"><input type="checkbox" id="c_ok2"> Quiero el acceso completo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label>
-      <button type="button" class="primary btnbig" id="c_buy" disabled>Desbloquear CALI.LAAD · 4,99 € (pago único y vitalicio)</button>
+      <label class="chk gcons"><input type="checkbox" id="c_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de uso y contratación</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
+      <label class="chk gcons"><input type="checkbox" id="c_ok2"> Quiero el acceso ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días. La suscripción se renueva sola cada año hasta que la cancele.</label>
+      <button type="button" class="primary btnbig" id="c_buy" disabled>Suscribirme · 19,99 € al año</button>
       <p class="notes" id="c_buymsg" role="status"></p>
     </div>
+    <div class="btnrow"><button type="button" id="c_portal" hidden>Gestionar o cancelar mi suscripción</button></div>
     <details class="cmore"><summary>Privacidad y datos de tu cuenta</summary>
       <label class="chk gcons"><input type="checkbox" id="c_stat"> Dejo que mis sesiones se usen, sin mi correo ni mi nombre, para estadísticas de la comunidad e investigación. Puedo quitarlo cuando quiera.</label>
       <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" id="c_export">Descargar todos mis datos</button><button type="button" class="x" id="c_del">Borrar mi cuenta</button></div>
@@ -2528,10 +2531,10 @@ const longDate=s=>D(s).toLocaleDateString('es-ES',{weekday:'short',day:'numeric'
 const LKEY='lad-registro-v1';
 // Cuentas de CALI.LAAD (Supabase). Rellenar con la Project URL y la clave pública (anon / publishable). Nunca la secreta.
 const SB_CONF={url:'',key:''};
-// Acceso vitalicio (4,99 €, pago único) y cada deportista del modo entrenador (3,99 €, pago único).
-// Enlaces de pago de Stripe (Payment Link) o Lemon Squeezy (checkout): url = acceso, athUrl = deportista. Vacío = venta aún no activa.
-const PAY_CONF={url:'',athUrl:''};
-let estado={pagado:false,usadas:0,gratis:5,atletas:[]};
+// Suscripción anual: acceso 19,99 €/año y cada deportista del modo entrenador 4,99 €/año (Stripe, Payment Links de suscripción).
+// url = suscripción de acceso, athUrl = suscripción por deportista, portal = enlace del portal de clientes de Stripe (gestionar o cancelar). Vacío = venta aún no activa.
+const PAY_CONF={url:'',athUrl:'',portal:''};
+let estado={pagado:false,usadas:0,gratis:5,atletas:[],hasta:null,caducado:false};
 const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
 let sessions=[], allS=[], mode='none', col=null, sb=null, sbUser=null, openDet=null;
 // cada sesión es de un deportista (ath); sin ath = «yo». La vista solo muestra las del deportista activo.
@@ -2592,7 +2595,7 @@ async function useAccount(user){
   window.CALIapp&&window.CALIapp.sbLoad&&window.CALIapp.sbLoad(sb,user.id);
   if(/[?&]pagado=1/.test(location.search)){let n=0,a0=(estado.atletas||[]).length;const iv=setInterval(async()=>{await refreshEstado();window.CALIapp&&window.CALIapp.render();if((estado.pagado&&(estado.atletas||[]).length>=a0)&&++n>2||++n>10)clearInterval(iv);},3000);}
 }
-function signedOut(){estado={pagado:false,usadas:0,gratis:5};const pw=$('paywall');if(pw)pw.hidden=true;
+function signedOut(){estado={pagado:false,usadas:0,gratis:5,atletas:[],hasta:null,caducado:false};const pw=$('paywall');if(pw)pw.hidden=true;
   window.CALIapp&&window.CALIapp.sbOut&&window.CALIapp.sbOut();sbUser=null;$('r_cuenta').hidden=true;mode='local';allS=[];sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
 window.CALIauth={
   async signUp(email,pw,stat){const {error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+location.pathname,data:{estadistica:!!stat,consentimiento:new Date().toISOString(),version_condiciones:'2026-11-22'}}});return error?error.message:null;},
@@ -2609,7 +2612,7 @@ async function putSession(s){
   putMsg=null; if(!s.ath)s.ath=curAth();
   if(mode==='sb'&&sb){const {error}=await sb.from('sesiones').upsert({id:s.id,fecha:s.date,datos:clean(s)});
     if(error){const lim=error.code==='42501'||/row-level security/i.test(error.message);
-      putMsg=$('r_msg').textContent=lim?(athLocked(s.ath)?'Este deportista aún no está desbloqueado. Desbloquéalo por 3,99 € (pago único y vitalicio) en su tarjeta de la carpeta de deportistas.':'Has usado tus '+estado.gratis+' sesiones gratis. Para seguir usando CALI.LAAD, desbloquéala por 4,99 € (pago único y vitalicio).'):'No se pudo guardar en tu cuenta: '+error.message;
+      putMsg=$('r_msg').textContent=lim?(athLocked(s.ath)?'Este deportista no está activo. Actívalo por 4,99 € al año en su tarjeta de la carpeta de deportistas.':estado.caducado?'Tu suscripción ha terminado. Renuévala para seguir usando CALI.LAAD.':'Has usado tus '+estado.gratis+' sesiones gratis. Para seguir usando CALI.LAAD, suscríbete por 19,99 € al año.'):'No se pudo guardar en tu cuenta: '+error.message;
       if(lim&&!athLocked(s.ath)){estado.usadas=Math.max(estado.usadas,estado.gratis);refreshEstado();paywall();}return false;}
     const i=allS.findIndex(x=>x.id===s.id); if(i>=0)allS[i]=s; else {allS.push(s);estado.usadas++;} refilter(); renderAll(); renderCuenta(); return true;}
   if(mode==='db'&&col){try{await col.doc(s.id).set(clean(s));return true}catch(e){
@@ -2626,24 +2629,27 @@ async function delSession(id){
 
 /* ---------- cuenta: plan gratuito (5 sesiones) o pago único ---------- */
 async function refreshEstado(){if(mode!=='sb'||!sb)return;const {data,error}=await sb.rpc('mi_estado');if(!error&&data){estado=Object.assign({atletas:[]},data);}renderCuenta();window.CALIapp&&window.CALIapp.render&&window.CALIapp.render();}
-// ath: id del deportista que se desbloquea (3,99 €); sin ath, el acceso vitalicio (4,99 €).
+// ath: id del deportista (4,99 €/año); sin ath, la suscripción de acceso (19,99 €/año).
 // Stripe: client_reference_id = <cuenta> o <cuenta>__<deportista>; Lemon Squeezy: custom user_id y ath_id.
 function payUrl(ath){const base=ath?PAY_CONF.athUrl:PAY_CONF.url;if(!base||!sbUser)return '';const e=encodeURIComponent(sbUser.email),id=encodeURIComponent(sbUser.id),q=base.includes('?')?'&':'?';
   return /lemonsqueezy/.test(base)?base+q+'checkout[email]='+e+'&checkout[custom][user_id]='+id+(ath?'&checkout[custom][ath_id]='+encodeURIComponent(ath):''):base+q+'prefilled_email='+e+'&client_reference_id='+id+(ath?'__'+encodeURIComponent(ath):'');}
 function athLocked(a){return mode==='sb'&&!!sbUser&&!!estado.pagado&&!!a&&a!=='yo'&&!(estado.atletas||[]).includes(a);}
-function paywall(){const lock=mode==='sb'&&!!sbUser&&!estado.pagado&&estado.usadas>=estado.gratis;const pw=$('paywall');if(!pw)return;
+function paywall(){const lock=mode==='sb'&&!!sbUser&&!estado.pagado&&(estado.usadas>=estado.gratis||!!estado.caducado);const pw=$('paywall');if(!pw)return;
   if(lock&&pw.hidden){pw.hidden=false;document.body.classList.add('gated');}
   if(!lock&&!pw.hidden){pw.hidden=true;document.body.classList.remove('gated');}
-  if(lock){$('pw_title').textContent='Has usado tus '+estado.gratis+' sesiones gratis';$('pw_buy').disabled=!($('pw_ok1').checked&&$('pw_ok2').checked);if(!PAY_CONF.url)$('pw_msg').textContent='La venta se activa en cuanto el autor conecte el pago.';}}
+  if(lock){$('pw_title').textContent=estado.caducado?'Tu suscripción ha terminado':'Has usado tus '+estado.gratis+' sesiones gratis';$('pw_sub').textContent=estado.caducado?'Renuévala para seguir usando CALI.LAAD. Tus datos siguen guardados en tu cuenta.':'Para seguir usando CALI.LAAD (plan, registro, evolución, calculadora y todo lo demás), suscríbete. Tus datos siguen guardados en tu cuenta.';$('pw_buy').disabled=!($('pw_ok1').checked&&$('pw_ok2').checked);if(!PAY_CONF.url)$('pw_msg').textContent='La venta se activa en cuanto el autor conecte el pago.';}}
 function renderCuenta(){paywall();const box=$('r_cuenta');if(!box)return;if(mode!=='sb'||!sbUser){box.hidden=true;return;}box.hidden=false;
   const left=Math.max(0,estado.gratis-estado.usadas);
-  $('c_plan').textContent=estado.pagado?'Acceso completo':'Plan gratuito';
+  $('c_plan').textContent=estado.pagado?'Suscripción activa':estado.caducado?'Suscripción terminada':'Prueba gratis';
   $('c_bar').style.width=estado.pagado?'100%':Math.min(100,estado.usadas/estado.gratis*100)+'%';
-  $('c_txt').textContent=estado.pagado?'Acceso completo y vitalicio. Gracias por apoyar CALI.LAAD.'+((estado.atletas||[]).length?' Deportistas desbloqueados: '+estado.atletas.length+'.':'')+' Cada deportista del modo entrenador se desbloquea por 3,99 € (pago único y vitalicio).':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Después de las '+estado.gratis+' sesiones gratis, seguir usando CALI.LAAD cuesta 4,99 € (pago único).';
+  const hasta=estado.hasta?new Date(estado.hasta).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}):'';
+  $('c_txt').textContent=estado.pagado?(hasta?'Suscripción activa hasta el '+hasta+'. Se renueva sola cada año; si la cancelas, conservas el acceso hasta esa fecha.':'Acceso completo.')+' Gracias por apoyar CALI.LAAD.'+((estado.atletas||[]).length?' Deportistas activos: '+estado.atletas.length+'.':'')+' Cada deportista del modo entrenador cuesta 4,99 € al año.':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Después de las '+estado.gratis+' sesiones gratis, seguir usando CALI.LAAD cuesta 19,99 € al año.';
+  $('c_portal').hidden=!(PAY_CONF.portal&&(estado.pagado||estado.caducado||(estado.atletas||[]).length));
   $('c_pay').hidden=!!estado.pagado; $('c_buy').disabled=!($('c_ok1').checked&&$('c_ok2').checked);
   if(!PAY_CONF.url)$('c_buymsg').textContent='La venta se activa en cuanto el autor conecte el pago.';
   $('c_stat').checked=!!(sbUser.user_metadata&&sbUser.user_metadata.estadistica);}
 ['c_ok1','c_ok2'].forEach(id=>$(id).addEventListener('change',renderCuenta));
+$('c_portal').addEventListener('click',()=>{if(PAY_CONF.portal)location.href=PAY_CONF.portal+(PAY_CONF.portal.includes('?')?'&':'?')+'prefilled_email='+encodeURIComponent(sbUser.email);});
 ['pw_ok1','pw_ok2'].forEach(id=>$(id).addEventListener('change',paywall));
 $('pw_buy').addEventListener('click',()=>{const u=payUrl();if(!u){$('pw_msg').textContent='La venta aún no está activa.';return;}
   sb.auth.updateUser({data:{desistimiento_renuncia:new Date().toISOString(),condiciones_aceptadas:'2026-11-24'}}).finally(()=>{location.href=u;});});
@@ -2658,7 +2664,7 @@ $('c_stat').addEventListener('change',async e=>{const {data,error}=await sb.auth
 $('c_export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({cuenta:sbUser&&sbUser.email,estado,sesiones:sessions},null,1)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='calilaad-mis-datos.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
 let delArmed=false;
-$('c_del').addEventListener('click',async()=>{if(!delArmed){delArmed=true;$('c_del').textContent='Pulsa otra vez para borrarlo todo';$('c_delmsg').textContent='Se borrarán tu cuenta y todas tus sesiones. No se puede deshacer.';setTimeout(()=>{delArmed=false;$('c_del').textContent='Borrar mi cuenta';},8000);return;}
+$('c_del').addEventListener('click',async()=>{if(!delArmed){delArmed=true;$('c_del').textContent='Pulsa otra vez para borrarlo todo';$('c_delmsg').textContent='Se borrarán tu cuenta y todas tus sesiones. No se puede deshacer. Ojo: borrar la cuenta no cancela la suscripción; cancélala antes en «Gestionar o cancelar mi suscripción».';setTimeout(()=>{delArmed=false;$('c_del').textContent='Borrar mi cuenta';},8000);return;}
   const {error}=await sb.rpc('borrar_mi_cuenta');if(error){$('c_delmsg').textContent='No se pudo borrar: '+error.message;return;}
   $('c_delmsg').textContent='Cuenta borrada.';await sb.auth.signOut();});
 
@@ -3329,7 +3335,7 @@ function renderAthBits(){
   $('ath_sel').innerHTML=list.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===a?' selected':'')+'>'+esc(x.name)+'</option>').join('');
   const p=planOf(a), today=todayISO(), w=p?weeksOf(p,a).find(x=>x.cur):null;
   const lkA=window.LADreg&&window.LADreg.athLocked&&window.LADreg.athLocked(a);
-  $('ath_info').textContent=(lkA?'Bloqueado (3,99 €) · ':'')+(w?'Semana '+(w.i+1)+' de '+p.weeks.length+' del plan · ':p?'':'Sin plan · ');const nW=sessOf(a).filter(s=>s.date>=monday(today)&&s.date<=today).length;$('ath_info').textContent+=nW+(nW===1?' sesión':' sesiones')+' esta semana';
+  $('ath_info').textContent=(lkA?'Sin activar (4,99 €/año) · ':'')+(w?'Semana '+(w.i+1)+' de '+p.weeks.length+' del plan · ':p?'':'Sin plan · ');const nW=sessOf(a).filter(s=>s.date>=monday(today)&&s.date<=today).length;$('ath_info').textContent+=nW+(nW===1?' sesión':' sesiones')+' esta semana';
   $('h_coachn').textContent=(list.length-1)+' deportista'+(list.length===2?'':'s');
   $('h_athgrid').innerHTML=list.map(x=>{
     const ss=sessOf(x.id), pl=planOf(x.id), wk=pl?weeksOf(pl,x.id).find(y=>y.cur):null, rg=regularity(x.id);
@@ -3339,9 +3345,9 @@ function renderAthBits(){
     return '<div class="athcard'+(x.id===a?' cur':'')+'" data-ath="'+esc(x.id)+'"><div class="ah">'+(ren?'<input data-rn value="'+esc(x.name)+'" maxlength="60" aria-label="Nuevo nombre">':'<h3>'+esc(x.name)+'</h3>')+badge+'</div>'+
       '<span class="am">Esta semana: <b>'+fmt(lad,1)+'</b> LAD-Au'+(wk&&wk.target?' de '+fmt(wk.target)+' objetivo':'')+'</span>'+
       '<span class="am">'+(pl?(wk?'Plan: semana '+(wk.i+1)+' de '+pl.weeks.length:'Plan fuera de fechas'):'Sin plan')+' · '+(last?'última sesión '+shortDate(last):'sin sesiones')+'</span>'+
-      (lk?'<span class="am lockm">Bloqueado: para registrar sus sesiones, desbloquéalo por <b>3,99 €</b> (pago único y vitalicio).</span>':'')+
-      (lk&&unl?'<label class="chk gcons ulk"><input type="checkbox" data-ulkok> Quiero desbloquearlo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label><div class="ab"><button type="button" class="primary" data-ulkgo disabled>Pagar 3,99 €</button><button type="button" data-ulkno>Cancelar</button></div><span class="am ulkmsg"></span>':'')+
-      '<div class="ab">'+(lk&&!unl?'<button type="button" class="primary" data-ulk>Desbloquear · 3,99 €</button>':'')+(ren?'<button type="button" class="primary" data-rnok>Guardar</button><button type="button" data-rnno>Cancelar</button>':
+      (lk?'<span class="am lockm">Sin activar: para registrar sus sesiones, actívalo por <b>4,99 € al año</b>.</span>':'')+
+      (lk&&unl?'<label class="chk gcons ulk"><input type="checkbox" data-ulkok> Quiero activarlo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días. Se renueva cada año hasta que lo cancele.</label><div class="ab"><button type="button" class="primary" data-ulkgo disabled>Pagar 4,99 € al año</button><button type="button" data-ulkno>Cancelar</button></div><span class="am ulkmsg"></span>':'')+
+      '<div class="ab">'+(lk&&!unl?'<button type="button" class="primary" data-ulk>Activar · 4,99 €/año</button>':'')+(ren?'<button type="button" class="primary" data-rnok>Guardar</button><button type="button" data-rnno>Cancelar</button>':
         (x.id===a?'<button type="button" class="primary" data-go="plan">Ver su plan</button>':'<button type="button" class="primary" data-open>Abrir</button>')+'<button type="button" data-inf>Informe</button>'+
         (x.id==='yo'?'':'<button type="button" data-rename>Renombrar</button><button type="button" class="x" data-rm>Quitar</button>'))+'</div></div>';
   }).join('');
@@ -3552,7 +3558,7 @@ function addAth(name){
 }
 $('ath_sel').addEventListener('change',e=>switchAth(e.target.value));
 $('ath_folder').addEventListener('click',()=>{window.LADtab('home');$('h_coach').scrollIntoView({block:'start'});});
-$('ath_add').addEventListener('click',()=>{const id=addAth($('ath_new').value);if(!id){$('ath_msg').textContent='Escribe un nombre.';return;}$('ath_new').value='';$('ath_msg').textContent='Añadido. Ya estás en su carpeta: crea su plan o registra su primera sesión.';switchAth(id);});
+$('ath_add').addEventListener('click',()=>{if(!$('ath_ok').checked){$('ath_msg').textContent='Marca la casilla: necesitas su permiso para guardar sus datos.';return;}const id=addAth($('ath_new').value);if(!id){$('ath_msg').textContent='Escribe un nombre.';return;}$('ath_ok').checked=false;$('ath_new').value='';$('ath_msg').textContent='Añadido. Ya estás en su carpeta: crea su plan o registra su primera sesión.';switchAth(id);});
 $('ath_new').addEventListener('keydown',e=>{if(e.key==='Enter')$('ath_add').click();});
 let rmArmed=null;
 $('h_athgrid').addEventListener('click',async e=>{
@@ -3593,7 +3599,7 @@ function openOnb(){
 function closeOnb(){$('onb').hidden=true;document.body.classList.remove('onbing');}
 function readOnb(){
   const v=id=>{const el=$(id);return el?el.value:undefined;};
-  if(ob.step===0){const r=document.querySelector('input[name="o_who"]:checked');if(r)ob.who=r.value;if($('o_ath'))ob.athName=v('o_ath').trim();}
+  if(ob.step===0){const r=document.querySelector('input[name="o_who"]:checked');if(r)ob.who=r.value;if($('o_ath'))ob.athName=v('o_ath').trim();if($('o_athok'))ob.athOk=$('o_athok').checked;}
   if(ob.step===1){['H','M','sP','sF'].forEach(k=>{const x=v('o_'+k);ob[k]=x===''?'':+x;});ob.tP=v('o_tP');ob.tF=v('o_tF');}
   if(ob.step===2){ob.days=DN.map((_,i)=>!!document.querySelector('#o_days [data-d="'+i+'"]:checked'));ob.goal=(v('o_goal')||'').trim();ob.n=+v('o_n');ob.ref=v('o_ref')===''?'':+v('o_ref');}
 }
@@ -3607,7 +3613,7 @@ function drawOnb(){
     b='<div class="ochoice" role="radiogroup" aria-label="Cómo vas a usar CALI.LAAD">'+
       '<label><input type="radio" name="o_who" value="self"'+(ob.who!=='coach'?' checked':'')+'><span><b>Entreno yo</b>Registro mis sesiones y sigo mi plan.</span></label>'+
       '<label><input type="radio" name="o_who" value="coach"'+(ob.who==='coach'?' checked':'')+'><span><b>Entreno a otras personas</b>Modo entrenador: una carpeta por deportista, sin mezclar datos.</span></label></div>'+
-      (ob.who==='coach'?'<label>Nombre de tu primer deportista <input id="o_ath" type="text" maxlength="60" value="'+esc(ob.athName)+'" placeholder="Opcional: puedes añadirlo después"></label>':'');}
+      (ob.who==='coach'?'<label>Nombre de tu primer deportista <input id="o_ath" type="text" maxlength="60" value="'+esc(ob.athName)+'" placeholder="Opcional: puedes añadirlo después"></label><label class="chk gcons"><input type="checkbox" id="o_athok"'+(ob.athOk?' checked':'')+'> Tengo su permiso (o el de sus padres o tutores, si es menor) para guardar sus datos de entrenamiento.</label>':'');}
   if(s===1){t=who?'Datos de '+who:'Tus datos';sub='Sirven para calcular la carga con '+(who?'su':'tu')+' cuerpo. Si no sabes algo, déjalo vacío: se puede poner luego en la Calculadora.';
     b='<div class="ofields"><label>Altura (cm)<input id="o_H" type="number" step="0.5" inputmode="decimal" value="'+esc(ob.H)+'" placeholder="168"></label><label>Peso (kg)<input id="o_M" type="number" step="0.1" inputmode="decimal" value="'+esc(ob.M)+'" placeholder="65"></label>'+
       '<label>Techo en plancha<select id="o_tP">'+progOpts('plancha',ob.tP)+'</select></label><label>Máximo en ese techo (s)<input id="o_sP" type="number" step="0.25" min="0" inputmode="decimal" value="'+esc(ob.sP)+'" placeholder="récord"></label>'+
@@ -3639,6 +3645,7 @@ function finishOnb(){
   setCfg({onb:true}); closeOnb(); formInit=false; window.LADtab('plan'); render();
 }
 $('o_next').addEventListener('click',()=>{readOnb();
+  if(ob.step===0&&ob.who==='coach'&&ob.athName&&!ob.athOk){$('o_msg').textContent='Marca la casilla: necesitas su permiso para guardar sus datos (o deja el nombre vacío y añádelo después).';return;}
   if(ob.step===2&&!ob.days.some(Boolean)){$('o_msg').textContent='Elige al menos un día.';return;}
   if(ob.step===3){finishOnb();return;}
   ob.step++; drawOnb();});
@@ -3649,6 +3656,7 @@ let onbDone=false;
 function maybeOnboard(){
   if(onbDone) return;
   if(!$('gate').hidden) return;
+  if($('paywall')&&!$('paywall').hidden) return; // con la web bloqueada no se abren los primeros pasos
   if(window.claude&&window.claude.use&&!remoteSeen&&!timedOut) return;
   if(window.LADreg&&window.LADreg.sbConfigured&&window.LADreg.sbConfigured()&&!remoteSeen) return;
   onbDone=true;
@@ -3720,7 +3728,7 @@ if(!(window.claude&&window.claude.use)) setTimeout(maybeOnboard,0);
 })();
 </script>
 
-<footer class="foot"><span>CALI.LAAD · método LAD, del autor</span><a href="aviso-legal.html">Aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><a href="condiciones.html">Condiciones de venta</a></footer>
+<footer class="foot"><span>CALI.LAAD · método LAD, del autor</span><a href="aviso-legal.html">Aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><a href="condiciones.html">Condiciones de uso y contratación</a></footer>
 
 </body>
 </html>
