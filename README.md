@@ -14,7 +14,8 @@ Web de calistenia de fuerza basada en el método LAD: plan por mesociclos, regis
 
 1. Al entrar, cada persona crea su cuenta con su correo y una contraseña (y confirma el correo).
 2. Puede guardar **5 sesiones gratis** por cuenta.
-3. Para seguir guardando, **pago único de 4,99 €**. Simulador, calculadora, tablas y método son siempre gratis.
+3. Al llegar a las 5 sesiones, la web entera queda bloqueada hasta el **pago único de 4,99 €**. Mientras tanto puede descargar sus datos, salir o borrar la cuenta.
+   El límite de guardado lo impone la base de datos; el bloqueo del resto de la web lo hace la página.
 4. Sus sesiones, su plan y sus deportistas se guardan en su cuenta: los ve en cualquier dispositivo.
 
 ## Puesta en marcha (una vez)

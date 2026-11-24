@@ -595,6 +595,10 @@ body.onbing{overflow:hidden}
 label.gcons,.gbox label.gcons,.cpay .gcons,.cmore .gcons{display:block!important;position:relative;padding-left:26px;line-height:1.45}
 label.gcons input,.gbox label.gcons input{position:absolute;left:0;top:2px;margin:0}
 .gbox a,.cuenta a,.foot a{color:var(--accent)}
+.gate.pay{z-index:55}
+.pwprice{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:10px;background:var(--soft)}
+.pwprice b{font-family:var(--display);font-size:30px;font-weight:800}
+.pwprice span{color:var(--muted);font-size:13px}
 /* volumen por progresión */
 .dlt{font-size:11px;font-weight:600;margin-left:5px;color:var(--muted);white-space:nowrap}
 .dlt.up{color:var(--accent)}.dlt.down{color:var(--warn)}
@@ -681,7 +685,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
   <div class="gbox">
     <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
     <h2 id="g_title">Crea tu cuenta</h2>
-    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes.</p>
+    <p class="gsub" id="g_sub">Con tu cuenta, tus sesiones se guardan en la nube y las ves en el móvil, el ordenador o donde entrenes. Las 5 primeras sesiones son gratis; después, 4,99 € en un pago único.</p>
     <div class="seg gtabs" role="tablist" aria-label="Acceso">
       <button type="button" role="tab" id="g_tup" aria-selected="true">Crear cuenta</button>
       <button type="button" role="tab" id="g_tin" aria-selected="false">Entrar</button>
@@ -702,6 +706,20 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
   </div>
 </div>
 
+<div class="gate pay" id="paywall" role="dialog" aria-modal="true" aria-labelledby="pw_title" hidden>
+  <div class="gbox">
+    <p class="brand gbrand" aria-hidden="true"><span>CALI</span><i class="dot"></i><span>LAAD</span></p>
+    <h2 id="pw_title">Has usado tus 5 sesiones gratis</h2>
+    <p class="gsub" id="pw_sub">Para seguir usando CALI.LAAD (plan, registro, evolución, calculadora y todo lo demás), desbloquea el acceso completo con un pago único. Tus datos siguen guardados en tu cuenta.</p>
+    <div class="pwprice"><b>4,99 €</b><span>pago único · sin suscripción</span></div>
+    <label class="chk gcons"><input type="checkbox" id="pw_ok1"> He leído las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de venta</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</label>
+    <label class="chk gcons"><input type="checkbox" id="pw_ok2"> Quiero el acceso completo ya y sé que, al empezar a usarlo, pierdo el derecho de desistimiento de 14 días.</label>
+    <button type="button" class="primary btnbig" id="pw_buy" disabled>Desbloquear CALI.LAAD · 4,99 €</button>
+    <p class="gmsg" id="pw_msg" role="status"></p>
+    <div class="gtry"><p>Tus datos son tuyos aunque no pagues: puedes descargarlos o borrar la cuenta.</p>
+      <div class="btnrow"><button type="button" id="pw_export">Descargar mis datos</button><button type="button" id="pw_out">Salir</button><button type="button" class="x" id="pw_del">Borrar mi cuenta</button></div></div>
+  </div>
+</div>
 <div class="onb" id="onb" role="dialog" aria-modal="true" aria-labelledby="o_title" hidden>
   <div class="obox">
     <div class="osteps" id="o_steps" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -2562,7 +2580,8 @@ async function useAccount(user){
   window.CALIapp&&window.CALIapp.sbLoad&&window.CALIapp.sbLoad(sb,user.id);
   if(/[?&]pagado=1/.test(location.search)){let n=0;const iv=setInterval(async()=>{await refreshEstado();if(estado.pagado||++n>10)clearInterval(iv);},3000);}
 }
-function signedOut(){window.CALIapp&&window.CALIapp.sbOut&&window.CALIapp.sbOut();sbUser=null;$('r_cuenta').hidden=true;mode='local';allS=[];sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
+function signedOut(){estado={pagado:false,usadas:0,gratis:5};const pw=$('paywall');if(pw)pw.hidden=true;
+  window.CALIapp&&window.CALIapp.sbOut&&window.CALIapp.sbOut();sbUser=null;$('r_cuenta').hidden=true;mode='local';allS=[];sessions=[];renderAll();window.CALIaccount&&window.CALIaccount(null);window.CALIgate.show({configured:true});}
 window.CALIauth={
   async signUp(email,pw,stat){const {error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+location.pathname,data:{estadistica:!!stat,consentimiento:new Date().toISOString(),version_condiciones:'2026-11-22'}}});return error?error.message:null;},
   async signIn(email,pw){const {error}=await sb.auth.signInWithPassword({email,password:pw});return error?error.message:null;},
@@ -2578,8 +2597,8 @@ async function putSession(s){
   putMsg=null; if(!s.ath)s.ath=curAth();
   if(mode==='sb'&&sb){const {error}=await sb.from('sesiones').upsert({id:s.id,fecha:s.date,datos:clean(s)});
     if(error){const lim=error.code==='42501'||/row-level security/i.test(error.message);
-      putMsg=$('r_msg').textContent=lim?'Has usado tus '+estado.gratis+' sesiones gratis. Desbloquea CALI.LAAD por 4,99 € (pago único) para guardar sin límite: lo tienes arriba, en «Tu cuenta».':'No se pudo guardar en tu cuenta: '+error.message;
-      if(lim){refreshEstado();$('r_cuenta').scrollIntoView({block:'start'});}return false;}
+      putMsg=$('r_msg').textContent=lim?'Has usado tus '+estado.gratis+' sesiones gratis. Para seguir usando CALI.LAAD, desbloquéala por 4,99 € (pago único).':'No se pudo guardar en tu cuenta: '+error.message;
+      if(lim){estado.usadas=Math.max(estado.usadas,estado.gratis);refreshEstado();paywall();}return false;}
     const i=allS.findIndex(x=>x.id===s.id); if(i>=0)allS[i]=s; else {allS.push(s);estado.usadas++;} refilter(); renderAll(); renderCuenta(); return true;}
   if(mode==='db'&&col){try{await col.doc(s.id).set(clean(s));return true}catch(e){
     if(e&&e.code==='quota_exceeded'){putMsg=$('r_msg').textContent='El registro está lleno: borra sesiones antiguas o exporta una copia.';return false;}
@@ -2597,15 +2616,27 @@ async function delSession(id){
 async function refreshEstado(){if(mode!=='sb'||!sb)return;const {data,error}=await sb.rpc('mi_estado');if(!error&&data)estado=data;renderCuenta();}
 function payUrl(){if(!PAY_CONF.url||!sbUser)return '';const e=encodeURIComponent(sbUser.email),id=encodeURIComponent(sbUser.id),q=PAY_CONF.url.includes('?')?'&':'?';
   return /lemonsqueezy/.test(PAY_CONF.url)?PAY_CONF.url+q+'checkout[email]='+e+'&checkout[custom][user_id]='+id:PAY_CONF.url+q+'prefilled_email='+e+'&client_reference_id='+id;}
-function renderCuenta(){const box=$('r_cuenta');if(!box)return;if(mode!=='sb'||!sbUser){box.hidden=true;return;}box.hidden=false;
+function paywall(){const lock=mode==='sb'&&!!sbUser&&!estado.pagado&&estado.usadas>=estado.gratis;const pw=$('paywall');if(!pw)return;
+  if(lock&&pw.hidden){pw.hidden=false;document.body.classList.add('gated');}
+  if(!lock&&!pw.hidden){pw.hidden=true;document.body.classList.remove('gated');}
+  if(lock){$('pw_title').textContent='Has usado tus '+estado.gratis+' sesiones gratis';$('pw_buy').disabled=!($('pw_ok1').checked&&$('pw_ok2').checked);if(!PAY_CONF.url)$('pw_msg').textContent='La venta se activa en cuanto el autor conecte el pago.';}}
+function renderCuenta(){paywall();const box=$('r_cuenta');if(!box)return;if(mode!=='sb'||!sbUser){box.hidden=true;return;}box.hidden=false;
   const left=Math.max(0,estado.gratis-estado.usadas);
   $('c_plan').textContent=estado.pagado?'Acceso completo':'Plan gratuito';
   $('c_bar').style.width=estado.pagado?'100%':Math.min(100,estado.usadas/estado.gratis*100)+'%';
-  $('c_txt').textContent=estado.pagado?'Puedes guardar todas las sesiones que quieras. Gracias por apoyar CALI.LAAD.':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Simulador, calculadora, tablas y método son siempre gratis.';
+  $('c_txt').textContent=estado.pagado?'Puedes guardar todas las sesiones que quieras. Gracias por apoyar CALI.LAAD.':'Has guardado '+estado.usadas+' de '+estado.gratis+' sesiones gratis'+(left?': te quedan '+left+'.':'. Para seguir guardando, desbloquea el acceso completo.')+' Después de las '+estado.gratis+' sesiones gratis, seguir usando CALI.LAAD cuesta 4,99 € (pago único).';
   $('c_pay').hidden=!!estado.pagado; $('c_buy').disabled=!($('c_ok1').checked&&$('c_ok2').checked);
   if(!PAY_CONF.url)$('c_buymsg').textContent='La venta se activa en cuanto el autor conecte el pago.';
   $('c_stat').checked=!!(sbUser.user_metadata&&sbUser.user_metadata.estadistica);}
 ['c_ok1','c_ok2'].forEach(id=>$(id).addEventListener('change',renderCuenta));
+['pw_ok1','pw_ok2'].forEach(id=>$(id).addEventListener('change',paywall));
+$('pw_buy').addEventListener('click',()=>{const u=payUrl();if(!u){$('pw_msg').textContent='La venta aún no está activa.';return;}
+  sb.auth.updateUser({data:{desistimiento_renuncia:new Date().toISOString(),condiciones_aceptadas:'2026-11-24'}}).finally(()=>{location.href=u;});});
+$('pw_export').addEventListener('click',()=>$('c_export').click());
+$('pw_out').addEventListener('click',()=>{const pw=$('paywall');pw.hidden=true;document.body.classList.remove('gated');window.CALIauth.signOut();});
+let pwDel=false;
+$('pw_del').addEventListener('click',async()=>{if(!pwDel){pwDel=true;$('pw_del').textContent='Pulsa otra vez: se borra todo';$('pw_msg').textContent='Se borrarán tu cuenta y todas tus sesiones. No se puede deshacer.';setTimeout(()=>{pwDel=false;$('pw_del').textContent='Borrar mi cuenta';},8000);return;}
+  const {error}=await sb.rpc('borrar_mi_cuenta');if(error){$('pw_msg').textContent='No se pudo borrar: '+error.message;return;}$('paywall').hidden=true;document.body.classList.remove('gated');await sb.auth.signOut();});
 $('c_buy').addEventListener('click',()=>{const u=payUrl();if(!u){$('c_buymsg').textContent='La venta aún no está activa.';return;}
   sb.auth.updateUser({data:{desistimiento_renuncia:new Date().toISOString(),condiciones_aceptadas:'2026-11-22'}}).finally(()=>{location.href=u;});});
 $('c_stat').addEventListener('change',async e=>{const {data,error}=await sb.auth.updateUser({data:{estadistica:e.target.checked}});if(!error&&data&&data.user)sbUser=data.user;});
