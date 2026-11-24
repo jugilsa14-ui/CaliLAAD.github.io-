@@ -62,7 +62,7 @@ create or replace view public.datos_investigacion as
 revoke all on public.datos_investigacion from anon, authenticated;
 
 -- ============================================================
--- PARTE 2 · Pago único de 5 € y permisos (22 nov 2026)
+-- PARTE 2 · Pago único (4,99 €) y permisos (22 nov 2026)
 -- Pégala también en el SQL Editor y pulsa Run. Se puede repetir sin romper nada.
 -- ============================================================
 
@@ -132,3 +132,26 @@ grant execute on function public.borrar_mi_cuenta() to authenticated;
 -- Nadie sin cuenta puede leer ni escribir nada.
 revoke all on public.sesiones from anon;
 revoke all on public.perfiles from anon;
+
+-- ============================================================
+-- PARTE 3 · Plan, deportistas y ajustes de cada cuenta (24 nov 2026)
+-- Pégala también en el SQL Editor y pulsa Run. Se puede repetir sin romper nada.
+-- Guarda el modo de uso, la carpeta de deportistas y el plan de cada uno,
+-- para que cada persona los tenga en el móvil, el ordenador o donde entrene.
+-- ============================================================
+create table if not exists public.ajustes (
+  user_id     uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  id          text not null,            -- 'cfg', 'a_<deportista>', 'p_<deportista>'
+  datos       jsonb not null,
+  actualizado timestamptz not null default now(),
+  primary key (user_id, id)
+);
+alter table public.ajustes enable row level security;
+drop policy if exists "mis ajustes" on public.ajustes;
+create policy "mis ajustes" on public.ajustes for all
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+revoke all on public.ajustes from anon;
+
+-- Para el autor: marcar tu propia cuenta como pagada (cambia el correo por el tuyo y pulsa Run).
+-- update public.perfiles set pagado = true, pagado_en = now(), plataforma = 'autor'
+--   where user_id = (select id from auth.users where email = 'tu-correo@ejemplo.com');
