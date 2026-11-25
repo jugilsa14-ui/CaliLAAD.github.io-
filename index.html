@@ -605,6 +605,25 @@ label.gcons input,.gbox label.gcons input{position:absolute;left:0;top:2px;margi
 .athcard label.gcons input{width:16px;height:16px;padding:0;border:0;position:absolute;left:0;top:2px}
 .infnote{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
 .infnote textarea{font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+.quick{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px dashed var(--accent);border-radius:12px;background:var(--soft)}
+.quick .qrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.quick .qlab{font-family:var(--display);font-size:15px;margin-right:4px}
+.quick select,.quick input{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:0;max-width:100%}
+.quick select{flex:1 1 220px}
+.quick .notes{margin:0}
+.step{display:inline-flex;align-items:stretch;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg);width:max-content}
+.step button{border:0;border-radius:0;padding:0 10px;font-size:18px;line-height:1;background:transparent;color:var(--ink);min-width:36px}
+.step button:hover{background:var(--soft)}
+.brow .step input[type=number]{border:0;width:58px;min-width:0;text-align:center;background:transparent;padding:7px 2px}
+.brow .swbtn{align-self:flex-end;padding:7px 10px;font-size:14px;min-width:44px}
+.brow .swbtn.run{background:var(--warn);border-color:var(--warn);color:#111;font-variant-numeric:tabular-nums}
+.dupg{display:inline-flex;gap:4px;align-items:center}
+.dupg select{width:auto;min-width:0;padding:5px 6px;font-size:13px}
+.nb .savebar{position:sticky;bottom:0;z-index:6;background:var(--panel);margin:0 -16px -16px;padding:12px 16px;border-radius:0 0 12px 12px;box-shadow:0 -8px 16px rgba(0,0,0,.14)}
+.sbtot{font-size:13px;color:var(--muted);margin-right:auto}
+.sbtot b{font-family:var(--display);font-size:22px;color:var(--ink)}
+@media (max-width:720px){.nb .savebar{bottom:calc(62px + env(safe-area-inset-bottom,0px))}.nb .savebar .btnbig{flex:1 1 auto}}
+@media (max-width:640px){.brow .step input[type=number]{width:50px}.brow .swbtn{grid-column:auto}}
 /* volumen por progresión */
 .dlt{font-size:11px;font-weight:600;margin-left:5px;color:var(--muted);white-space:nowrap}
 .dlt.up{color:var(--accent)}.dlt.down{color:var(--warn)}
@@ -1176,7 +1195,16 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <div class="rform">
       <label>Fecha <input id="r_date" type="date"></label>
       <label class="grow">Título <input id="r_note" type="text" maxlength="120" placeholder="p. ej. Lunes · holds RAW y combos en half"></label>
-      <label>Dureza de la sesión (0–5, en pasos de 0,5) <input id="r_srpe" type="number" min="0" max="5" step="0.5" inputmode="decimal" placeholder="—"></label>
+      <label>Dureza de la sesión <select id="r_srpe"><option value="">—</option><option value="0">0 · Nada</option><option value="0.5">0,5</option><option value="1">1 · Muy fácil</option><option value="1.5">1,5</option><option value="2">2 · Fácil</option><option value="2.5">2,5</option><option value="3">3 · Moderada</option><option value="3.5">3,5</option><option value="4">4 · Dura</option><option value="4.5">4,5</option><option value="5">5 · Máxima</option></select></label>
+    </div>
+    <div class="quick" id="q_bar">
+      <div class="qrow"><b class="qlab">Empieza rápido</b>
+        <button type="button" class="primary" id="q_last">Repetir mi última sesión</button>
+        <select id="q_src" aria-label="Copiar de una plantilla o de una sesión anterior"></select>
+        <button type="button" id="q_load">Cargar</button>
+      </div>
+      <div class="qrow"><button type="button" id="q_save">Guardar como plantilla</button><input id="q_tname" type="text" maxlength="60" placeholder="Nombre, p. ej. Lunes plancha" aria-label="Nombre de la plantilla" hidden><button type="button" class="x" id="q_tdel" hidden>Borrar plantilla</button><button type="button" class="x" id="b_clear">Empezar de cero</button><span class="tag" id="q_msg" role="status"></span></div>
+      <p class="notes" id="q_hint">Carga una sesión anterior o una plantilla y cambia solo lo que haya sido distinto. Las plantillas sirven para todos tus deportistas.</p>
     </div>
     <details class="desc" id="r_descbox"><summary>Descripción de la sesión <span class="opt">objetivos, metodología, notas</span></summary>
       <div class="descf">
@@ -1187,7 +1215,7 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     </details>
 
     <div id="r_preview" class="rprev"></div>
-    <div class="sticky-head"><h3>Series de skills</h3><span class="notes">Una serie es una fila o varias: para un combo, añade más filas a la misma serie. El <b>agarre</b> se anota por serie (por ahora no cambia la carga). Un <b>deadstop</b> es un hold de 0,5″: su duración está fija y no se puede cambiar; si aguantas más, anótalo como hold.</span></div>
+    <div class="sticky-head"><h3>Series de skills</h3><span class="notes">Usa <b>−</b> y <b>+</b> para los segundos y las repeticiones, y <b>⏱</b> para cronometrar un hold mientras entrenas. Una serie es una fila o varias: para un combo, añade más filas a la misma serie. El <b>agarre</b> se anota por serie (por ahora no cambia la carga). Un <b>deadstop</b> es un hold de 0,5″: su duración está fija y no se puede cambiar; si aguantas más, anótalo como hold.</span></div>
     <div id="b_series" class="bseries"></div>
     <p class="notes" id="b_empty">Todavía no hay series. Añade la primera.</p>
     <div class="row addbtns">
@@ -1198,8 +1226,8 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
     <div class="tablewrap"><table class="wtable"><thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Kg</th><th>Con mi peso</th><th>1RM (kg)</th><th>Aguante por rep (s)</th><th>INOL</th><th></th></tr></thead><tbody id="b_wrows"></tbody></table></div>
     <div class="row addbtns"><button type="button" id="w_add">+ Ejercicio de pesas</button></div>
     <div class="row savebar">
+      <span class="sbtot" id="r_tot"></span>
       <button class="primary btnbig" id="r_save" type="button">Guardar sesión</button>
-      <button id="b_clear" type="button">Empezar de cero</button>
       <span id="r_msg" class="tag" role="status"></span>
     </div>
   </section>
@@ -2877,9 +2905,10 @@ window.LADreg={preview,show(t){if(t==='reg'){preview();window.CALIbuilder&&windo
   payAth(a){const u=payUrl(a);if(!u)return false;sb.auth.updateUser({data:{desistimiento_renuncia:new Date().toISOString(),condiciones_aceptadas:'2026-11-24'}}).finally(()=>{location.href=u;});return true;},
   sbConfigured:()=>!!(SB_CONF.url&&SB_CONF.key),
   chart:(id,o)=>svgChart(id,o),
-  prefill(date,title){if(date)$('r_date').value=date;if(title&&!$('r_note').value.trim())$('r_note').value=title;},
+  prefill(date,title){if(date)$('r_date').value=date;if(title&&!$('r_note').value.trim())$('r_note').value=title;window.CALIbuilder&&window.CALIbuilder.render();},
   async delAth(a){for(const s of allS.filter(x=>(x.ath||'yo')===a))await delSession(s.id);}};
 $('r_date').value=todayISO();
+$('r_note').addEventListener('change',()=>window.CALIbuilder&&window.CALIbuilder.render());
 initStore();
 })();
 </script>
@@ -2913,16 +2942,20 @@ function toEfs(rows){const out=[];rows.forEach(r=>{const base={pos:r.pos,band:+r
 let st=null;
 function load(){st=window.LADcalc.getState();}
 function commit(){window.LADcalc.setState(st.series,st.weights);render();}
+/* cronómetro de holds: un toque empieza, otro para y apunta los segundos */
+let sw={key:null,t0:0,iv:null};
+function swHtml(i,j){const k=i+'|'+j,run=sw.key===k;return '<button type="button" class="swbtn'+(run?' run':'')+'" data-sw="'+k+'" aria-label="'+(run?'Parar el cronómetro y apuntar':'Cronometrar este hold')+'">'+(run?'■ '+((performance.now()-sw.t0)/1000).toFixed(1)+'″':'⏱')+'</button>';}
+function swTick(){const b=document.querySelector('[data-sw="'+sw.key+'"]');if(b)b.textContent='■ '+((performance.now()-sw.t0)/1000).toFixed(1)+'″';}
 function rowHtml(s,i,r,j){
   const pm=PM.includes(r.el);
   return '<div class="brow" data-i="'+i+'" data-j="'+j+'">'+
     '<label><span>Elemento</span><select data-k="el">'+opts(EL[s.fam],r.el)+'</select></label>'+
     '<label><span>Progresión</span><select data-k="pos"'+(r.el==='low'?' disabled':'')+'>'+opts(PROGX[s.fam],r.pos)+'</select></label>'+
     '<label><span>Goma</span><select data-k="band"'+(r.el==='low'?' disabled':'')+'>'+opts(BAND,r.band)+'</select></label>'+
-    (pm?'<label><span>Reps</span><input data-k="reps" type="number" min="1" step="1" inputmode="numeric" value="'+r.reps+'"></label>'+
+    (pm?'<label><span>Reps</span><span class="step"><button type="button" data-st="-" aria-label="Una repetición menos">−</button><input data-k="reps" data-step="1" type="number" min="1" step="1" inputmode="numeric" value="'+r.reps+'"><button type="button" data-st="+" aria-label="Una repetición más">+</button></span></label>'+
         '<label class="chk"><input data-k="part" type="checkbox"'+(r.part?' checked':'')+'><span>Parcial</span></label>'
        :r.el==='dead'?'<label><span>Segundos</span><output class="fixed" title="Un deadstop es un hold de 0,5″">0,5″</output></label><span class="sp"></span>'
-       :'<label><span>Segundos</span><input data-k="secs" type="number" min="0" step="0.25" inputmode="decimal" value="'+r.secs+'"></label><span class="sp"></span>')+
+       :'<label><span>Segundos</span><span class="step"><button type="button" data-st="-" aria-label="Medio segundo menos">−</button><input data-k="secs" data-step="0.5" type="number" min="0" step="0.25" inputmode="decimal" value="'+r.secs+'"><button type="button" data-st="+" aria-label="Medio segundo más">+</button></span></label>'+swHtml(i,j)+'<span class="sp"></span>')+
     '<button type="button" class="x" data-rdel aria-label="Quitar esta fila">✕</button></div>';
 }
 function render(){
@@ -2936,7 +2969,7 @@ function render(){
       '<label><span>Cómo acabó</span><select data-s="end">'+opts(END,s.end||'na')+'</select></label>'+
       '<span class="bload"><b>'+fmt(r.load,1)+'</b> LAD</span></div>'+
       rows.map((rw,j)=>rowHtml(s,i,rw,j)).join('')+
-      '<div class="bfoot"><button type="button" data-radd>+ Añadir al combo</button><button type="button" data-sdup>Repetir serie</button><button type="button" class="x" data-sdel>Quitar serie</button>'+(rows.length>1?'<span class="tag">'+(rows.some(r=>PM.includes(r.el))&&rows.some(r=>!PM.includes(r.el)||r.el!==rows[0].el)?'Combo de ':'Serie de ')+rows.length+' elementos</span>':'')+'</div></div>';}).join('');
+      '<div class="bfoot"><button type="button" data-radd>+ Añadir al combo</button><span class="dupg"><button type="button" data-sdup>Repetir serie</button><select data-dupn aria-label="Cuántas veces repetirla">'+[1,2,3,4,5,6,8,10].map(n=>'<option value="'+n+'">×'+n+'</option>').join('')+'</select></span><button type="button" class="x" data-sdel>Quitar serie</button>'+(rows.length>1?'<span class="tag">'+(rows.some(r=>PM.includes(r.el))&&rows.some(r=>!PM.includes(r.el)||r.el!==rows[0].el)?'Combo de ':'Serie de ')+rows.length+' elementos</span>':'')+'</div></div>';}).join('');
   $('b_empty').hidden=st.series.length>0;
   $('b_wrows').innerHTML=st.weights.map((w,i)=>{const r=snap.perW[i]||{};return '<tr data-w="'+i+'">'+
     '<td><input data-wk="name" type="text" value="'+esc(w.name)+'" aria-label="Ejercicio"></td>'+
@@ -2948,7 +2981,50 @@ function render(){
   const th=[...document.querySelectorAll('.wtable th')].map(t=>t.textContent);
   $('b_wrows').querySelectorAll('tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.l=th[i]||''));
   window.LADreg&&window.LADreg.preview&&window.LADreg.preview();
+  $('r_tot').innerHTML='<b>'+fmt(snap.tL,1)+'</b> LAD-Au · '+st.series.length+' serie'+(st.series.length===1?'':'s')+(st.weights.length?' · INOL '+fmt(snap.tI,2):'');
+  fillQuick();
 }
+/* ---------- empezar rápido: repetir, copiar o usar una plantilla ---------- */
+const sdate=d=>{const x=new Date(d+'T00:00:00Z');return x.getUTCDate()+'/'+(x.getUTCMonth()+1);};
+function srcList(){const a=window.CALIapp&&window.CALIapp.active?window.CALIapp.active():'yo';
+  const ss=(window.LADreg&&window.LADreg.all?window.LADreg.all():[]).filter(x=>(x.ath||'yo')===a&&((x.series||[]).length||(x.weights||[]).length))
+    .sort((x,y)=>y.date.localeCompare(x.date)||String(y.saved).localeCompare(String(x.saved)));
+  return {ss,tp:window.CALIapp&&window.CALIapp.tpls?window.CALIapp.tpls():[]};}
+function fillQuick(){
+  const {ss,tp}=srcList(), sel=$('q_src'), cur=sel.value;
+  sel.innerHTML='<option value="">Copiar de una plantilla o sesión…</option>'+
+    (tp.length?'<optgroup label="Mis plantillas">'+tp.map(t=>'<option value="t:'+esc(t.id)+'">'+esc(t.name)+' · '+(t.series||[]).length+' series</option>').join('')+'</optgroup>':'')+
+    (ss.length?'<optgroup label="Sesiones anteriores">'+ss.slice(0,25).map(x=>'<option value="s:'+esc(x.id)+'">'+sdate(x.date)+' · '+esc(x.title||x.note||'Sin título')+' · '+fmt(+x.ladau,1)+' LAD</option>').join('')+'</optgroup>':'');
+  if([...sel.options].some(o=>o.value===cur)) sel.value=cur;
+  $('q_last').disabled=!ss.length; $('q_load').disabled=!(tp.length||ss.length); $('q_tdel').hidden=!sel.value.startsWith('t:');
+  const title=$('r_note').value.trim().toLowerCase(), m=title&&!st.series.length&&!st.weights.length?tp.find(t=>t.name.trim().toLowerCase()===title):null;
+  const hint=m?'Hoy toca <b>'+esc(m.name)+'</b>: <button type="button" class="primary" data-qtp="'+esc(m.id)+'">Cargar esa plantilla</button>'
+    :'Carga una sesión anterior o una plantilla y cambia solo lo que haya sido distinto. Las plantillas sirven para todos tus deportistas.';
+  if($('q_hint').dataset.h!==hint){$('q_hint').dataset.h=hint;$('q_hint').innerHTML=hint;} // sin redibujar si no cambia: el toque en el botón no se pierde
+}
+function applySrc(series,weights,title){load();
+  st.series=JSON.parse(JSON.stringify(series||[])).map(x=>Object.assign(x,{end:'na',res:''}));
+  st.weights=JSON.parse(JSON.stringify(weights||[])).map(w=>Object.assign(w,{rir:''}));
+  if(title&&!$('r_note').value.trim())$('r_note').value=title; commit();}
+let qArm=false;
+function guarded(fn){load();if((st.series.length||st.weights.length)&&!qArm){qArm=true;$('q_msg').textContent='Ya tienes series puestas: pulsa otra vez para sustituirlas.';setTimeout(()=>{qArm=false;},6000);return;}qArm=false;fn();}
+function loadSrc(v){const {ss,tp}=srcList();
+  if(v.startsWith('t:')){const t=tp.find(x=>x.id===v.slice(2));if(t){applySrc(t.series,t.weights,t.name);$('q_msg').textContent='Plantilla «'+t.name+'» cargada. Cambia lo que haya sido distinto.';}}
+  else{const x=ss.find(y=>y.id===v.slice(2));if(x){applySrc(x.series,x.weights,x.title||x.note);$('q_msg').textContent='Copiada la sesión del '+sdate(x.date)+'. Cambia lo que haya sido distinto.';}}}
+$('q_last').addEventListener('click',()=>guarded(()=>{const x=srcList().ss[0];if(x)loadSrc('s:'+x.id);}));
+$('q_load').addEventListener('click',()=>{const v=$('q_src').value;if(!v){$('q_msg').textContent='Elige antes una plantilla o una sesión en la lista.';return;}guarded(()=>loadSrc(v));});
+$('q_src').addEventListener('change',()=>{$('q_tdel').hidden=!$('q_src').value.startsWith('t:');$('q_msg').textContent='';});
+$('q_save').addEventListener('click',()=>{
+  load(); if(!st.series.length&&!st.weights.length){$('q_msg').textContent='Añade antes alguna serie: la plantilla guarda las series y las pesas.';return;}
+  if($('q_tname').hidden){$('q_tname').hidden=false;$('q_tname').value=$('r_note').value.trim();$('q_save').textContent='Guardar plantilla';$('q_tname').focus();return;}
+  const name=$('q_tname').value.trim(); if(!name){$('q_msg').textContent='Ponle un nombre a la plantilla.';$('q_tname').focus();return;}
+  window.CALIapp&&window.CALIapp.tplSave({name,series:st.series.map(x=>Object.assign({},x,{end:'na',res:''})),weights:st.weights});
+  $('q_tname').hidden=true;$('q_save').textContent='Guardar como plantilla';$('q_msg').textContent='Plantilla «'+name+'» guardada. Si un día del plan se llama igual, la web te la ofrecerá.';fillQuick();});
+$('q_tname').addEventListener('keydown',e=>{if(e.key==='Enter')$('q_save').click();});
+let tdelArm=false;
+$('q_tdel').addEventListener('click',()=>{const v=$('q_src').value;if(!v.startsWith('t:'))return;
+  if(!tdelArm){tdelArm=true;$('q_tdel').textContent='Pulsa otra vez para borrarla';setTimeout(()=>{tdelArm=false;$('q_tdel').textContent='Borrar plantilla';},5000);return;}
+  tdelArm=false;$('q_tdel').textContent='Borrar plantilla';window.CALIapp&&window.CALIapp.tplDel(v.slice(2));$('q_src').value='';$('q_msg').textContent='Plantilla borrada.';fillQuick();});
 const box=document.querySelector('.nb');
 box.addEventListener('change',e=>{
   const t=e.target, card=t.closest('.bcard'), wr=t.closest('tr[data-w]');
@@ -2963,13 +3039,22 @@ box.addEventListener('change',e=>{
   if(wr){load();const w=st.weights[+wr.dataset.w],k=t.dataset.wk;if(!k)return;w[k]=k==='name'?t.value:k==='bw'?t.checked:t.value===''?'':+t.value;commit();}
 });
 box.addEventListener('click',e=>{
-  const t=e.target,d=t.dataset,card=t.closest('.bcard');
+  const t=e.target.closest('button')||e.target,d=t.dataset,card=t.closest('.bcard');
+  if(d.st){const inp=t.parentNode.querySelector('input');if(!inp)return;const stp=+inp.dataset.step||1,mn=+inp.min||0;
+    let v=(+inp.value||0)+(d.st==='+'?stp:-stp);v=Math.max(mn,Math.round(v/stp)*stp);inp.value=String(+v.toFixed(2));inp.dispatchEvent(new Event('change',{bubbles:true}));return;}
+  if(d.sw){const k=d.sw;
+    if(sw.key===k){const secs=Math.max(0.25,Math.round((performance.now()-sw.t0)/1000/0.25)*0.25);clearInterval(sw.iv);sw={key:null,t0:0,iv:null};
+      const inp=t.closest('.brow').querySelector('input[data-k="secs"]');if(inp){inp.value=String(secs);inp.dispatchEvent(new Event('change',{bubbles:true}));}return;}
+    if(sw.iv)clearInterval(sw.iv);sw={key:k,t0:performance.now(),iv:setInterval(swTick,100)};t.classList.add('run');t.setAttribute('aria-label','Parar el cronómetro y apuntar');swTick();return;}
+  if(d.qtp){guarded(()=>loadSrc('t:'+d.qtp));return;}
   if(d.addser){load();const last=[...st.series].reverse().find(s=>s.fam===d.addser);
     st.series.push(last?Object.assign(JSON.parse(JSON.stringify(last)),{end:'na',res:''}):{fam:d.addser,rest:st.series.length?180:0,ring:false,fan:1,end:'na',res:'',efs:[{mv:'hold',pos:'full',band:0,secs:3,part:false,smax:'',i1:0.5}]});
     commit();const cards=document.querySelectorAll('.bcard');cards[cards.length-1]&&cards[cards.length-1].scrollIntoView({block:'nearest'});return;}
   if(card&&d.radd!=null){load();const s=st.series[+card.dataset.i];const rows=toRows(s.efs);const last=rows[rows.length-1]||{pos:'full',band:0};
     rows.push({el:'dead',pos:last.pos,band:last.band,secs:0.5,reps:'',part:false});s.efs=toEfs(rows);commit();return;}
-  if(card&&d.sdup!=null){load();const i=+card.dataset.i;st.series.splice(i+1,0,JSON.parse(JSON.stringify(st.series[i])));commit();return;}
+  if(card&&d.sdup!=null){load();const i=+card.dataset.i,n=Math.max(1,+(card.querySelector('[data-dupn]')||{}).value||1);
+    for(let k=0;k<n;k++)st.series.splice(i+1,0,JSON.parse(JSON.stringify(st.series[i])));commit();
+    const cards=document.querySelectorAll('.bcard');cards[i+n]&&cards[i+n].scrollIntoView({block:'nearest'});return;}
   if(card&&d.sdel!=null){load();st.series.splice(+card.dataset.i,1);commit();return;}
   if(card&&d.rdel!=null){load();const s=st.series[+card.dataset.i];const rows=toRows(s.efs);rows.splice(+t.closest('.brow').dataset.j,1);
     if(rows.length)s.efs=toEfs(rows);else st.series.splice(+card.dataset.i,1);commit();return;}
@@ -3692,7 +3777,10 @@ async function sbLoad(client,uid){
   if(window.LADreg) window.LADreg.refresh(); setTimeout(maybeOnboard,0);
 }
 function sbOut(){sbc=null;sbUid=null;docs={};persist();remoteSeen=false;onbDone=false;render();}
-window.CALIapp={active,remote,render,openOnb,evoVol,sbLoad,sbOut};
+window.CALIapp={active,remote,render,openOnb,evoVol,sbLoad,sbOut,
+  tpls:()=>Object.keys(docs).filter(k=>k.startsWith('tp_')).map(k=>Object.assign({id:k.slice(3)},docs[k])).sort((a,b)=>String(a.name).localeCompare(String(b.name),'es')),
+  tplSave(t){const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);put('tp_'+id,Object.assign({created:new Date().toISOString()},t));return id;},
+  tplDel(id){drop('tp_'+id);}};
 if(window.CALIpending){const p=window.CALIpending;delete window.CALIpending;remote(p.extra,p.col);}
 if(window.LADreg) window.LADreg.refresh();
 if(!(window.claude&&window.claude.use)) setTimeout(maybeOnboard,0);
